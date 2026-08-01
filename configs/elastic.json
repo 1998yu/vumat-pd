@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "1.0",
+  "name": "Elastic",
+  "cmname": "ELASTIC",
+  "plugin": "elastic_vumat_plugin",
+  "symbol": "vumat_adapter_call",
+  "ndir": 3,
+  "nshr": 3,
+  "nstatev": 1,
+  "nfieldv": 1,
+  "props": [
+    210000.0,
+    0.30
+  ],
+  "density": 7800.0,
+  "note": "Linear isotropic elastic VUMAT. The single zero state slot is an adapter-safe placeholder; the material does not use history variables."
+}

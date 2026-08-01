@@ -1,0 +1,15 @@
+/build/
+/examples/output/
+/.venv/
+/.vs/
+/.vscode/
+/.idea/
+**/__pycache__/
+*.py[cod]
+*.user
+*.suo
+*.tmp
+*.log
+.DS_Store
+Thumbs.db
+desktop.ini
