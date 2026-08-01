@@ -8,7 +8,7 @@ jobs:
   ubuntu:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Install compilers
         run: sudo apt-get update && sudo apt-get install -y gfortran ninja-build
       - name: Configure
