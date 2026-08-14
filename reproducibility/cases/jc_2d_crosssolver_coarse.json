@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "1.0",
+  "name": "jc_2d_crosssolver_coarse",
+  "type": "vumat_pd_boundary_case",
+  "classification": "verification",
+  "scope": "Quasi-2D plane-strain JC strip for Abaqus/Explicit versus VUMAT-PD cross-solver verification",
+  "units": {"length": "mm", "time": "ms", "force": "N", "stress": "MPa", "massDensity": "N*ms^2/mm^4", "sourceDensity": "kg/m^3"},
+  "geometry": {"type": "patch", "nx": 51, "ny": 11, "nz": 3, "spacing": 2.0, "horizon": 6.0},
+  "time_integration": {"steps": 2400, "dt": 0.00005, "totalTime": 0.12},
+  "boundary_conditions": {"type": "regional_smooth_displacement", "mode": "boundary_value", "supportRegion": "left", "loadRegion": "right", "component": "x", "regionLayers": 2, "amplitude": 2.0, "riseTime": 0.12, "planeStrain": true, "rigidBodySuppression": true},
+  "dynamics": {"density": 0.0078, "energyToleranceRelative": 0.15, "netForceTolerance": 1.0e-6, "outputEvery": 10, "snapshotEvery": 600, "minimumPlasticStrain": 0.001, "kineticToInternalLimit": 10.0},
+  "damage": {"model": "none", "initiation": 0.0, "failure": 1.0, "deletionEnabled": false},
+  "output": {"directory": "reproducibility/generated/jc_2d_crosssolver_coarse", "csv": true, "svg": true, "metadata": true},
+  "materials": [{"name": "JC", "materialConfigPath": "reproducibility/configs/johnson_cook.json", "reference": true, "elasticE": 210000.0, "elasticNu": 0.30, "referenceTemperature": 293.0, "equivalentPlasticStrainIndex": 1}],
+  "checks": ["The physical in-plane dimensions are 100 x 20 mm.", "The same BSD-licensed JC VUMAT and material constants are used by FEM and PD.", "External PD damage and element deletion are disabled.", "All particles are constrained only in thickness for plane strain."]
+}

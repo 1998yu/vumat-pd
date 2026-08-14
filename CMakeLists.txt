@@ -28,6 +28,23 @@ set_target_properties(elastic_vumat_plugin PROPERTIES
   OUTPUT_NAME "elastic_vumat_plugin"
 )
 
+add_library(jc_vumat_plugin SHARED
+  materials/examples/JohnsonCook.f90
+  materials/bridge/vumat_c_wrapper_jinfo.f90
+  materials/bridge/abaqus_stubs.f90
+)
+target_include_directories(jc_vumat_plugin PRIVATE materials/bridge)
+target_compile_options(jc_vumat_plugin PRIVATE
+  $<$<COMPILE_LANGUAGE:Fortran>:-std=legacy>
+  $<$<COMPILE_LANGUAGE:Fortran>:-ffixed-line-length-none>
+  $<$<COMPILE_LANGUAGE:Fortran>:-fallow-argument-mismatch>
+  $<$<COMPILE_LANGUAGE:Fortran>:-fcray-pointer>
+)
+set_target_properties(jc_vumat_plugin PROPERTIES
+  PREFIX ""
+  OUTPUT_NAME "jc_vumat_plugin"
+)
+
 add_library(vumat_pd STATIC
   src/MaterialConfigJson.cpp
   src/SimpleJson.cpp
@@ -61,6 +78,9 @@ endif()
 add_executable(vumat_pd_run src/main_pd_case_runner.cpp)
 target_link_libraries(vumat_pd_run PRIVATE vumat_pd)
 
+add_executable(jc_2d_fem reproducibility/src/main_jc_2d_fem.cpp)
+target_link_libraries(jc_2d_fem PRIVATE vumat_pd)
+
 add_executable(corotational_kinematics_test
   tests/corotational_kinematics_test.cpp)
 target_link_libraries(corotational_kinematics_test PRIVATE vumat_pd)
@@ -93,11 +113,14 @@ if(BUILD_TESTING)
     COMMAND vumat_pd_run examples/affine_bar_elastic.json)
   add_test(NAME affine_shear_elastic
     COMMAND vumat_pd_run examples/affine_shear_elastic.json)
+  add_test(NAME jc_vumat_material_point
+    COMMAND vumat_pd_run reproducibility/cases/jc_material_point.json)
   foreach(test_name IN ITEMS corotational_kinematics neighbor_search
-      rigid_wall_contact affine_bar_elastic affine_shear_elastic)
+      rigid_wall_contact affine_bar_elastic affine_shear_elastic
+      jc_vumat_material_point)
     configure_vumat_test(${test_name})
   endforeach()
 endif()
 
-install(TARGETS vumat_pd vumat_pd_run elastic_vumat_plugin)
+install(TARGETS vumat_pd vumat_pd_run elastic_vumat_plugin jc_vumat_plugin jc_2d_fem)
 install(DIRECTORY include/ DESTINATION include)

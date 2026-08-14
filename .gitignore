@@ -1,5 +1,6 @@
 /build/
 /examples/output/
+/reproducibility/generated/
 /.venv/
 /.vs/
 /.vscode/

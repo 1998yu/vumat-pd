@@ -24,20 +24,38 @@ PD demonstration solver, and small reproducible verification cases.
 - Explicit time integration, simple bond damage, and rigid-wall contact.
 - JSON-driven material and case configuration.
 - BSD-licensed linear-elastic example VUMAT.
+- BSD-licensed Johnson-Cook example VUMAT and manuscript reproduction package.
+- BSD-licensed Johnson-Cook example VUMAT and manuscript reproduction package.
 - Unit and regression tests for tensor mapping, rigid rotation, neighbor
   search, contact, affine extension, and affine shear.
 
 ## What is not included
 
 - Abaqus, Abaqus headers, or proprietary solver libraries.
-- Third-party Johnson–Cook, CDPM2, M7, or other VUMAT source files.
-- Manuscript files, large simulation outputs, or experimental datasets.
+- Third-party CDPM2, M7, or other restricted VUMAT source files.
+- Manuscript source files or experimental datasets.
 - MPI/distributed-memory execution.
 - A complete production implementation of particle deletion and flying-point
   management.
 
 Users are responsible for ensuring that any VUMAT they load may legally be
 used and redistributed.
+
+## Reproduce the manuscript results
+
+The repository contains the complete Johnson-Cook source, coarse and fine PD
+inputs, matching explicit FEM path, 241-time raw histories, field data,
+post-processing scripts, expected values and tolerances. Start with
+[`reproducibility/README.md`](reproducibility/README.md) or run
+`reproducibility/reproduce.ps1` / `reproducibility/reproduce.sh`.
+
+## Reproduce the manuscript results
+
+The repository contains the complete Johnson-Cook source, coarse and fine PD
+inputs, matching explicit FEM path, 241-time raw histories, field data,
+post-processing scripts, expected values and tolerances. Start with
+[`reproducibility/README.md`](reproducibility/README.md) or run
+`reproducibility/reproduce.ps1` / `reproducibility/reproduce.sh`.
 
 ## Requirements
 

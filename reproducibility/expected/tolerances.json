@@ -1,0 +1,5 @@
+{
+  "metricRelativeTolerance": 0.005,
+  "metricAbsoluteTolerance": 1e-10,
+  "interpretation": "Regenerated numeric leaves must match the archived expected JSON within 0.5% relative tolerance or 1e-10 absolute tolerance. FEM-PD differences in Table 3 are scientific comparison metrics, not reproduction tolerances."
+}

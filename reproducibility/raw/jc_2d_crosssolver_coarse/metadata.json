@@ -1,0 +1,26 @@
+{
+  "name": "jc_2d_crosssolver_coarse",
+  "status": "pass",
+  "classification": "verification",
+  "scope": "Quasi-2D plane-strain JC strip for Abaqus/Explicit versus VUMAT-PD cross-solver verification",
+  "units": {"length": "mm", "time": "ms", "force": "N", "stress": "MPa", "solverMassDensity": "N*ms^2/mm^4", "sourceDensity": "kg/m^3"},
+  "densityConversion": "rho_solver = rho_kg_per_m3 * 1e-6",
+  "particles": 1683,
+  "grid": [51,11,3],
+  "spacing_mm": 2,
+  "horizon_mm": 6,
+  "horizonSpacingRatio": 3,
+  "neighborSearch": "cell-linked-list",
+  "planeStrain": true,
+  "outerSimpleDamage": false,
+  "boundarySets": {"support": "left", "loaded": "right", "regionLayers": 2, "rigidBodySuppression": "one lateral component at the support-centre particle"},
+  "dt_ms": 5e-05,
+  "steps": 2400,
+  "materials": [
+    {"name": "JC", "status": "pass", "sourceDensity_kg_per_m3": 7800, "solverDensity": 0.0078, "runtimeSeconds": 27.409164, "maxNetInternalForce_N": 5.00451025360176e-10, "finalEnergyError": 0.0232554348888506, "maxEnergyError": 0.0232554348888506, "maxKineticToInternal": 698.676720789789, "finalKineticToInternal": 0.00209472305138763, "maxEqps": 0.0325224451246335, "maxInternalIndicator": 0, "earlyElasticSlope_MPa": 231716.647089348, "analyticalPlaneStrainSlope_MPa": 230769.230769231, "earlyElasticRelativeError": 0.00410547072050972, "finalReaction_N": 23447.2158345424, "finalNominalStress_MPa": 177.630422988958, "finalEngineeringStrain": 0.0204081632653061, "finite": true}
+  ],
+  "acceptance": {"energyToleranceRelative": 0.15, "netForceTolerance_N": 1e-06, "minimumPlasticStrain": 0.001, "kineticToInternalLimit": 10},
+  "materialComparisonCaveat": "Internal state variables are model-specific observers and are not mapped to a common bond-breaking rule.",
+  "parameterMatchingPolicy": "Only identifiable macroscopic properties are matched; formulation-specific or hard-coded parameters are not claimed to be equivalent.",
+  "legacyBlockPolicy": "Material-independent fixed-width blocks of 256 points; a non-full final block duplicates its last valid point and discards padded outputs."
+}

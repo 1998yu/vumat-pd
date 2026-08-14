@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "1.0",
+  "name": "JC",
+  "cmname": "JOHNSONCOOK",
+  "plugin": "jc_vumat_plugin",
+  "symbol": "vumat_adapter_call",
+  "ndir": 3,
+  "nshr": 3,
+  "nstatev": 6,
+  "nfieldv": 1,
+  "props": [
+    210000.0,
+    0.30,
+    350.0,
+    500.0,
+    0.025,
+    0.36,
+    1.0,
+    1.0,
+    293.0,
+    1793.0,
+    7800.0,
+    0.9,
+    500.0,
+    1.0
+  ],
+  "density": 7800.0
+}
