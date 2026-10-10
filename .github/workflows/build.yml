@@ -17,3 +17,5 @@ jobs:
         run: cmake --build --preset release
       - name: Test
         run: ctest --preset release
+      - name: Verify 3D archived data integrity
+        run: python reproducibility/three_dimensional/unpack_archive.py

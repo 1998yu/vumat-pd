@@ -37,6 +37,7 @@ public:
 private:
   VumatPdCorrespondenceConfig config_;
   VumatMaterialAdapter adapter_;
+  std::vector<std::unique_ptr<VumatMaterialAdapter>> threadAdapters_;
 };
 
 } // namespace pd

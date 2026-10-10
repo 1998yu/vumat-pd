@@ -160,7 +160,7 @@ RunSummary runMaterial(const DemoCaseConfig& config,
   const int lateralCount=lateral==0?config.geometry.nx:config.geometry.ny;
   (void)lateralCount;
   const int crossCount=axis==0?config.geometry.ny:config.geometry.nx;
-  const double crossSectionArea=static_cast<double>(crossCount*config.geometry.nz)*
+  const double crossSectionArea=static_cast<double>((crossCount-1)*(config.geometry.nz-1))*
                                 config.geometry.spacing*config.geometry.spacing;
 
   pd::PdCorrespondenceSkeleton skeleton(config.geometry.horizon);
@@ -228,14 +228,15 @@ RunSummary runMaterial(const DemoCaseConfig& config,
     std::vector<char> boundary(block.referencePosition.size(),0);
     for(size_t i:constraints.support()) boundary[i]=1;
     for(size_t i:constraints.loaded()) boundary[i]=1;
-    size_t interiorCount=0;
+    double interiorVolume=0.0;
     for(size_t i=0;i<block.referencePosition.size();++i) {
       for(int d=0;d<3;++d)
         netInternal[static_cast<size_t>(d)] += force[i][static_cast<size_t>(d)]*block.volume[i];
-      if(!boundary[i]) {
-        averageStress += loadingSign*result.rawStress[i][static_cast<size_t>(4*axis)];
-        averageAxialStrain += loadingSign*result.strain[i][static_cast<size_t>(4*axis)];
-        ++interiorCount;
+      if(block.referencePosition[i][0]>=2.0-1e-8 && block.referencePosition[i][0]<=98.0+1e-8) {
+        const double w=block.volume[i]*((std::abs(block.referencePosition[i][0]-2.0)<1e-8 || std::abs(block.referencePosition[i][0]-98.0)<1e-8)?0.5:1.0);
+        averageStress += loadingSign*result.rawStress[i][static_cast<size_t>(4*axis)]*w;
+        averageAxialStrain += loadingSign*result.strain[i][static_cast<size_t>(4*axis)]*w;
+        interiorVolume+=w;
       }
       if(material.equivalentPlasticStrainIndex>=0)
         maxEqps=std::max(maxEqps,materialState.vumatStateN[i][static_cast<size_t>(material.equivalentPlasticStrainIndex)]);
@@ -248,8 +249,8 @@ RunSummary runMaterial(const DemoCaseConfig& config,
     for(size_t i:constraints.loaded())
       reaction += (config.dynamics.density*ramp.acceleration-force[i][static_cast<size_t>(axis)])*
                   block.volume[i];
-    averageStress/=static_cast<double>(interiorCount);
-    averageAxialStrain/=static_cast<double>(interiorCount);
+    averageStress/=interiorVolume;
+    averageAxialStrain/=interiorVolume;
     const double power=reaction*ramp.velocity;
     externalWork += 0.5*config.timeIntegration.dt*(previousPower+power);
     previousPower=power;
@@ -319,6 +320,7 @@ int runBoundaryValueCase(const DemoCaseConfig& config) {
       "average_axial_strain,average_axial_stress_MPa,max_eqps,max_internal_indicator,"
       "kinetic_energy_Nmm,internal_energy_Nmm,external_work_Nmm,relative_energy_error,"
       "net_internal_force_N,finite\n";
+  snapshots << std::setprecision(16);
   snapshots << "material,step,time_ms,particle,x0_mm,y0_mm,z0_mm,ux_mm,uy_mm,uz_mm,"
       "x_mm,y_mm,z_mm,vx_mm_per_ms,vy_mm_per_ms,vz_mm_per_ms,axial_strain,"
       "axial_stress_MPa,eqps,internal_indicator,simple_damage\n";
@@ -352,11 +354,11 @@ int runBoundaryValueCase(const DemoCaseConfig& config) {
       << ",\n  \"horizon_mm\": " << config.geometry.horizon
       << ",\n  \"horizonSpacingRatio\": " << config.geometry.horizon/config.geometry.spacing
       << ",\n  \"neighborSearch\": \"cell-linked-list\",\n"
-      << "  \"planeStrain\": true,\n  \"outerSimpleDamage\": false,\n"
+      << "  \"planeStrain\": " << (config.boundaryCondition.planeStrain?"true":"false") << ",\n  \"outerSimpleDamage\": false,\n"
       << "  \"boundarySets\": {\"support\": \"" << config.boundaryCondition.supportRegion
       << "\", \"loaded\": \"" << config.boundaryCondition.loadRegion
       << "\", \"regionLayers\": " << config.boundaryCondition.regionLayers
-      << ", \"rigidBodySuppression\": \"one lateral component at the support-centre particle\"},\n"
+      << ", \"rigidBodySuppression\": \"two lateral components at support centre and z at support upper midplane point\"},\n"
       << "  \"dt_ms\": " << config.timeIntegration.dt << ",\n  \"steps\": "
       << config.timeIntegration.steps << ",\n  \"materials\": [\n";
   for(size_t i=0;i<summaries.size();++i) {

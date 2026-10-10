@@ -1,0 +1,16 @@
+{
+  "coarse": {
+    "stress_MPa": 0.5439943097801588,
+    "mean_axial_strain": 1.7192823977724965,
+    "max_eqps": 8.244832929811725,
+    "stress_history_pct": 1.9816250573279284,
+    "displacement_pct": 2.160596567043601
+  },
+  "fine": {
+    "stress_MPa": 0.16996813408541447,
+    "mean_axial_strain": 0.17500868361548436,
+    "max_eqps": 11.518172240235469,
+    "stress_history_pct": 0.5501009812741988,
+    "displacement_pct": 0.9633471154910281
+  }
+}

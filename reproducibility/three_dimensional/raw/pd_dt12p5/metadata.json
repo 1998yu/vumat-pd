@@ -1,0 +1,26 @@
+{
+  "name": "pd_dt12p5",
+  "status": "pass",
+  "classification": "verification",
+  "scope": "Three-dimensional fixed 100 x 20 x 4 mm JC tensile verification; free lateral faces; no fracture",
+  "units": {"length": "mm", "time": "ms", "force": "N", "stress": "MPa", "solverMassDensity": "N*ms^2/mm^4", "sourceDensity": "kg/m^3"},
+  "densityConversion": "rho_solver = rho_kg_per_m3 * 1e-6",
+  "particles": 10605,
+  "grid": [101,21,5],
+  "spacing_mm": 1,
+  "horizon_mm": 3,
+  "horizonSpacingRatio": 3,
+  "neighborSearch": "cell-linked-list",
+  "planeStrain": false,
+  "outerSimpleDamage": false,
+  "boundarySets": {"support": "left", "loaded": "right", "regionLayers": 3, "rigidBodySuppression": "two lateral components at support centre and z at support upper midplane point"},
+  "dt_ms": 1.25e-05,
+  "steps": 9600,
+  "materials": [
+    {"name": "JC", "status": "pass", "sourceDensity_kg_per_m3": 7800, "solverDensity": 0.0078, "runtimeSeconds": 428.5424621, "maxNetInternalForce_N": 8.90636910599937e-10, "finalEnergyError": 0.0226013662563599, "maxEnergyError": 0.0226013662563599, "maxKineticToInternal": 4507.43733369526, "finalKineticToInternal": 0.00226889723063967, "maxEqps": 0.02935932674581, "maxInternalIndicator": 0, "earlyElasticSlope_MPa": 209215.76822091, "analyticalPlaneStrainSlope_MPa": 230769.230769231, "earlyElasticRelativeError": 0.093398337709391, "finalReaction_N": 8981.72039522025, "finalNominalStress_MPa": 112.271504940253, "finalEngineeringStrain": 0.0204081632653061, "finite": true}
+  ],
+  "acceptance": {"energyToleranceRelative": 0.15, "netForceTolerance_N": 1e-06, "minimumPlasticStrain": 0.001, "kineticToInternalLimit": 10},
+  "materialComparisonCaveat": "Internal state variables are model-specific observers and are not mapped to a common bond-breaking rule.",
+  "parameterMatchingPolicy": "Only identifiable macroscopic properties are matched; formulation-specific or hard-coded parameters are not claimed to be equivalent.",
+  "legacyBlockPolicy": "Material-independent fixed-width blocks of 256 points; a non-full final block duplicates its last valid point and discards padded outputs."
+}

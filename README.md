@@ -13,6 +13,10 @@ PD demonstration solver, and small reproducible verification cases.
 > method development, and VUMAT integration experiments. It is not a
 > replacement for a production finite-element or peridynamics package.
 
+## Latest 3D verification
+
+The 2026-10-10 revision provides matched 100 × 20 × 4 mm 3D H8 FEM and PD models, a common finest FEM reference, and reproducible Figures 4–6. Code, portable case runners, archived results and plotting scripts are in [the 3D reproducibility package](reproducibility/three_dimensional/README.md). The prior 2D comparison is historical evidence at commit 913e426.
+
 ## What is included
 
 - Block-wise C++/Fortran VUMAT adapter.
@@ -24,7 +28,6 @@ PD demonstration solver, and small reproducible verification cases.
 - Explicit time integration, simple bond damage, and rigid-wall contact.
 - JSON-driven material and case configuration.
 - BSD-licensed linear-elastic example VUMAT.
-- BSD-licensed Johnson-Cook example VUMAT and manuscript reproduction package.
 - BSD-licensed Johnson-Cook example VUMAT and manuscript reproduction package.
 - Unit and regression tests for tensor mapping, rigid rotation, neighbor
   search, contact, affine extension, and affine shear.
@@ -43,24 +46,15 @@ used and redistributed.
 
 ## Reproduce the manuscript results
 
-The repository contains the complete Johnson-Cook source, coarse and fine PD
-inputs, matching explicit FEM path, 241-time raw histories, field data,
-post-processing scripts, expected values and tolerances. Start with
-[`reproducibility/README.md`](reproducibility/README.md) or run
-`reproducibility/reproduce.ps1` / `reproducibility/reproduce.sh`.
-
-## Reproduce the manuscript results
-
-The repository contains the complete Johnson-Cook source, coarse and fine PD
-inputs, matching explicit FEM path, 241-time raw histories, field data,
-post-processing scripts, expected values and tolerances. Start with
-[`reproducibility/README.md`](reproducibility/README.md) or run
-`reproducibility/reproduce.ps1` / `reproducibility/reproduce.sh`.
+Use [the 3D reproduction guide](reproducibility/three_dimensional/README.md)
+for the current solver, matched meshes, archived histories and fields,
+Figures 4–6, expected metrics and the portable simulation runner.
+The prior 2D package remains available as historical evidence.
 
 ## Requirements
 
 - CMake 3.20 or newer.
-- A C++17 compiler.
+- A C++17 compiler with OpenMP support.
 - A Fortran compiler compatible with legacy fixed-form VUMAT sources.
 - Ninja is recommended.
 
@@ -115,9 +109,10 @@ PD displacement field
   -> PD force state
 ```
 
-The legacy infinitesimal-strain mode remains available only for controlled
-regression comparisons. Corotational kinematics is the recommended mode for
-impact and finite-rotation problems.
+The current streamed material bridge uses corotational kinematics. For the
+legacy infinitesimal-strain regression implementation, use historical commit
+913e426. Set OMP_NUM_THREADS=1 for user VUMATs unless their routines have been
+audited for reentrant parallel execution.
 
 ## Use your own VUMAT
 

@@ -429,9 +429,8 @@ DemoCaseConfig loadDemoCaseConfigFromJson(const std::string& casePath,
         config.boundaryCondition.amplitude == 0.0 ||
         config.boundaryCondition.riseTime <= 0.0 ||
         config.boundaryCondition.regionLayers < 1 ||
-        !config.boundaryCondition.planeStrain ||
         !config.boundaryCondition.rigidBodySuppression)
-      throw std::runtime_error("Boundary-value case requires regional smooth loading, plane strain, and rigid-body suppression.");
+      throw std::runtime_error("Boundary-value case requires regional smooth loading and rigid-body suppression.");
     const bool xCase = config.boundaryCondition.component == "x" &&
         config.boundaryCondition.supportRegion == "left" &&
         config.boundaryCondition.loadRegion == "right";
@@ -440,9 +439,11 @@ DemoCaseConfig loadDemoCaseConfigFromJson(const std::string& casePath,
         config.boundaryCondition.loadRegion == "top";
     if (!xCase && !yCase)
       throw std::runtime_error("Regional boundary case supports left/right-x or bottom/top-y loading.");
-    if (config.geometry.nz != 3 ||
-        std::abs(config.geometry.horizon / config.geometry.spacing - 3.0) > 1.0e-12)
-      throw std::runtime_error("Quasi-2D boundary cases require nz=3 and horizon/spacing=3.");
+    // Refinement studies retain plane strain but vary the sampling density
+    // through a fixed physical thickness and vary the horizon independently.
+    if (config.geometry.nz < 3 ||
+        config.geometry.horizon / config.geometry.spacing < 1.5)
+      throw std::runtime_error("Plane-strain refinement cases require nz>=3 and horizon/spacing>=1.5.");
     if (config.dynamics.density <= 0.0 || config.dynamics.outputEvery < 1 ||
         config.dynamics.snapshotEvery < 1 ||
         config.dynamics.energyToleranceRelative <= 0.0 ||

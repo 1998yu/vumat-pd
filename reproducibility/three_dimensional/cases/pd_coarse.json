@@ -1,0 +1,77 @@
+{
+  "schemaVersion": "1.0",
+  "name": "pd_coarse",
+  "type": "vumat_pd_boundary_case",
+  "classification": "verification",
+  "scope": "Three-dimensional fixed 100 x 20 x 4 mm JC tensile verification; free lateral faces; no fracture",
+  "units": {
+    "length": "mm",
+    "time": "ms",
+    "force": "N",
+    "stress": "MPa",
+    "massDensity": "N*ms^2/mm^4",
+    "sourceDensity": "kg/m^3"
+  },
+  "geometry": {
+    "type": "patch",
+    "nx": 51,
+    "ny": 11,
+    "nz": 3,
+    "spacing": 2,
+    "horizon": 6
+  },
+  "time_integration": {
+    "steps": 4800,
+    "dt": 2.4999999999999998e-05,
+    "totalTime": 0.12
+  },
+  "boundary_conditions": {
+    "type": "regional_smooth_displacement",
+    "mode": "boundary_value",
+    "supportRegion": "left",
+    "loadRegion": "right",
+    "component": "x",
+    "regionLayers": 2,
+    "amplitude": 2,
+    "riseTime": 0.12,
+    "planeStrain": false,
+    "rigidBodySuppression": true
+  },
+  "dynamics": {
+    "density": 0.0078,
+    "energyToleranceRelative": 0.15,
+    "netForceTolerance": 1e-06,
+    "outputEvery": 20,
+    "snapshotEvery": 4800,
+    "minimumPlasticStrain": 0.001,
+    "kineticToInternalLimit": 10
+  },
+  "damage": {
+    "model": "none",
+    "initiation": 0,
+    "failure": 1,
+    "deletionEnabled": false
+  },
+  "output": {
+    "directory": "reproducibility/three_dimensional/generated/results/pd_coarse",
+    "csv": true,
+    "svg": true,
+    "metadata": true
+  },
+  "materials": [
+    {
+      "name": "JC",
+      "materialConfigPath": "reproducibility/configs/johnson_cook.json",
+      "reference": true,
+      "elasticE": 210000,
+      "elasticNu": 0.3,
+      "referenceTemperature": 293,
+      "equivalentPlasticStrainIndex": 1
+    }
+  ],
+  "checks": [
+    "Fixed 100 x 20 x 4 mm domain; fixed 2 mm end bands.",
+    "Boundary quadrature preserves 8000 mm3 material volume.",
+    "Out-of-plane motion is free except rigid-body pins."
+  ]
+}

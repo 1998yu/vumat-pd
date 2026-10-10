@@ -94,6 +94,21 @@ void RegionalConstraintSystem::apply(vumat::pd::ParticleBlock& block,
     setComponent(i, loadComponent_, prescribed.displacement,
                  prescribed.velocity, prescribed.acceleration);
   setComponent(anchor_, lateralComponent(), 0.0, 0.0, 0.0);
+  if (!config_.planeStrain) {
+    // The centre pin removes lateral translations; a second pin removes
+    // rotation about x while permitting Poisson contraction about the centre.
+    setComponent(anchor_, 2, 0.0, 0.0, 0.0);
+    size_t rotationPin = anchor_;
+    double greatestY = -1.0e100;
+    const auto& centre = block.referencePosition[anchor_];
+    for (size_t i : support_) {
+      const auto& x = block.referencePosition[i];
+      if (std::abs(x[0]-centre[0])<1e-8 && std::abs(x[2]-centre[2])<1e-8 && x[1]>greatestY) {
+        greatestY=x[1]; rotationPin=i;
+      }
+    }
+    setComponent(rotationPin, 2, 0.0, 0.0, 0.0);
+  }
   if (config_.planeStrain)
     for (size_t i = 0; i < block.referencePosition.size(); ++i)
       setComponent(i, 2, 0.0, 0.0, 0.0);

@@ -122,5 +122,26 @@ if(BUILD_TESTING)
   endforeach()
 endif()
 
-install(TARGETS vumat_pd vumat_pd_run elastic_vumat_plugin jc_vumat_plugin jc_2d_fem)
+# Parallel material blocks require reentrant user material routines.
+find_package(OpenMP REQUIRED COMPONENTS CXX)
+target_link_libraries(vumat_pd PUBLIC OpenMP::OpenMP_CXX)
+target_compile_options(jc_vumat_plugin PRIVATE
+  $<$<COMPILE_LANGUAGE:Fortran>:-frecursive>)
+
+add_executable(jc_3d_fem reproducibility/src/main_jc_3d_fem.cpp)
+target_link_libraries(jc_3d_fem PRIVATE vumat_pd)
+add_executable(neighbor_lattice_regression tests/neighbor_lattice_regression.cpp)
+target_link_libraries(neighbor_lattice_regression PRIVATE vumat_pd)
+if(BUILD_TESTING)
+  add_test(NAME fem_h8_patch COMMAND jc_3d_fem --selftest)
+  add_test(NAME neighbor_lattice_regression COMMAND neighbor_lattice_regression)
+  configure_vumat_test(fem_h8_patch)
+  configure_vumat_test(neighbor_lattice_regression)
+  set_tests_properties(corotational_kinematics neighbor_search rigid_wall_contact
+    affine_bar_elastic affine_shear_elastic jc_vumat_material_point
+    fem_h8_patch neighbor_lattice_regression
+    PROPERTIES ENVIRONMENT "OMP_NUM_THREADS=2;OMP_DYNAMIC=FALSE")
+endif()
+
+install(TARGETS vumat_pd vumat_pd_run elastic_vumat_plugin jc_vumat_plugin jc_2d_fem jc_3d_fem)
 install(DIRECTORY include/ DESTINATION include)

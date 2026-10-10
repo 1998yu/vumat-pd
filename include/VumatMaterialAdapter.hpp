@@ -29,6 +29,7 @@ public:
 
   VumatPointResult updatePoint(const VumatPointInput& input) const;
   VumatBlockResult updateBlock(const VumatBlockInput& input) const;
+  const VumatBlockResult& updateFixedBlockCached(const VumatBlockInput& input) const;
 
 private:
   using VumatCall = void (*)(
@@ -70,6 +71,7 @@ private:
   std::shared_ptr<DynamicLibrary> library_;
   VumatCall call_ = nullptr;
   mutable WorkBuffer work_;
+  mutable VumatBlockResult cachedResult_;
 };
 
 } // namespace vumat

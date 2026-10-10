@@ -3,6 +3,8 @@
 
 #include <stdexcept>
 #include <utility>
+#include <algorithm>
+#include <omp.h>
 
 namespace vumat {
 namespace pd {
@@ -47,6 +49,8 @@ void validateState(size_t pointCount, const MaterialState& state) {
 VumatPdCorrespondenceMaterial::VumatPdCorrespondenceMaterial(
     VumatPdCorrespondenceConfig config)
     : config_(std::move(config)), adapter_(config_.material) {
+  for(int t=0;t<omp_get_max_threads();++t)
+    threadAdapters_.push_back(std::make_unique<VumatMaterialAdapter>(config_.material));
   if (config_.charLength <= 0.0)
     throw std::runtime_error("VUMAT-PD material bridge requires charLength > 0.");
   if (!config_.initialState.empty() &&
@@ -65,6 +69,7 @@ void VumatPdCorrespondenceMaterial::initialize(
   state.leftStretchN.assign(n, identityTensor());
   state.rotationN.assign(n, identityTensor());
   state.strainN.resize(n);
+  #pragma omp parallel for schedule(static)
   for (size_t i = 0; i < n; ++i)
     state.strainN[i] = config_.kinematicsMode == KinematicsMode::Corotational
         ? greenLagrangeStrain(initialDeformationGradient[i])
@@ -97,67 +102,58 @@ MaterialUpdateResult VumatPdCorrespondenceMaterial::update(
   output.rotation.resize(n);
   output.leftStretch.resize(n);
 
-  VumatBlockInput input;
-  input.dt = dt;
-  input.stepTime = stepTime;
-  input.totalTime = totalTime;
-  input.charLength.assign(n, config_.charLength);
-  input.temperature = state.temperatureN;
-  input.strainRateFull.resize(n);
-  input.relSpinIncFull.resize(n);
-  input.stretchOld = state.leftStretchN;
-  input.stretchNew.resize(n);
-  input.strainFullN = state.strainN;
-  input.stressFullN = state.rawStressN;
-  input.defgradOld = state.deformationGradientN;
-  input.defgradNew = deformationGradient;
-  input.stateOld = state.vumatStateN;
-  input.internalEnergyOld = state.internalEnergyN;
-  input.inelasticEnergyOld = state.inelasticEnergyN;
-  for (size_t i = 0; i < n; ++i) {
-    if (config_.kinematicsMode == KinematicsMode::LegacySmallStrain) {
-      output.strain[i] = legacySmallStrain(deformationGradient[i]);
-      output.rotation[i] = identityTensor();
-      output.leftStretch[i] = identityTensor();
-      for (size_t c = 0; c < 9; ++c)
-        input.strainRateFull[i][c] =
-            (output.strain[i][c] - state.strainN[i][c]) / dt;
-      input.relSpinIncFull[i] = zeroTensor();
-      // Reproduce the former bridge exactly: stretch and relative-spin
-      // arrays were zero-initialized rather than computed.
-      input.stretchOld[i] = zeroTensor();
-      input.stretchNew[i] = zeroTensor();
-      continue;
-    }
-    const CorotationalUpdate kinematics = updateCorotationalKinematics(
-        state.deformationGradientN[i], deformationGradient[i],
-        state.leftStretchN[i], state.rotationN[i], dt);
-    output.strain[i] = greenLagrangeStrain(deformationGradient[i]);
-    output.rotation[i] = kinematics.rotationNP1;
-    output.leftStretch[i] = kinematics.leftStretchNP1;
-    input.strainRateFull[i] = kinematics.unrotatedRateOfDeformation;
-    input.relSpinIncFull[i] = kinematics.relativeSpinIncrement;
-    input.stretchNew[i] = kinematics.leftStretchNP1;
-  }
 
-  const VumatBlockResult result = adapter_.updateBlock(input);
   output.rawStress.resize(n);
-  for (size_t i = 0; i < n; ++i)
-    output.rawStress[i] = config_.kinematicsMode == KinematicsMode::Corotational
-        ? rotateCorotationalStressToSpatial(result.stressFullNew[i], output.rotation[i])
-        : result.stressFullNew[i];
-  output.internalEnergy = result.internalEnergyNew;
-  output.inelasticEnergy = result.inelasticEnergyNew;
-
-  state.deformationGradientN = deformationGradient;
-  state.leftStretchN = output.leftStretch;
-  state.rotationN = output.rotation;
-  state.strainN = output.strain;
-  state.rawStressN = result.stressFullNew;
-  state.vumatStateN = result.stateNew;
-  state.temperatureN = result.temperatureNew;
-  state.internalEnergyN = result.internalEnergyNew;
-  state.inelasticEnergyN = result.inelasticEnergyNew;
+  output.internalEnergy.resize(n);
+  output.inelasticEnergy.resize(n);
+  constexpr size_t width=256;
+  const size_t batches=(n+width-1)/width;
+  #pragma omp parallel
+  {
+    VumatBlockInput input;
+    input.dt=dt;input.stepTime=stepTime;input.totalTime=totalTime;
+    input.charLength.assign(width,config_.charLength);
+    input.temperature.resize(width);input.strainRateFull.resize(width);
+    input.relSpinIncFull.resize(width);input.stretchOld.resize(width);input.stretchNew.resize(width);
+    input.strainFullN.resize(width);input.stressFullN.resize(width);
+    input.defgradOld.resize(width);input.defgradNew.resize(width);
+    input.stateOld.assign(width,std::vector<double>(static_cast<size_t>(config_.material.nstatev)));
+    input.internalEnergyOld.resize(width);input.inelasticEnergyOld.resize(width);
+    #pragma omp for schedule(static)
+    for(size_t b=0;b<batches;++b) {
+      const size_t begin=b*width,count=std::min(width,n-begin);
+      for(size_t j=0;j<count;++j) {
+        const size_t i=begin+j;
+        const auto kinematics=updateCorotationalKinematics(state.deformationGradientN[i],deformationGradient[i],state.leftStretchN[i],state.rotationN[i],dt);
+        output.strain[i]=greenLagrangeStrain(deformationGradient[i]);
+        output.rotation[i]=kinematics.rotationNP1;output.leftStretch[i]=kinematics.leftStretchNP1;
+        input.temperature[j]=state.temperatureN[i];input.strainRateFull[j]=kinematics.unrotatedRateOfDeformation;
+        input.relSpinIncFull[j]=kinematics.relativeSpinIncrement;
+        input.stretchOld[j]=state.leftStretchN[i];input.stretchNew[j]=kinematics.leftStretchNP1;
+        input.strainFullN[j]=state.strainN[i];input.stressFullN[j]=state.rawStressN[i];
+        input.defgradOld[j]=state.deformationGradientN[i];input.defgradNew[j]=deformationGradient[i];
+        input.stateOld[j]=state.vumatStateN[i];input.internalEnergyOld[j]=state.internalEnergyN[i];input.inelasticEnergyOld[j]=state.inelasticEnergyN[i];
+      }
+      for(size_t j=count;j<width;++j) {
+        const size_t last=count-1;
+        input.temperature[j]=input.temperature[last];input.strainRateFull[j]=input.strainRateFull[last];input.relSpinIncFull[j]=input.relSpinIncFull[last];
+        input.stretchOld[j]=input.stretchOld[last];input.stretchNew[j]=input.stretchNew[last];
+        input.strainFullN[j]=input.strainFullN[last];input.stressFullN[j]=input.stressFullN[last];
+        input.defgradOld[j]=input.defgradOld[last];input.defgradNew[j]=input.defgradNew[last];
+        input.stateOld[j]=input.stateOld[last];input.internalEnergyOld[j]=input.internalEnergyOld[last];input.inelasticEnergyOld[j]=input.inelasticEnergyOld[last];
+      }
+      const auto& result=threadAdapters_[omp_get_thread_num()]->updateFixedBlockCached(input);
+      for(size_t j=0;j<count;++j) {
+        const size_t i=begin+j;
+        output.rawStress[i]=rotateCorotationalStressToSpatial(result.stressFullNew[j],output.rotation[i]);
+        output.internalEnergy[i]=result.internalEnergyNew[j];output.inelasticEnergy[i]=result.inelasticEnergyNew[j];
+        state.deformationGradientN[i]=deformationGradient[i];state.leftStretchN[i]=output.leftStretch[i];state.rotationN[i]=output.rotation[i];
+        state.strainN[i]=output.strain[i];state.rawStressN[i]=result.stressFullNew[j];
+        state.vumatStateN[i]=result.stateNew[j];state.temperatureN[i]=result.temperatureNew[j];
+        state.internalEnergyN[i]=result.internalEnergyNew[j];state.inelasticEnergyN[i]=result.inelasticEnergyNew[j];
+      }
+    }
+  }
   return output;
 }
 

@@ -22,7 +22,7 @@ vumat::pd::ParticleBlock makeParticlePatch(int nx, int ny, int nz, double spacin
                                            static_cast<double>(j) * spacing - yOffset,
                                            static_cast<double>(k) * spacing - zOffset});
         block.displacement.push_back({0.0, 0.0, 0.0});
-        block.volume.push_back(volume);
+        block.volume.push_back(volume * ((i==0 || i==nx-1)?0.5:1.0) * ((j==0 || j==ny-1)?0.5:1.0) * ((k==0 || k==nz-1)?0.5:1.0));
       }
     }
   }

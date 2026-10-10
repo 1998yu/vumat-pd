@@ -1,3 +1,7 @@
+# Historical 2D package
+
+**For the current matched 3D FEM–PD comparison and Figures 4–6, use [three_dimensional/](three_dimensional/README.md).** This older package is archived evidence. To rerun it with its original quadrature and averaging, check out commit 913e42635183c87eb2734666c79c328800ff41c2.
+
 # Paper reproducibility package
 
 This directory reproduces the 100 x 20 mm Johnson-Cook FEM-PD comparison in

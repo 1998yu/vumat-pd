@@ -138,15 +138,17 @@ VumatBlockResult VumatMaterialAdapter::updateBlock(const VumatBlockInput& input)
 
   constexpr size_t maxLegacyBlockSize = 256;
   if (input.strainRateFull.size() > maxLegacyBlockSize) {
+    const size_t n=input.strainRateFull.size();
+    const size_t chunks=(n+maxLegacyBlockSize-1)/maxLegacyBlockSize;
     VumatBlockResult combined;
-    const auto appendFirst = [](auto& destination, auto&& source, size_t count) {
-      destination.insert(destination.end(),
-                         std::make_move_iterator(source.begin()),
-                         std::make_move_iterator(source.begin() +
-                                                 static_cast<std::ptrdiff_t>(count)));
-    };
-    for (size_t begin = 0; begin < input.strainRateFull.size();
-         begin += maxLegacyBlockSize) {
+    combined.stressFullNew.resize(n);combined.stateNew.resize(n);
+    combined.temperatureNew.resize(n);combined.internalEnergyNew.resize(n);combined.inelasticEnergyNew.resize(n);
+    #pragma omp parallel
+    {
+      VumatMaterialAdapter threadAdapter(config_);
+      #pragma omp for schedule(static)
+      for(size_t batch=0;batch<chunks;++batch) {
+        const size_t begin=batch*maxLegacyBlockSize;
       const size_t end = std::min(begin + maxLegacyBlockSize,
                                   input.strainRateFull.size());
       VumatBlockInput chunk;
@@ -197,16 +199,26 @@ VumatBlockResult VumatMaterialAdapter::updateBlock(const VumatBlockInput& input)
       padToLegacyBlock(chunk.stateOld);
       padToLegacyBlock(chunk.internalEnergyOld);
       padToLegacyBlock(chunk.inelasticEnergyOld);
-      VumatBlockResult result = updateBlock(chunk);
-      appendFirst(combined.stressFullNew, std::move(result.stressFullNew), validCount);
-      appendFirst(combined.stateNew, std::move(result.stateNew), validCount);
-      appendFirst(combined.temperatureNew, std::move(result.temperatureNew), validCount);
-      appendFirst(combined.internalEnergyNew, std::move(result.internalEnergyNew), validCount);
-      appendFirst(combined.inelasticEnergyNew, std::move(result.inelasticEnergyNew), validCount);
+
+        auto result=threadAdapter.updateBlock(chunk);
+        for(size_t k=0;k<validCount;++k) {
+          combined.stressFullNew[begin+k]=result.stressFullNew[k];
+          combined.stateNew[begin+k]=std::move(result.stateNew[k]);
+          combined.temperatureNew[begin+k]=result.temperatureNew[k];
+          combined.internalEnergyNew[begin+k]=result.internalEnergyNew[k];
+          combined.inelasticEnergyNew[begin+k]=result.inelasticEnergyNew[k];
+        }
+      }
     }
     return combined;
   }
 
+  return updateFixedBlockCached(input);
+}
+
+const VumatBlockResult& VumatMaterialAdapter::updateFixedBlockCached(const VumatBlockInput& input) const {
+  if(input.strainRateFull.size()>256 || input.dt<=0.0)
+    throw std::runtime_error("Cached material update requires a positive time step and at most 256 points.");
   int nblock = static_cast<int>(requireConsistentBlockSize(input, config_.nstatev));
   int ndir = config_.ndir;
   int nshr = config_.nshr;
@@ -304,7 +316,7 @@ VumatBlockResult VumatMaterialAdapter::updateBlock(const VumatBlockInput& input)
         work.stretchNew.data(), work.defgradNew.data(), work.fieldNew.data(), work.stressNew.data(),
         work.stateNew.data(), work.enerInternNew.data(), work.enerInelasNew.data());
 
-  VumatBlockResult result;
+  VumatBlockResult& result=cachedResult_;
   result.stressFullNew.resize(static_cast<size_t>(nblock));
   result.stateNew.resize(static_cast<size_t>(nblock));
   result.temperatureNew.assign(work.tempNew.begin(), work.tempNew.end());

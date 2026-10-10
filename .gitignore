@@ -14,3 +14,5 @@
 .DS_Store
 Thumbs.db
 desktop.ini
+
+/reproducibility/three_dimensional/generated/
