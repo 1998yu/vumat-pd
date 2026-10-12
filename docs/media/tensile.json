@@ -1,0 +1,13 @@
+{
+  "data_source": "archive",
+  "resolution": "fine",
+  "cases": [
+    "pd_shared",
+    "fem_fine"
+  ],
+  "coordinates": "reference",
+  "FEM_sampling": "mean of nearest two Gauss planes; quadrature subcells",
+  "PD_sampling": "z=0 nodal layer",
+  "smoothing": false,
+  "shared_full_range_scales": true
+}

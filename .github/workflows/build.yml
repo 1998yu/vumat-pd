@@ -17,5 +17,10 @@ jobs:
         run: cmake --build --preset release
       - name: Test
         run: ctest --preset release
-      - name: Verify 3D archived data integrity
-        run: python reproducibility/three_dimensional/unpack_archive.py
+      - name: Verify benchmark archive integrity
+        run: python benchmarks/tensile3d/unpack_archive.py
+      - name: Check demo entry points
+        run: |
+          python -m compileall -q demos benchmarks/tensile3d
+          python demos/run.py elastic
+          python demos/run.py material-point

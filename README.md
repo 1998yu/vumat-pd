@@ -1,157 +1,136 @@
 # VUMAT–PD
 
-VUMAT–PD is a research-oriented, solver-independent adapter that reuses
-Abaqus/Explicit-style VUMAT material updates inside a correspondence
-peridynamics (PD) solver.
+**Reuse a material routine in peridynamics. Build it once, load it as a plugin, and run a verified example.**
 
-The repository focuses on the interface between nonlocal PD kinematics and
-block-wise constitutive updates. It includes a Flanagan–Taylor corotational
-kinematics update, VUMAT tensor mapping, spatial stress rotation, an explicit
-PD demonstration solver, and small reproducible verification cases.
+VUMAT–PD is a C++/Fortran interface for executing VUMAT-style constitutive updates inside a correspondence-peridynamics solver. It handles tensor mapping, corotational kinematics, block-wise calls and persistent material state, so that a new material does not need a second PD-specific implementation.
 
-> Status: research software. The repository is suitable for verification,
-> method development, and VUMAT integration experiments. It is not a
-> replacement for a production finite-element or peridynamics package.
+The project includes an explicit PD host, an independent 3D H8 finite-element comparison solver, two redistributable material plugins and four runnable demos. **Abaqus is not required to build or run the included examples.**
 
-## Latest 3D verification
+[Demos](demos/README.md) · [Integrate a VUMAT](docs/add-a-vumat.md) · [Interface conventions](docs/interface.md) · [Validation](benchmarks/tensile3d/README.md)
 
-The 2026-10-10 revision provides matched 100 × 20 × 4 mm 3D H8 FEM and PD models, a common finest FEM reference, and reproducible Figures 4–6. Code, portable case runners, archived results and plotting scripts are in [the 3D reproducibility package](reproducibility/three_dimensional/README.md). The prior 2D comparison is historical evidence at commit 913e426.
+## See it run
 
-## What is included
+### Elastic deformation
 
-- Block-wise C++/Fortran VUMAT adapter.
-- Node-level correspondence PD deformation-gradient and force-state assembly.
-- Flanagan–Taylor update of rotation and left stretch.
-- Corotational rate-of-deformation, relative spin, stretch, and deformation
-  gradient transfer to VUMAT.
-- Rotation of VUMAT stress back to the spatial PD frame.
-- Explicit time integration, simple bond damage, and rigid-wall contact.
-- JSON-driven material and case configuration.
-- BSD-licensed linear-elastic example VUMAT.
-- BSD-licensed Johnson-Cook example VUMAT and manuscript reproduction package.
-- Unit and regression tests for tensor mapping, rigid rotation, neighbor
-  search, contact, affine extension, and affine shear.
+Check an elastic material plugin through affine extension and simple shear. The results are compared with the analytical small-strain response.
 
-## What is not included
+![Elastic extension and shear](docs/media/elastic.png)
 
-- Abaqus, Abaqus headers, or proprietary solver libraries.
-- Third-party CDPM2, M7, or other restricted VUMAT source files.
-- Manuscript source files or experimental datasets.
-- MPI/distributed-memory execution.
-- A complete production implementation of particle deletion and flying-point
-  management.
+```bash
+python demos/run.py elastic
+```
 
-Users are responsible for ensuring that any VUMAT they load may legally be
-used and redistributed.
+### Johnson–Cook material point
 
-## Reproduce the manuscript results
+Load the Fortran Johnson–Cook plugin and inspect its stress and equivalent-plastic-strain history before using it in a spatial model.
 
-Use [the 3D reproduction guide](reproducibility/three_dimensional/README.md)
-for the current solver, matched meshes, archived histories and fields,
-Figures 4–6, expected metrics and the portable simulation runner.
-The prior 2D package remains available as historical evidence.
+![Johnson–Cook material-point response](docs/media/material-point.png)
 
-## Requirements
+```bash
+python demos/run.py material-point
+```
 
-- CMake 3.20 or newer.
-- A C++17 compiler with OpenMP support.
-- A Fortran compiler compatible with legacy fixed-form VUMAT sources.
-- Ninja is recommended.
+### The same material in 3D FEM and PD
 
-Tested locally with GCC/gfortran through MSYS2 UCRT64 on Windows. The GitHub
-Actions workflow verifies GCC/gfortran on Ubuntu.
+Run a matched 100 × 20 × 4 mm tensile specimen through independent FEM and PD spatial solvers. Both execute the same compiled material routine. Inspect the response history and the final stress and plastic-strain fields.
 
-## Build and test
+![Matched 3D FEM and PD](docs/media/tensile.png)
+
+```bash
+python demos/run.py tensile --threads 2
+```
+
+### Transient stress evolution
+
+Watch the FEM tensile field evolve from the displaced end across the specimen. The moving time marker, fixed colour scales and reflected axial profile make the transient asymmetry visible.
+
+![Transient tensile response](docs/media/transient.gif)
+
+[Download the full-resolution MP4](docs/media/transient.mp4).
+
+```bash
+python demos/run.py transient --threads 2
+```
+
+The gallery uses actual solver outputs. The animation shows FEM; the preceding demo compares FEM and PD. The nonfracturing specimen does not depict damage or crack propagation.
+
+## Quick start
+
+Install CMake 3.25+, a C++17 compiler, a legacy-compatible Fortran compiler, Ninja and OpenMP. The configuration is tested with GCC/gfortran on Windows through MSYS2 UCRT64; the Ubuntu workflow builds and checks GCC/gfortran.
+
+Run from the repository root:
 
 ```bash
 cmake --preset release
-cmake --build --preset release
+cmake --build --preset release --parallel
 ctest --preset release
+python demos/run.py elastic
 ```
 
-If Ninja or the compilers are not on `PATH`, configure explicitly:
+Python 3.10+ is used by the demo launcher and archive checker. Install the optional plotting dependencies to regenerate the gallery:
 
 ```bash
-cmake -S . -B build/release -G Ninja \
-  -DCMAKE_BUILD_TYPE=Release \
-  -DCMAKE_CXX_COMPILER=g++ \
-  -DCMAKE_Fortran_COMPILER=gfortran
-cmake --build build/release
-ctest --test-dir build/release --output-on-failure
+python -m pip install -r demos/requirements.txt
+python demos/plot.py --demo elastic
 ```
 
-## Run an example
+The transient demo also requires FFmpeg on `PATH`. On Windows, use an ASCII-only checkout path and a terminal with the UCRT64 compiler runtimes on `PATH`. See [the demo guide](demos/README.md) for outputs and for the distinction between inspecting archived data and rerunning simulations.
+
+## What you can reuse
+
+| Component | Purpose |
+|---|---|
+| Runtime material plugins | Compile an elastic or Johnson–Cook Fortran routine into a shared library |
+| `VumatMaterialAdapter` | Transfer properties, tensors, energies and state arrays through block-wise calls |
+| `VumatPdCorrespondenceMaterial` | Connect material updates to PD deformation measures and spatial stresses |
+| Explicit PD host | Build neighborhoods, reconstruct kinematics, assemble forces and advance motion |
+| 3D H8 FEM host | Compare the same constitutive routine through an independent spatial formulation |
+| JSON cases and validation data | Start from documented inputs and check expected responses |
+
+```text
+PD nodal motion → nonlocal deformation gradient → corotational update
+    → VUMAT material plugin → spatial stress → internal forces → next step
+```
+
+Adding a material means compiling a compatible plugin and writing its configuration. Start with [the VUMAT integration guide](docs/add-a-vumat.md); verify the material point before moving to a spatial case.
+
+## Verification you can inspect
+
+The automated checks cover corotational updates, neighbor search, elastic deformation, rigid-wall contact and an H8 affine patch. The [3D tensile benchmark](benchmarks/tensile3d/README.md) retains the final inputs, compressed raw data, hashes and comparison metrics.
+
+For the fine matched FEM–PD case, archived stress-history NRMSE is **0.55%**, displacement RMSE is **0.96% of the imposed 2 mm displacement**, and local maximum plastic strain differs by **11.52%**. The tested JC update gives close averaged responses across the hosts, while local plastic strain remains more sensitive.
+
+Final grid, horizon and time-step sensitivity cases are also included. Inspect them without rerunning the full matrix:
 
 ```bash
-./build/release/bin/vumat_pd_run examples/affine_bar_elastic.json
-./build/release/bin/vumat_pd_run examples/affine_shear_elastic.json
+python benchmarks/tensile3d/analyse_and_plot.py
+python benchmarks/tensile3d/verify_metrics.py
 ```
 
-On Windows, use `vumat_pd_run.exe`.
+## Interface and scope
 
-Generated files are written below `examples/output/`, which is excluded from
-Git.
+The adapter uses symmetric ordering **11, 22, 33, 23, 13, 12**, tensor shear and **left stretch**. These differ from standard Abaqus VUMAT shear ordering and right-stretch input. The included isotropic routines work under the documented conventions; an arbitrary VUMAT needs component/frame mapping and its own verification.
 
-## Kinematic coupling
+The 3D benchmark verifies a nonfracturing, x-directed tensile case. It establishes neither general finite-rotation accuracy nor a physically calibrated thermal response. The JC temperature state is a transferred numerical variable, not a validated adiabatic prediction. Existing damage/contact code does not establish production impact or fracture capability. Read [interface conventions and applicability](docs/interface.md) before adapting the project.
 
-The default material update follows
+Use one OpenMP thread for a custom routine until its reentrancy has been checked. The JC plugin is built with recursive local Fortran storage for its tested threaded path.
+
+## Project layout
 
 ```text
-PD displacement field
-  -> deformation gradients F_n and F_n+1
-  -> velocity gradient L
-  -> D and W
-  -> Flanagan–Taylor rotation R and left stretch V
-  -> unrotated rate D_bar and relative spin
-  -> block-wise VUMAT update
-  -> corotational stress sigma_bar
-  -> spatial stress sigma = R sigma_bar R^T
-  -> PD force state
+src/                  Single current C++ implementation
+include/              Public C++ interfaces
+materials/            Fortran examples and standalone bridge
+configs/              Material properties and plugin configuration
+examples/             Small runnable cases
+demos/                Launcher, plotting and movie generation
+benchmarks/tensile3d/  Final 3D validation inputs, data and metrics
+docs/                 Architecture, integration guides and gallery
+tests/                Automated checks
 ```
 
-The current streamed material bridge uses corotational kinematics. For the
-legacy infinitesimal-strain regression implementation, use historical commit
-913e426. Set OMP_NUM_THREADS=1 for user VUMATs unless their routines have been
-audited for reentrant parallel execution.
+Builds, generated runs and logs are ignored by Git. The checkout contains the current implementation and supported examples; earlier models and development snapshots remain in Git history.
 
-## Use your own VUMAT
+## License and support
 
-The example plugin target in `CMakeLists.txt` combines:
-
-- a VUMAT source;
-- `materials/bridge/vumat_c_wrapper_jinfo.f90`;
-- `materials/bridge/abaqus_stubs.f90`.
-
-Replace the example source with a VUMAT that you are permitted to use, then
-create a matching JSON material configuration. See
-[docs/add-a-vumat.md](docs/add-a-vumat.md).
-
-## Repository layout
-
-```text
-include/             Public C++ interfaces
-src/                 VUMAT–PD and demonstration-solver implementation
-materials/bridge/    Standalone C/Fortran bridge and minimal Abaqus shims
-materials/examples/  Redistributable example VUMAT
-configs/             Material configurations
-examples/            Small JSON verification cases
-tests/               Fast unit and regression tests
-docs/                Architecture, kinematics, and extension guides
-```
-
-## Known limitations
-
-- The current velocity gradient is reconstructed from consecutive deformation
-  gradients rather than directly from the nonlocal velocity field.
-- Energy diagnostics still require a fully consistent work-conjugate update
-  for large-deformation production studies.
-- Fracture-related neighborhood degradation and particle deletion require
-  further verification.
-- The included solver is deliberately compact and is not distributed-memory
-  parallel.
-
-## License and citation
-
-The repository is released under the BSD 3-Clause License. See
-[LICENSE](LICENSE) and [CITATION.cff](CITATION.cff).
-
+The project uses the [BSD 3-Clause License](LICENSE). Both included materials are redistributable examples. Use [GitHub issues](https://github.com/1998yu/vumat-pd/issues) for reproducible bug reports and integration questions. See [CONTRIBUTING.md](CONTRIBUTING.md) and [CITATION.cff](CITATION.cff).

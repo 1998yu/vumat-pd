@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.25)
 
 project(VumatPd LANGUAGES CXX Fortran)
 
@@ -78,9 +78,6 @@ endif()
 add_executable(vumat_pd_run src/main_pd_case_runner.cpp)
 target_link_libraries(vumat_pd_run PRIVATE vumat_pd)
 
-add_executable(jc_2d_fem reproducibility/src/main_jc_2d_fem.cpp)
-target_link_libraries(jc_2d_fem PRIVATE vumat_pd)
-
 add_executable(corotational_kinematics_test
   tests/corotational_kinematics_test.cpp)
 target_link_libraries(corotational_kinematics_test PRIVATE vumat_pd)
@@ -114,7 +111,7 @@ if(BUILD_TESTING)
   add_test(NAME affine_shear_elastic
     COMMAND vumat_pd_run examples/affine_shear_elastic.json)
   add_test(NAME jc_vumat_material_point
-    COMMAND vumat_pd_run reproducibility/cases/jc_material_point.json)
+    COMMAND vumat_pd_run examples/jc_material_point.json)
   foreach(test_name IN ITEMS corotational_kinematics neighbor_search
       rigid_wall_contact affine_bar_elastic affine_shear_elastic
       jc_vumat_material_point)
@@ -128,7 +125,7 @@ target_link_libraries(vumat_pd PUBLIC OpenMP::OpenMP_CXX)
 target_compile_options(jc_vumat_plugin PRIVATE
   $<$<COMPILE_LANGUAGE:Fortran>:-frecursive>)
 
-add_executable(jc_3d_fem reproducibility/src/main_jc_3d_fem.cpp)
+add_executable(jc_3d_fem src/main_jc_3d_fem.cpp)
 target_link_libraries(jc_3d_fem PRIVATE vumat_pd)
 add_executable(neighbor_lattice_regression tests/neighbor_lattice_regression.cpp)
 target_link_libraries(neighbor_lattice_regression PRIVATE vumat_pd)
@@ -143,5 +140,5 @@ if(BUILD_TESTING)
     PROPERTIES ENVIRONMENT "OMP_NUM_THREADS=2;OMP_DYNAMIC=FALSE")
 endif()
 
-install(TARGETS vumat_pd vumat_pd_run elastic_vumat_plugin jc_vumat_plugin jc_2d_fem jc_3d_fem)
+install(TARGETS vumat_pd vumat_pd_run elastic_vumat_plugin jc_vumat_plugin jc_3d_fem)
 install(DIRECTORY include/ DESTINATION include)

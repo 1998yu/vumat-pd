@@ -1,0 +1,12 @@
+{
+  "affine_bar_elastic": {
+    "status": "pass",
+    "maximum_stress_error_MPa": 0.001342701315319772,
+    "max_net_force_N": 5.186726233405765e-14
+  },
+  "affine_shear_elastic": {
+    "status": "pass",
+    "maximum_stress_error_MPa": 0.000383653908329283,
+    "max_net_force_N": 1.391725562512403e-14
+  }
+}

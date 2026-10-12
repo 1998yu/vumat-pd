@@ -34,8 +34,10 @@ frame. The PD force assembly uses the spatial stress
 
 An infinitesimal-strain update mixes material deformation with rigid rotation.
 That approximation is acceptable only when both strain and rotation are
-small. The corotational update is objective and is therefore the default for
-impact, large deformation, and fracture-oriented studies.
+small. The corotational update separates material deformation from rigid
+rotation and is the current spatial host's default. Regression checks do not
+establish accuracy for all finite rotations or impact/fracture applications;
+those uses require independent verification.
 
 ## Current approximation
 

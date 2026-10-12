@@ -1,0 +1,58 @@
+{
+  "schemaVersion": "1.0",
+  "name": "jc_material_point",
+  "type": "vumat_material_point_case",
+  "classification": "verification",
+  "scope": "Johnson-Cook material-update demonstration with a prescribed mixed strain-stress condition",
+  "geometry": {
+    "type": "patch",
+    "nx": 2,
+    "ny": 2,
+    "nz": 2,
+    "spacing": 1.0,
+    "horizon": 3.0
+  },
+  "time_integration": {
+    "steps": 600,
+    "dt": 0.0002,
+    "totalTime": 0.12
+  },
+  "boundary_conditions": {
+    "type": "affine_displacement",
+    "mode": "plane_strain_x_uniaxial_stress",
+    "maxStrain": 0.02040816326530612
+  },
+  "damage": {
+    "model": "none",
+    "initiation": 0.0,
+    "failure": 1.0,
+    "deletionEnabled": false
+  },
+  "output": {
+    "directory": "examples/output/jc_material_point",
+    "csv": true,
+    "svg": false,
+    "metadata": true
+  },
+  "materials": [
+    {
+      "name": "JC",
+      "materialConfigPath": "configs/johnson_cook.json",
+      "reference": false,
+      "elasticE": 210000.0,
+      "elasticNu": 0.3,
+      "referenceTemperature": 293.0,
+      "equivalentPlasticStrainIndex": 1,
+      "internalIndicator": {
+        "indices": [
+          1
+        ],
+        "reduction": "max",
+        "transform": "identity"
+      }
+    }
+  ],
+  "checks": [
+    "The VUMAT loads and returns finite stress and state-variable histories."
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "case": "full-domain H8 FEM tension",
+  "spacing_mm": 2.0,
+  "dt_ns": 25.0,
+  "actual_states": 241,
+  "simulation_time_ms": [
+    0.0,
+    0.12
+  ],
+  "playback_seconds": 14.95,
+  "dimensions": [
+    1920,
+    1080
+  ],
+  "stress_scale_MPa": [
+    -374.2812936780325,
+    1111.3764765834205
+  ],
+  "plastic_strain_scale": [
+    0,
+    0.025508799649288573
+  ],
+  "snapshot_sha256": "3abfed7896caf846bc3783513e4beea2420f1df18d8b66106e1f4b2105fe21f3",
+  "movie_sha256": "0b8e71f802c78cac32b044c1949f6b092935b62eae4df910fdf3bab0f2fc8f07",
+  "smoothing": false,
+  "time_interpolation": false,
+  "full_decode": "pass"
+}

@@ -1,6 +1,6 @@
 /build/
 /examples/output/
-/reproducibility/generated/
+/benchmarks/tensile3d/generated/
 /.venv/
 /.vs/
 /.vscode/
@@ -15,4 +15,4 @@
 Thumbs.db
 desktop.ini
 
-/reproducibility/three_dimensional/generated/
+/demos/output/
