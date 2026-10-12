@@ -6,7 +6,7 @@ VUMAT–PD is a C++/Fortran interface for executing VUMAT-style constitutive upd
 
 The project includes an explicit PD host, an independent 3D H8 finite-element comparison solver, three material plugins and five runnable demos. **Abaqus is not required to build or run the included examples.**
 
-[Demos](demos/README.md) · [Integrate a VUMAT](docs/add-a-vumat.md) · [Interface conventions](docs/interface.md) · [Validation](benchmarks/tensile3d/README.md)
+[Architecture](docs/architecture.md) · [Demos](demos/README.md) · [Integrate a VUMAT](docs/add-a-vumat.md) · [Interface conventions](docs/interface.md) · [Validation](benchmarks/tensile3d/README.md)
 
 ## See it run
 
@@ -58,9 +58,17 @@ The gallery uses actual solver outputs. The animation shows FEM; the preceding d
 
 Bend a 3D bar through 150° or twist it through 540° using the compressible Neo-Hookean material plugin. Free particles move under PD internal forces; only the support and loaded end layers have prescribed motion.
 
-![Neo-Hookean large bending and torsion](docs/media/hyperelastic.gif)
+**150° bending**
 
-[Download the large-deformation MP4](docs/media/hyperelastic.mp4).
+![Neo-Hookean 150 degree bending](docs/media/bending.gif)
+
+[Download the bending MP4](docs/media/bending.mp4).
+
+**540° torsion**
+
+![Neo-Hookean 540 degree torsion](docs/media/torsion.gif)
+
+[Download the torsion MP4](docs/media/torsion.mp4).
 
 ```bash
 python demos/run.py hyperelastic

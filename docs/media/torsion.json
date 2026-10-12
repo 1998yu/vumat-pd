@@ -1,0 +1,29 @@
+{
+  "material": "compressible Neo-Hookean",
+  "scenario": "torsion",
+  "angle_deg": 540,
+  "layout": "single demo",
+  "actual_states": 101,
+  "simulation_time_ms": [
+    0,
+    1.2
+  ],
+  "dimensions": [
+    1440,
+    960
+  ],
+  "playback_seconds": 7.95,
+  "stress_scale_MPa": [
+    0.0,
+    609.4809988429816
+  ],
+  "geometry_exaggeration": false,
+  "surface_visualization": "Facets connect actual boundary particles; face stress is the mean of their corner values.",
+  "time_interpolation": false,
+  "independent_spatial_validation": false,
+  "full_decode": "pass",
+  "minimum_J_over_history": 0.880208301124391,
+  "snapshot_sha256": "da7cbd8c090c249ac0b174380177503a7d0e0c1f4f3f4f9d695fbdde4be5334a",
+  "history_sha256": "d5e06e66b64840f9e57b16cfea8ba11d28e12ba0c33d466f13ccfd4ec748bcb0",
+  "movie_sha256": "b3327109452568e9b5f788b632eaba86b41564dd637da27d5fb1318a809c8b00"
+}

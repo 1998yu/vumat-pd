@@ -1,21 +1,72 @@
 # Architecture
 
-VUMAT–PD is organized into four layers:
+VUMAT–PD separates material updates from spatial solvers. C++ hosts handle geometry, kinematics, force assembly and time integration; Fortran plugins handle constitutive response. The adapter connects them through one documented tensor and state-array contract.
 
-1. **PD kinematics** reconstructs deformation gradients from particle
-   neighborhoods.
-2. **Corotational kinematics** updates rotation, left stretch, unrotated
-   rate-of-deformation, and relative spin.
-3. **VUMAT adapter** maps C++ tensors and state vectors into an
-   Abaqus/Explicit-style block call.
-4. **PD force assembly** rotates constitutive stress to the spatial frame and
-   evaluates the correspondence force state.
+## Repository map
 
-`VumatMaterialAdapter` is independent of the demonstration PD solver and is
-the main reusable interface. `VumatPdCorrespondenceMaterial` owns the coupling
-state required by the correspondence formulation.
+```text
+vumat-pd/
+├── src/                   Current C++ implementation and solver entry points
+├── include/               Public C++ interfaces
+├── materials/
+│   ├── examples/          Elastic, Johnson–Cook and Neo-Hookean routines
+│   └── bridge/            C-compatible Fortran wrapper and standalone shims
+├── configs/               Material properties and plugin selection
+├── examples/              Small case inputs
+├── demos/                 Launcher, plots and video renderers
+├── benchmarks/tensile3d/   Final 3D cases, compressed data and metric baselines
+├── docs/                  Architecture, integration guides and media
+├── tests/                 Automated numerical checks
+├── CMakeLists.txt         Build targets
+└── .github/workflows/     Linux build and verification
+```
 
-The compact case runner is included to make the interface testable without
-Abaqus or Peridigm. Larger solvers can replace the geometry, neighborhood,
-time integration, and output layers while retaining the material adapter.
+Generated runs, temporary plots and compiler outputs are excluded from Git.
+
+## Material update routes
+
+```mermaid
+flowchart TD
+    Inputs["Case inputs + material configuration"] --> PD["Correspondence PD host"]
+    Inputs --> FEM["Independent H8 FEM host"]
+    PD --> PF["Nonlocal deformation gradient"]
+    FEM --> FF["Element deformation gradient"]
+    PF --> Corot["Corotational coupling: Elastic / JC"]
+    FF --> Corot
+    PF --> Spatial["Dedicated spatial-stress route: Neo-Hookean demo"]
+    Corot --> Adapter["VumatMaterialAdapter"]
+    Spatial --> Adapter
+    Adapter --> Plugin["Compiled Fortran material plugin"]
+    Plugin --> Returned["Stress + updated material state"]
+    Returned --> Frame["Host applies the route's stress-frame convention"]
+    Frame --> Forces["PD force state / FEM force assembly"]
+    Forces --> Motion["Time integration + boundary conditions"]
+    Motion --> Outputs["CSV outputs → plots and demo videos"]
+```
+
+`VumatMaterialAdapter` loads a material library, packs block inputs and unpacks stress, energy and persistent state arrays. It can be reused independently of the included spatial hosts. The bridge exports `vumat_adapter_call`; no Abaqus installation is needed for the examples.
+
+`VumatPdCorrespondenceMaterial` manages the corotational route, including rotation, left stretch and material history. The host rotates the returned corotational stress into the spatial frame before assembling forces.
+
+The Neo-Hookean bending/torsion entry calls `VumatMaterialAdapter` directly with spatial deformation gradients. Its material routine returns spatial Cauchy stress, so this route applies no extra corotational stress rotation. The two routes must not be interchanged without a frame conversion. See [interface conventions](interface.md).
+
+## Runnable entry points
+
+| Entry | Role |
+|---|---|
+| `vumat_pd_run` | Affine PD checks, material-point updates and regional PD boundary cases |
+| `jc_3d_fem` | Independent H8 tensile solver using the same JC material plugin |
+| `vumat_pd_large_motion_3d` | Dedicated Neo-Hookean 150° bending and 540° torsion examples |
+| `python demos/run.py` | Select and launch the supported demos |
+| `python demos/plot.py` | Plot small demos or the matched 3D tensile comparison |
+| `python demos/render_transient.py` | Render actual FEM transient fields |
+| `python demos/render_hyperelastic.py` | Render bending and torsion as separate videos |
+
+## Verification and reuse
+
+Core checks cover neighborhood construction, corotational updates, affine response, an H8 patch and basic contact. The Neo-Hookean material check covers finite stretch, three shear planes and rotation. The tensile benchmark retains independent FEM–PD comparisons and sensitivity cases.
+
+The hyperelastic spatial examples are demonstrations with dynamic relaxation; they do not yet have an independent FEM or experimental reference. The archived 3D tensile comparison establishes the documented JC case, not arbitrary material compatibility.
+
+To integrate a new material, start with [the integration guide](add-a-vumat.md). A larger host can replace geometry, neighborhoods, force assembly and output while retaining the adapter and compatible material plugins.
 
