@@ -17,9 +17,6 @@ struct GeometryConfig {
   int nz = 1;
   double spacing = 1.0;
   double horizon = 1.0;
-  double length = 0.0;
-  double diameter = 0.0;
-  double initialGap = 0.0;
 };
 
 struct TimeIntegrationConfig {
@@ -45,22 +42,12 @@ struct BoundaryConditionConfig {
 
 struct DynamicsConfig {
   double density = 0.0;
-  double probeX = 0.0;
-  std::string referenceModel = "constrained_p_wave";
-  double arrivalThresholdFraction = 0.05;
-  double arrivalToleranceRelative = 0.25;
   double energyToleranceRelative = 1.0e-3;
   double netForceTolerance = 1.0e-8;
   int outputEvery = 1;
   int snapshotEvery = 0;
   double minimumPlasticStrain = 0.0;
   double kineticToInternalLimit = 1.0;
-  double momentumImpulseToleranceRelative = 0.01;
-  double penetrationSpacingTolerance = 0.2;
-};
-
-struct InitialConditionsConfig {
-  std::array<double, 3> velocity{0.0, 0.0, 0.0};
 };
 
 struct RigidWallContactConfig {
@@ -69,17 +56,6 @@ struct RigidWallContactConfig {
   std::array<double, 3> normal{1.0, 0.0, 0.0};
   double penaltyStiffness = 0.0;
   double frictionCoefficient = 0.0;
-};
-
-struct BenchmarkConfig {
-  std::string name;
-  std::string source;
-  std::string citation;
-  std::string doi;
-  std::string referenceProfilePath;
-  std::string originalVumatSourceHash;
-  double experimentalFinalLength = 0.0;
-  double experimentalMushroomDiameter = 0.0;
 };
 
 struct UnitSystemConfig {
@@ -129,9 +105,6 @@ struct DemoCaseConfig {
   TimeIntegrationConfig timeIntegration;
   BoundaryConditionConfig boundaryCondition;
   DynamicsConfig dynamics;
-  InitialConditionsConfig initialConditions;
-  RigidWallContactConfig contact;
-  BenchmarkConfig benchmark;
   SimpleDamageConfig damage;
   OutputConfig output;
   ValidationToleranceConfig tolerances;

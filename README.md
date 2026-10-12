@@ -4,7 +4,7 @@
 
 VUMAT–PD is a C++/Fortran interface for executing VUMAT-style constitutive updates inside a correspondence-peridynamics solver. It handles tensor mapping, corotational kinematics, block-wise calls and persistent material state, so that a new material does not need a second PD-specific implementation.
 
-The project includes an explicit PD host, an independent 3D H8 finite-element comparison solver, two redistributable material plugins and four runnable demos. **Abaqus is not required to build or run the included examples.**
+The project includes an explicit PD host, an independent 3D H8 finite-element comparison solver, three material plugins and five runnable demos. **Abaqus is not required to build or run the included examples.**
 
 [Demos](demos/README.md) · [Integrate a VUMAT](docs/add-a-vumat.md) · [Interface conventions](docs/interface.md) · [Validation](benchmarks/tensile3d/README.md)
 
@@ -54,6 +54,21 @@ python demos/run.py transient --threads 2
 
 The gallery uses actual solver outputs. The animation shows FEM; the preceding demo compares FEM and PD. The nonfracturing specimen does not depict damage or crack propagation.
 
+### Hyperelastic large deformation
+
+Bend a 3D bar through 150° or twist it through 540° using the compressible Neo-Hookean material plugin. Free particles move under PD internal forces; only the support and loaded end layers have prescribed motion.
+
+![Neo-Hookean large bending and torsion](docs/media/hyperelastic.gif)
+
+[Download the large-deformation MP4](docs/media/hyperelastic.mp4).
+
+```bash
+python demos/run.py hyperelastic
+python demos/render_hyperelastic.py
+```
+
+These examples use dynamic relaxation and demonstrate finite-deformation behavior. They use a dedicated spatial-stress path, rather than the corotational JC path. The Neo-Hookean material check covers tension, compression, three shear planes, rigid rotation and rotated stretch; the spatial examples are demonstrations without an independent FEM or experimental reference. See [conditions and outputs](demos/README.md#5-hyperelastic-large-deformation).
+
 ## Quick start
 
 Install CMake 3.25+, a C++17 compiler, a legacy-compatible Fortran compiler, Ninja and OpenMP. The configuration is tested with GCC/gfortran on Windows through MSYS2 UCRT64; the Ubuntu workflow builds and checks GCC/gfortran.
@@ -80,7 +95,7 @@ The transient demo also requires FFmpeg on `PATH`. On Windows, use an ASCII-only
 
 | Component | Purpose |
 |---|---|
-| Runtime material plugins | Compile an elastic or Johnson–Cook Fortran routine into a shared library |
+| Runtime material plugins | Compile elastic, Johnson–Cook or Neo-Hookean Fortran routines into shared libraries |
 | `VumatMaterialAdapter` | Transfer properties, tensors, energies and state arrays through block-wise calls |
 | `VumatPdCorrespondenceMaterial` | Connect material updates to PD deformation measures and spatial stresses |
 | Explicit PD host | Build neighborhoods, reconstruct kinematics, assemble forces and advance motion |
@@ -129,8 +144,8 @@ docs/                 Architecture, integration guides and gallery
 tests/                Automated checks
 ```
 
-Builds, generated runs and logs are ignored by Git. The checkout contains the current implementation and supported examples; earlier models and development snapshots remain in Git history.
+Builds, generated runs and logs are ignored by Git. The checkout contains the current implementation for affine PD checks, material-point updates, regional PD boundary cases and the dedicated hyperelastic bending/torsion demo. Comparison plots and exported tables can be regenerated from the final validation data.
 
 ## License and support
 
-The project uses the [BSD 3-Clause License](LICENSE). Both included materials are redistributable examples. Use [GitHub issues](https://github.com/1998yu/vumat-pd/issues) for reproducible bug reports and integration questions. See [CONTRIBUTING.md](CONTRIBUTING.md) and [CITATION.cff](CITATION.cff).
+The project uses the [BSD 3-Clause License](LICENSE). The included materials are example routines. Use [GitHub issues](https://github.com/1998yu/vumat-pd/issues) for reproducible bug reports and integration questions. See [CONTRIBUTING.md](CONTRIBUTING.md) and [CITATION.cff](CITATION.cff).

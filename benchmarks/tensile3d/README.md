@@ -62,4 +62,4 @@ The fine direct pair gives 0.55% stress-history NRMSE, 0.96% displacement RMSE/2
 
 Raw metadata retains an earlier elastic-slope diagnostic for hash integrity; the analyzer uses 3D uniaxial E = 210000 MPa. The checked outputs define validation, rather than that embedded earlier diagnostic.
 
-`cases` contains final PD inputs; `raw` contains compressed final data; `expected` contains fixed metrics and hashes; `figures` contains geometry, workflow and comparisons. There is one shared implementation in the project root.
+`cases` contains final PD inputs; `raw` contains compressed final data; `expected` contains the two metric baselines and CSV hashes. Comparison plots, tabulated metrics and displacement-sample coordinates are regenerated under `generated`, so duplicate exported figures and tables are not stored in the checkout. There is one shared implementation in the project root.

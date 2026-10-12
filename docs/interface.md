@@ -13,6 +13,8 @@ A routine with a different frame, component order or signature needs an adapter 
 
 The isotropic JC update does not use the stretch or deformation-gradient arrays and treats shear entries identically. Its FEM–PD agreement therefore does not verify these mappings for an arbitrary anisotropic or stretch-dependent routine.
 
+The Neo-Hookean bending/torsion demo uses a separate contract: spatial deformation gradients and spatial Cauchy stress pass directly through `VumatMaterialAdapter`. It bypasses the corotational coupling wrapper. The supplied Neo-Hookean routine matches the adapter's tensor ordering; its material-point tests cover all three shear planes and rotated finite stretch. Do not feed this spatial-stress routine into the corotational host unchanged.
+
 ## Batches and plugin entry
 
 Spatial coupling uses at most 256 points per block. Rows retain point ownership. The last block is padded by duplicating its final valid row and discards padded outputs. Properties, old state, stress and energy histories pass through the adapter.
@@ -27,7 +29,7 @@ The spatial benchmark uses mm, ms, N and MPa, with solver density 0.0078 N·ms²
 
 Comparisons verify the included JC routine in documented 3D nonfracturing tensile models. Core tests cover affine response, neighbor search, an H8 patch, corotational updates and basic rigid-wall contact. Local maximum plastic strain remains resolution-sensitive.
 
-General finite-rotation accuracy, arbitrary VUMAT compatibility, damage–neighborhood coupling, deletion and production impact/fracture need separate evaluation. Contact and damage source code is not application-validation evidence.
+The dedicated Neo-Hookean examples demonstrate 150° bending and 540° torsion with dynamic relaxation, but have no independent spatial reference or convergence study. General finite-rotation accuracy, arbitrary VUMAT compatibility, damage–neighborhood coupling, deletion and production impact/fracture need separate evaluation. Contact and damage source code is not application-validation evidence.
 
 ## Threading
 

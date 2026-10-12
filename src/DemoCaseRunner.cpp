@@ -3,8 +3,6 @@
 #include "DemoCaseRunner.hpp"
 #include "MaterialPointCaseRunner.hpp"
 #include "DemoConfig.hpp"
-#include "DynamicCaseRunner.hpp"
-#include "ImpactCaseRunner.hpp"
 #include "Geometry.hpp"
 #include "PdCorrespondenceSkeleton.hpp"
 #include "PdSimpleDamage.hpp"
@@ -504,10 +502,6 @@ int runDemoCaseFromJson(const std::string& casePath, const std::string& pluginDi
       return runMaterialPointCase(config);
     if (config.type == "vumat_pd_boundary_case")
       return runBoundaryValueCase(config);
-    if (config.type == "vumat_pd_dynamic_case")
-      return runDynamicCase(config);
-    if (config.type == "vumat_pd_impact_case")
-      return runImpactCase(config);
 
     const std::string outputRoot = config.output.directory;
     std::filesystem::create_directories(outputRoot);

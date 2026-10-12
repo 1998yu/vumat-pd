@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "1.0",
+  "name": "NeoHookean",
+  "cmname": "NEOHOOKEAN",
+  "plugin": "neohookean_kv_vumat_plugin",
+  "symbol": "vumat_adapter_call",
+  "ndir": 3,
+  "nshr": 3,
+  "nstatev": 4,
+  "nfieldv": 1,
+  "props": [
+    769.2307692307692,
+    1666.6666666666665,
+    0.0,
+    0.0
+  ],
+  "density": 7800.0,
+  "note": "Pure compressible Neo-Hookean model. Initial tangent moduli exactly match E=2000 MPa and nu=0.30; viscosity is disabled for constitutive comparison."
+}

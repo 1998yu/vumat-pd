@@ -22,9 +22,6 @@ GeometryConfig loadGeometry(const json::Value& root) {
     geometry.nz = json::getInt(*object, "nz", false, geometry.nz);
     geometry.spacing = json::getDouble(*object, "spacing", false, geometry.spacing);
     geometry.horizon = json::getDouble(*object, "horizon", false, geometry.horizon);
-    geometry.length = json::getDouble(*object, "length", false, geometry.length);
-    geometry.diameter = json::getDouble(*object, "diameter", false, geometry.diameter);
-    geometry.initialGap = json::getDouble(*object, "initialGap", false, geometry.initialGap);
     return geometry;
   }
 
@@ -88,13 +85,6 @@ DynamicsConfig loadDynamics(const json::Value& root) {
   if (!object || object->type != json::Value::Type::Object)
     return dynamics;
   dynamics.density = json::getDouble(*object, "density", false, dynamics.density);
-  dynamics.probeX = json::getDouble(*object, "probeX", false, dynamics.probeX);
-  dynamics.referenceModel =
-      json::getString(*object, "referenceModel", false, dynamics.referenceModel);
-  dynamics.arrivalThresholdFraction = json::getDouble(
-      *object, "arrivalThresholdFraction", false, dynamics.arrivalThresholdFraction);
-  dynamics.arrivalToleranceRelative = json::getDouble(
-      *object, "arrivalToleranceRelative", false, dynamics.arrivalToleranceRelative);
   dynamics.energyToleranceRelative = json::getDouble(
       *object, "energyToleranceRelative", false, dynamics.energyToleranceRelative);
   dynamics.netForceTolerance = json::getDouble(
@@ -107,69 +97,7 @@ DynamicsConfig loadDynamics(const json::Value& root) {
       *object, "minimumPlasticStrain", false, dynamics.minimumPlasticStrain);
   dynamics.kineticToInternalLimit = json::getDouble(
       *object, "kineticToInternalLimit", false, dynamics.kineticToInternalLimit);
-  dynamics.momentumImpulseToleranceRelative = json::getDouble(
-      *object, "momentumImpulseToleranceRelative", false,
-      dynamics.momentumImpulseToleranceRelative);
-  dynamics.penetrationSpacingTolerance = json::getDouble(
-      *object, "penetrationSpacingTolerance", false,
-      dynamics.penetrationSpacingTolerance);
   return dynamics;
-}
-
-std::array<double, 3> loadVec3(const json::Value& object, const std::string& name,
-                              const std::array<double, 3>& fallback) {
-  const json::Value* value = json::find(object, name);
-  if (!value) return fallback;
-  if (value->type != json::Value::Type::Array || value->array.size() != 3)
-    throw std::runtime_error(name + " must be a three-component numeric array.");
-  std::array<double, 3> result{};
-  for (size_t i = 0; i < 3; ++i) {
-    if (value->array[i].type != json::Value::Type::Number)
-      throw std::runtime_error(name + " must contain only numbers.");
-    result[i] = value->array[i].number;
-  }
-  return result;
-}
-
-InitialConditionsConfig loadInitialConditions(const json::Value& root) {
-  InitialConditionsConfig initial;
-  const json::Value* object = json::find(root, "initial_conditions");
-  if (object && object->type == json::Value::Type::Object)
-    initial.velocity = loadVec3(*object, "velocity", initial.velocity);
-  return initial;
-}
-
-RigidWallContactConfig loadContact(const json::Value& root) {
-  RigidWallContactConfig contact;
-  const json::Value* object = json::find(root, "contact");
-  if (!object || object->type != json::Value::Type::Object) return contact;
-  contact.enabled = json::getBool(*object, "enabled", false, contact.enabled);
-  contact.point = loadVec3(*object, "point", contact.point);
-  contact.normal = loadVec3(*object, "normal", contact.normal);
-  contact.penaltyStiffness =
-      json::getDouble(*object, "penaltyStiffness", false, contact.penaltyStiffness);
-  contact.frictionCoefficient = json::getDouble(
-      *object, "frictionCoefficient", false, contact.frictionCoefficient);
-  return contact;
-}
-
-BenchmarkConfig loadBenchmark(const json::Value& root) {
-  BenchmarkConfig benchmark;
-  const json::Value* object = json::find(root, "benchmark");
-  if (!object || object->type != json::Value::Type::Object) return benchmark;
-  benchmark.name = json::getString(*object, "name", false, "");
-  benchmark.source = json::getString(*object, "source", false, "");
-  benchmark.citation = json::getString(*object, "citation", false, "");
-  benchmark.doi = json::getString(*object, "doi", false, "");
-  benchmark.referenceProfilePath =
-      json::getString(*object, "referenceProfilePath", false, "");
-  benchmark.originalVumatSourceHash =
-      json::getString(*object, "originalVumatSourceHash", false, "");
-  benchmark.experimentalFinalLength = json::getDouble(
-      *object, "experimentalFinalLength", false, 0.0);
-  benchmark.experimentalMushroomDiameter = json::getDouble(
-      *object, "experimentalMushroomDiameter", false, 0.0);
-  return benchmark;
 }
 
 UnitSystemConfig loadUnits(const json::Value& root) {
@@ -355,9 +283,6 @@ DemoCaseConfig loadDemoCaseConfigFromJson(const std::string& casePath,
   config.timeIntegration = loadTimeIntegration(root);
   config.boundaryCondition = loadBoundaryCondition(root);
   config.dynamics = loadDynamics(root);
-  config.initialConditions = loadInitialConditions(root);
-  config.contact = loadContact(root);
-  config.benchmark = loadBenchmark(root);
   config.damage = loadDamage(root);
   config.output = loadOutput(root, config.name);
   config.tolerances = loadTolerances(root);
@@ -377,9 +302,8 @@ DemoCaseConfig loadDemoCaseConfigFromJson(const std::string& casePath,
     config.timeIntegration.totalTime =
         config.timeIntegration.dt * static_cast<double>(config.timeIntegration.steps);
 
-  if (config.type != "vumat_pd_demo_case" && config.type != "vumat_pd_dynamic_case" &&
+  if (config.type != "vumat_pd_demo_case" &&
       config.type != "vumat_pd_boundary_case" &&
-      config.type != "vumat_pd_impact_case" &&
       config.type != "vumat_material_point_case")
     throw std::runtime_error("Unsupported case type: " + config.type);
   if (config.geometry.spacing <= 0.0 || config.geometry.horizon <= 0.0)
@@ -387,10 +311,6 @@ DemoCaseConfig loadDemoCaseConfigFromJson(const std::string& casePath,
   if (config.geometry.type == "patch") {
     if (config.geometry.nx < 2 || config.geometry.ny < 2 || config.geometry.nz < 2)
       throw std::runtime_error("PD patch geometry requires nx/ny/nz >= 2.");
-  } else if (config.geometry.type == "cylinder") {
-    if (config.geometry.length <= 0.0 || config.geometry.diameter <= 0.0 ||
-        config.geometry.initialGap < 0.0)
-      throw std::runtime_error("Cylinder geometry requires positive length/diameter and nonnegative gap.");
   } else {
     throw std::runtime_error("Unsupported geometry type: " + config.geometry.type);
   }
@@ -406,24 +326,6 @@ DemoCaseConfig loadDemoCaseConfigFromJson(const std::string& casePath,
          config.boundaryCondition.mode != "simple_shear_xy" &&
          config.boundaryCondition.mode != "plane_strain_x_uniaxial_stress"))
       throw std::runtime_error("Unsupported boundary_conditions type or mode.");
-  } else if (config.type == "vumat_pd_dynamic_case") {
-    if (config.boundaryCondition.type != "smooth_displacement_ramp_x" ||
-        config.boundaryCondition.amplitude == 0.0 ||
-        config.boundaryCondition.riseTime <= 0.0)
-      throw std::runtime_error("Dynamic wave case requires a nonzero smooth displacement ramp.");
-    if (config.dynamics.density <= 0.0 || config.dynamics.outputEvery < 1 ||
-        config.dynamics.arrivalThresholdFraction <= 0.0 ||
-        config.dynamics.arrivalToleranceRelative <= 0.0 ||
-        config.dynamics.energyToleranceRelative <= 0.0 ||
-        config.dynamics.netForceTolerance <= 0.0 ||
-        config.dynamics.referenceModel != "constrained_p_wave")
-      throw std::runtime_error("Invalid dynamics configuration.");
-    if (config.materials.size() != 1)
-      throw std::runtime_error("The dynamic wave validation currently requires one material.");
-    if (config.materials.front().elasticE <= 0.0 ||
-        config.materials.front().elasticNu <= -1.0 ||
-        config.materials.front().elasticNu >= 0.5)
-      throw std::runtime_error("Dynamic wave reference requires valid elastic E and nu.");
   } else if (config.type == "vumat_pd_boundary_case") {
     if (config.boundaryCondition.type != "regional_smooth_displacement" ||
         config.boundaryCondition.amplitude == 0.0 ||
@@ -439,11 +341,10 @@ DemoCaseConfig loadDemoCaseConfigFromJson(const std::string& casePath,
         config.boundaryCondition.loadRegion == "top";
     if (!xCase && !yCase)
       throw std::runtime_error("Regional boundary case supports left/right-x or bottom/top-y loading.");
-    // Refinement studies retain plane strain but vary the sampling density
-    // through a fixed physical thickness and vary the horizon independently.
+    // Boundary cases retain thickness sampling while varying grid and horizon.
     if (config.geometry.nz < 3 ||
         config.geometry.horizon / config.geometry.spacing < 1.5)
-      throw std::runtime_error("Plane-strain refinement cases require nz>=3 and horizon/spacing>=1.5.");
+      throw std::runtime_error("PD boundary cases require nz>=3 and horizon/spacing>=1.5.");
     if (config.dynamics.density <= 0.0 || config.dynamics.outputEvery < 1 ||
         config.dynamics.snapshotEvery < 1 ||
         config.dynamics.energyToleranceRelative <= 0.0 ||
@@ -454,29 +355,6 @@ DemoCaseConfig loadDemoCaseConfigFromJson(const std::string& casePath,
         config.units.force != "N" || config.units.stress != "MPa" ||
         config.units.massDensity != "N*ms^2/mm^4")
       throw std::runtime_error("Boundary-value cases currently require the documented mm-ms-N-MPa unit system.");
-  } else {
-    if (config.geometry.type != "cylinder" ||
-        std::abs(config.geometry.horizon / config.geometry.spacing - 3.0) > 1.0e-12)
-      throw std::runtime_error("Impact cases require a cylinder and horizon/spacing=3.");
-    if (config.materials.size() != 1 || config.dynamics.density <= 0.0 ||
-        config.dynamics.outputEvery < 1 || config.dynamics.snapshotEvery < 1 ||
-        config.dynamics.energyToleranceRelative <= 0.0 ||
-        config.dynamics.momentumImpulseToleranceRelative <= 0.0 ||
-        config.dynamics.penetrationSpacingTolerance <= 0.0)
-      throw std::runtime_error("Invalid impact dynamics configuration.");
-    if (!config.contact.enabled || config.contact.penaltyStiffness <= 0.0 ||
-        config.contact.frictionCoefficient < 0.0)
-      throw std::runtime_error("Impact cases require enabled rigid-wall contact.");
-    if (config.initialConditions.velocity[0] == 0.0 &&
-        config.initialConditions.velocity[1] == 0.0 &&
-        config.initialConditions.velocity[2] == 0.0)
-      throw std::runtime_error("Impact cases require a nonzero uniform initial velocity.");
-    if (config.damage.mode != "none" || config.damage.deletionEnabled)
-      throw std::runtime_error("Adapter impact verification requires external damage and deletion disabled.");
-    if (config.units.length != "mm" || config.units.time != "ms" ||
-        config.units.force != "N" || config.units.stress != "MPa" ||
-        config.units.massDensity != "N*ms^2/mm^4")
-      throw std::runtime_error("Impact cases require the documented mm-ms-N-MPa unit system.");
   }
   if (config.materials.empty())
     throw std::runtime_error("Demo case requires at least one material.");

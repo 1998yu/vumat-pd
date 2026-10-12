@@ -45,6 +45,18 @@ set_target_properties(jc_vumat_plugin PROPERTIES
   OUTPUT_NAME "jc_vumat_plugin"
 )
 
+add_library(neohookean_kv_vumat_plugin SHARED
+  materials/examples/NeoHookeanKV.f90
+  materials/bridge/vumat_c_wrapper_jinfo.f90
+  materials/bridge/abaqus_stubs.f90
+)
+target_include_directories(neohookean_kv_vumat_plugin PRIVATE materials/bridge)
+target_compile_options(neohookean_kv_vumat_plugin PRIVATE
+  $<$<COMPILE_LANGUAGE:Fortran>:-std=legacy>
+  $<$<COMPILE_LANGUAGE:Fortran>:-frecursive>
+)
+set_target_properties(neohookean_kv_vumat_plugin PROPERTIES PREFIX "")
+
 add_library(vumat_pd STATIC
   src/MaterialConfigJson.cpp
   src/SimpleJson.cpp
@@ -57,8 +69,6 @@ add_library(vumat_pd STATIC
   src/Geometry.cpp
   src/DemoCaseRunner.cpp
   src/MaterialPointCaseRunner.cpp
-  src/DynamicCaseRunner.cpp
-  src/ImpactCaseRunner.cpp
   src/BoundaryValueCaseRunner.cpp
   src/ExplicitTimeIntegrator.cpp
   src/CorotationalKinematics.cpp
@@ -127,6 +137,10 @@ target_compile_options(jc_vumat_plugin PRIVATE
 
 add_executable(jc_3d_fem src/main_jc_3d_fem.cpp)
 target_link_libraries(jc_3d_fem PRIVATE vumat_pd)
+add_executable(vumat_pd_large_motion_3d src/main_large_motion_3d.cpp)
+target_link_libraries(vumat_pd_large_motion_3d PRIVATE vumat_pd)
+add_executable(neohookean_material_test tests/neohookean_material_test.cpp)
+target_link_libraries(neohookean_material_test PRIVATE vumat_pd)
 add_executable(neighbor_lattice_regression tests/neighbor_lattice_regression.cpp)
 target_link_libraries(neighbor_lattice_regression PRIVATE vumat_pd)
 if(BUILD_TESTING)
@@ -134,11 +148,24 @@ if(BUILD_TESTING)
   add_test(NAME neighbor_lattice_regression COMMAND neighbor_lattice_regression)
   configure_vumat_test(fem_h8_patch)
   configure_vumat_test(neighbor_lattice_regression)
+  add_test(NAME neohookean_material
+    COMMAND neohookean_material_test configs/neohookean.json
+            demos/output/hyperelastic/material-point-check)
+  add_test(NAME hyperelastic_bending
+    COMMAND vumat_pd_large_motion_3d bending demos/output/hyperelastic/bending 2400 24 150)
+  add_test(NAME hyperelastic_torsion
+    COMMAND vumat_pd_large_motion_3d torsion demos/output/hyperelastic/torsion 2400 24 540)
+  foreach(test_name IN ITEMS neohookean_material hyperelastic_bending hyperelastic_torsion)
+    configure_vumat_test(${test_name})
+  endforeach()
+  set_tests_properties(hyperelastic_bending hyperelastic_torsion PROPERTIES TIMEOUT 120)
   set_tests_properties(corotational_kinematics neighbor_search rigid_wall_contact
     affine_bar_elastic affine_shear_elastic jc_vumat_material_point
-    fem_h8_patch neighbor_lattice_regression
+    fem_h8_patch neighbor_lattice_regression neohookean_material
+    hyperelastic_bending hyperelastic_torsion
     PROPERTIES ENVIRONMENT "OMP_NUM_THREADS=2;OMP_DYNAMIC=FALSE")
 endif()
 
-install(TARGETS vumat_pd vumat_pd_run elastic_vumat_plugin jc_vumat_plugin jc_3d_fem)
+install(TARGETS vumat_pd vumat_pd_run elastic_vumat_plugin jc_vumat_plugin
+  neohookean_kv_vumat_plugin jc_3d_fem vumat_pd_large_motion_3d)
 install(DIRECTORY include/ DESTINATION include)

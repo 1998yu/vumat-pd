@@ -68,6 +68,23 @@ python demos/render_transient.py \
   --output demos/output/transient.mp4 --gif
 ```
 
+## 5 Hyperelastic large deformation
+
+```bash
+python demos/run.py hyperelastic
+python demos/render_hyperelastic.py
+```
+
+The material check verifies the Neo-Hookean plugin against closed-form spatial Cauchy stress in tension, compression, xy/xz/yz shear, rigid rotation and rotated finite stretch. Then the launcher runs both the 150° bending and 540° torsion examples, with no Abaqus dependency.
+
+Each example uses a 41 × 5 × 5 particle grid spanning 80 × 8 × 8 mm, 2 mm spacing, 6 mm horizon and clipped boundary-cell volumes from the current PD host. Three end layers are fixed and three loaded layers follow a smooth rigid-motion ramp. The remaining particles are advanced by explicit PD force balance. There are 2400 steps of 0.0005 ms, with real field snapshots every 24 steps. Solver density is 0.0078 N·ms²/mm⁴; E = 2000 MPa and nu = 0.30 set the initial Neo-Hookean tangent. Constitutive viscosities are zero; host dynamic relaxation is 8/ms. Damage and deletion are disabled.
+
+Outputs are under `demos/output/hyperelastic/bending` and `torsion`. The renderer uses their actual snapshots to create `hyperelastic.mp4`, `hyperelastic.gif`, a PNG poster and a provenance JSON. Plotting dependencies and FFmpeg are required for rendering. The gallery is available under `docs/media`.
+
+The material routine consumes the spatial deformation gradient and returns spatial Cauchy stress. The dedicated demo calls the adapter directly and applies no additional corotational stress rotation. Do not use that routine unchanged through the corotational JC host. Large rotations are demonstrated in this specific path; spatial convergence, damping sensitivity and comparison with independent FEM/experiments remain unverified.
+
+These examples reproduce the earlier bending/torsion setup using the current host's boundary volumes. The displayed outputs are freshly computed; earlier uniform-volume output tables are not mixed into this project.
+
 ## Plotting and outputs
 
 ```bash
