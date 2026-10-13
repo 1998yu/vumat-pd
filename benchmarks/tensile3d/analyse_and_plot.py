@@ -38,7 +38,10 @@ for name in names:
     assert not np.isclose(nodes['uz_mm'].min(),0,atol=1e-5),(name,'out-of-plane motion suppressed')
     assert np.isclose(np.ptp(nodes['z0_mm']),4)
     data[name]={'series':ts,'fields':field,'nodes':nodes,'metadata':meta}
-    for f in p.glob('*.csv'):hashes[f'{name}/{f.name}']=hashlib.sha256(f.read_bytes()).hexdigest()
+    # Optional movie snapshots are separate artifacts, not benchmark inputs.
+    required=['timeseries.csv','field_snapshots.csv'] if name.startswith('pd') else ['timeseries.csv','final_gauss_points.csv','final_nodes.csv']
+    for filename in required:
+        f=p/filename;hashes[f'{name}/{filename}']=hashlib.sha256(f.read_bytes()).hexdigest()
 
 common_t=np.arange(1,241)*.0005
 coords=np.array([(x,y,z) for x in np.arange(4,98,2) for y in np.arange(-10,12,2) for z in [-2,0,2]],dtype=float)

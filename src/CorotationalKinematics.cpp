@@ -97,7 +97,10 @@ CorotationalUpdate updateCorotationalKinematics(
   if(omegaSq>1.0e-30) {
     const double magnitude=std::sqrt(omegaSq);
     const double s1=std::sin(dt*magnitude)/magnitude;
-    const double s2=-(1.0-std::cos(dt*magnitude))/omegaSq;
+    // Positive Rodrigues coefficient for omega*omega. The half-angle form
+    // avoids subtractive cancellation for small rotation increments.
+    const double halfSine=std::sin(0.5*dt*magnitude);
+    const double s2=2.0*halfSine*halfSine/omegaSq;
     const Tensor3 omega2=multiply(omega,omega);
     for(size_t i=0;i<9;++i) q[i]+=s1*omega[i]+s2*omega2[i];
   }

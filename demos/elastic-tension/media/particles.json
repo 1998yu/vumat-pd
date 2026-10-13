@@ -9,8 +9,8 @@
     0.12
   ],
   "field_sampling": "all actual PD particles at saved deformed 3D coordinates",
-  "snapshots_sha256": "d72b532eb2462b9b829e2b7e95b65e7f72d8518a9d8d7bf6eab7fc1a3e121917",
-  "history_sha256": "66afcbc124916b7fdbb487091ed85a63f4fe2b1cf0d409b76611e7b1e6b6fae2",
+  "snapshots_sha256": "fd38b36cc534012ddcf1ebd25e7605ab98405b6ddcea59921a166f3a30e61eb3",
+  "history_sha256": "36ae962e47183ecf58eb7a6633be5a508998d6ce998535ee5ef05b3da078f8db",
   "case": "elastic",
   "visualization": "All actual PD particle centers at deformed 3D coordinates; orthographic depth-sorted point markers.",
   "submitted_particle_count": 1683,
@@ -23,7 +23,7 @@
   "camera_fixed": true,
   "stress_scale_MPa": [
     -1.34507789521894e-11,
-    74.6414870965128
+    74.6414870965807
   ],
   "quantity": "Axial stress (MPa)",
   "dimensions": [

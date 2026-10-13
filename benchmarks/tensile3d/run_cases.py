@@ -78,6 +78,10 @@ def main():
         # Remove only the completion marker, so an interrupted rerun cannot
         # accidentally be accepted as a previously successful simulation.
         (dest / 'metadata.json').unlink(missing_ok=True)
+        if name in FEM:
+            # An optional movie from a previous solve must not survive a rerun
+            # that exports only final fields with a newly rebuilt solver.
+            (dest / 'movie_slice.csv').unlink(missing_ok=True)
         with (logs / f'{name}.log').open('w') as log:
             result = subprocess.run(command, cwd=REPO, env=env,
                                     stdout=log, stderr=subprocess.STDOUT)

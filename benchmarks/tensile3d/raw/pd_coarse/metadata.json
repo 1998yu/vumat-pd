@@ -1,5 +1,6 @@
 {
   "name": "pd_coarse",
+  "solver": "correspondence peridynamics",
   "status": "pass",
   "classification": "verification",
   "scope": "Three-dimensional fixed 100 x 20 x 4 mm JC tensile verification; free lateral faces; no fracture",
@@ -17,7 +18,7 @@
   "dt_ms": 2.5e-05,
   "steps": 4800,
   "materials": [
-    {"name": "JC", "status": "pass", "sourceDensity_kg_per_m3": 7800, "solverDensity": 0.0078, "runtimeSeconds": 35.0184498, "maxNetInternalForce_N": 2.77111792423875e-10, "finalEnergyError": 0.0224015438964681, "maxEnergyError": 0.0224015438964681, "maxKineticToInternal": 2424.53097161769, "finalKineticToInternal": 0.00233821756277847, "maxEqps": 0.0278019694943397, "maxInternalIndicator": 0, "earlyElasticSlope_MPa": 201234.895969065, "analyticalPlaneStrainSlope_MPa": 230769.230769231, "earlyElasticRelativeError": 0.127982117467386, "finalReaction_N": 9871.7175608885, "finalNominalStress_MPa": 123.396469511106, "finalEngineeringStrain": 0.0204081632653061, "finite": true}
+    {"name": "JC", "status": "pass", "plugin_file": "jc_vumat_plugin.dll", "sourceDensity_kg_per_m3": 7800, "solverDensity": 0.0078, "runtimeSeconds": 17.9319899, "maxNetInternalForce_N": 3.35774477874176e-10, "finalEnergyError": 0.0224015614675876, "maxEnergyError": 0.0224015614675876, "maxKineticToInternal": 2424.53097161769, "finalKineticToInternal": 0.00233810751741491, "maxEqps": 0.0278018224371612, "maxInternalIndicator": 0, "earlyElasticSlope_MPa": 201234.895921675, "analyticalPlaneStrainSlope_MPa": 230769.230769231, "earlyElasticRelativeError": 0.127982117672743, "finalReaction_N": 9875.54163611348, "finalNominalStress_MPa": 123.444270451419, "finalEngineeringStrain": 0.0204081632653061, "finite": true}
   ],
   "acceptance": {"energyToleranceRelative": 0.15, "netForceTolerance_N": 1e-06, "minimumPlasticStrain": 0.001, "kineticToInternalLimit": 10},
   "materialComparisonCaveat": "Internal state variables are model-specific observers and are not mapped to a common bond-breaking rule.",

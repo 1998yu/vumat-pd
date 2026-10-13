@@ -39,10 +39,10 @@ The manuscript tests the same Johnson–Cook plugin in independent 3D PD and H8 
 
 | Matched fine-resolution comparison | Result |
 |---|---:|
-| Final mean axial stress difference | 0.17% |
+| Final mean axial stress difference | 0.19% |
 | Stress-history NRMSE | 0.55% |
 | Displacement RMSE / imposed displacement | 0.96% |
-| Maximum local plastic-strain difference | 11.52% |
+| Maximum local plastic-strain difference | 11.50% |
 
 These results support constitutive-transfer consistency for the documented nonfracturing JC case. They do not establish universal VUMAT compatibility or full convergence.
 
@@ -50,7 +50,7 @@ These results support constitutive-transfer consistency for the documented nonfr
 
 ![3D H8 FEM tensile reference: axial stress and equivalent plastic strain evolve over time](benchmarks/tensile3d/media/fem-tension.gif)
 
-[Watch/download the original MP4](benchmarks/tensile3d/media/fem-tension.mp4) · [Movie provenance](benchmarks/tensile3d/media/fem-tension.json)
+[Watch/download the verification MP4](benchmarks/tensile3d/media/fem-tension.mp4) · [Movie provenance](benchmarks/tensile3d/media/fem-tension.json)
 
 *Supplementary Movie S1 from the coarse 3D H8 FEM benchmark: axial stress and equivalent plastic strain evolve over 0–0.12 ms under one-sided end displacement. The displayed fields average the two nearest mid-thickness Gauss planes. This movie supports independent verification; the four runnable particle demos use PD.*
 
@@ -80,11 +80,11 @@ The benchmark also varies PD grid spacing, horizon and time step against one fin
 
 ![Grid, horizon and time-step sensitivity against the same finest FEM reference](docs/paper-figures/sensitivity.png)
 
-*For the fine PD baseline, stress-history, displacement and maximum-plastic-strain deviations are 0.483%, 0.540% and 8.113%. These use the finest FEM reference and differ from the matched-pair metrics above.*
+*For the fine PD baseline, stress-history, displacement and maximum-plastic-strain deviations are 0.483%, 0.538% and 8.186%. These use the finest FEM reference and differ from the matched-pair metrics above.*
 
 </details>
 
-The [benchmark directory](benchmarks/tensile3d/README.md) preserves original data hashes, final case inputs, separate metric baselines and reproduction tools. Browse [all six manuscript figures](docs/paper-figures/README.md) and their source traceability.
+The [benchmark directory](benchmarks/tensile3d/README.md) preserves the corrected publication data hashes, final case inputs, separate metric baselines and reproduction tools. Browse [all six manuscript figures](docs/paper-figures/README.md) and their source traceability.
 
 ## Explore the PD particle demos
 

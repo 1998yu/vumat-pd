@@ -8,12 +8,13 @@
       "executable": "vumat_pd_run.exe",
       "material_config": "configs/elastic.json",
       "plugin": "elastic_vumat_plugin.dll",
-      "executable_sha256": "cea3b8ecb926846474f45df062e37df2362f0003249622cc43cbfa26dbd0f09d",
+      "executable_sha256": "21ec29725b09cf34e6ebcc550f6a9033f0147a9e14e2ca7e0fc7f4d07ad95fa5",
       "plugin_sha256": "0bd94cbfcb01860dbd5ab9a48afc8076d178e2a47f42ae4f3900fbb939373bc6",
       "result_directory": "demos/output/elastic_pd",
-      "snapshots_sha256": "d72b532eb2462b9b829e2b7e95b65e7f72d8518a9d8d7bf6eab7fc1a3e121917",
-      "history_sha256": "66afcbc124916b7fdbb487091ed85a63f4fe2b1cf0d409b76611e7b1e6b6fae2",
-      "status": "pass"
+      "snapshots_sha256": "fd38b36cc534012ddcf1ebd25e7605ab98405b6ddcea59921a166f3a30e61eb3",
+      "history_sha256": "36ae962e47183ecf58eb7a6633be5a508998d6ce998535ee5ef05b3da078f8db",
+      "status": "pass",
+      "before_fix_results_identical": false
     },
     {
       "case": "johnson_cook_tension",
@@ -21,12 +22,13 @@
       "executable": "vumat_pd_run.exe",
       "material_config": "configs/johnson_cook.json",
       "plugin": "jc_vumat_plugin.dll",
-      "executable_sha256": "cea3b8ecb926846474f45df062e37df2362f0003249622cc43cbfa26dbd0f09d",
+      "executable_sha256": "21ec29725b09cf34e6ebcc550f6a9033f0147a9e14e2ca7e0fc7f4d07ad95fa5",
       "plugin_sha256": "891a71442ada62b2586553b82e103f0b9372fc878c0283836b2ddf473158a17c",
       "result_directory": "demos/output/jc_pd",
-      "snapshots_sha256": "e1badabade53923a8538c31304d93f4827594f046f312c7b868b610790b2d1b4",
-      "history_sha256": "c1f8bf1ea0047a3a73968dd1349debd73b23ee592f57064a6999d9579ada49ad",
-      "status": "pass"
+      "snapshots_sha256": "da97658c16bbed906d5b0640a6c821e7cd5caae0024727403c22fbef8f0ceb1c",
+      "history_sha256": "60106d68ac3c42f7580d4ec47f788ed6847d1a823f854c9b17f24b83cbe3f4ac",
+      "status": "pass",
+      "before_fix_results_identical": false
     },
     {
       "case": "bending",
@@ -34,12 +36,13 @@
       "executable": "vumat_pd_large_motion_3d.exe",
       "material_config": "configs/neohookean.json",
       "plugin": "neohookean_kv_vumat_plugin.dll",
-      "executable_sha256": "c93aeddb584633896e483339f02b8880e844bad53b62b14925a56f6c71f186ca",
+      "executable_sha256": "255f1ac39d7ace086d7a5e7b67dfe86f2c4b0a9e0a8874c025838b709704da20",
       "plugin_sha256": "4958a7bfed0882ae43a0eb614bee0f8bf48ed9fb59339c217a5a6d7e4f9ff004",
       "result_directory": "demos/output/hyperelastic/bending",
       "snapshots_sha256": "189203962d7648adcb5d0afab98c017a860bdca50cc0c1a5e1e4a0a920271731",
       "history_sha256": "877133bad5a6302187089cbd4b99e2d65279297ed5a06b28dd1aae20b11e96ee",
-      "status": "completed"
+      "status": "completed",
+      "before_fix_results_identical": true
     },
     {
       "case": "torsion",
@@ -47,12 +50,13 @@
       "executable": "vumat_pd_large_motion_3d.exe",
       "material_config": "configs/neohookean.json",
       "plugin": "neohookean_kv_vumat_plugin.dll",
-      "executable_sha256": "c93aeddb584633896e483339f02b8880e844bad53b62b14925a56f6c71f186ca",
+      "executable_sha256": "255f1ac39d7ace086d7a5e7b67dfe86f2c4b0a9e0a8874c025838b709704da20",
       "plugin_sha256": "4958a7bfed0882ae43a0eb614bee0f8bf48ed9fb59339c217a5a6d7e4f9ff004",
       "result_directory": "demos/output/hyperelastic/torsion",
       "snapshots_sha256": "da7cbd8c090c249ac0b174380177503a7d0e0c1f4f3f4f9d695fbdde4be5334a",
       "history_sha256": "d5e06e66b64840f9e57b16cfea8ba11d28e12ba0c33d466f13ccfd4ec748bcb0",
-      "status": "completed"
+      "status": "completed",
+      "before_fix_results_identical": true
     }
   ],
   "regression_check": {
@@ -62,5 +66,6 @@
     "comparison": "All complete particle-field and history CSVs are byte-identical after restoring the optional outer damage path with damage disabled.",
     "maximum_absolute_numeric_difference": 0.0,
     "tested_platform": "Windows MSYS2 UCRT64; GCC/gfortran 16.1; 2 OpenMP threads"
-  }
+  },
+  "execution_note": "All four PD cases were executed by the Release CTest suite after the Rodrigues rotation correction. Neo-Hookean uses its separate spatial route and retains identical field/history files."
 }

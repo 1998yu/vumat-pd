@@ -1,6 +1,6 @@
 # Manuscript figures used by the project
 
-These are the supplied manuscript's own figures, used to explain the software and its documented verification. The five raster figures retain their original embedded pixels; the coupling diagram was rendered from its original vector metafile for browser display. The [provenance record](provenance.json) identifies each figure and its checksum.
+These figures explain the software and its documented verification. Figures 1–3 retain the supplied manuscript diagrams; the coupling diagram was rendered from its original vector metafile for browser display. Figures 4–6 were regenerated from the corrected Rodrigues-update benchmark results. The [provenance record](provenance.json) identifies each figure and its checksum.
 
 | Manuscript figure | Project asset | Purpose |
 |---|---|---|
@@ -13,7 +13,7 @@ These are the supplied manuscript's own figures, used to explain the software an
 
 Figures 4 and 5 show reference-coordinate fields: actual PD z = 0 values and FEM values averaged over the two nearest Gauss planes, displayed in quadrature subcells. Both methods share a full-range color scale. Stress annotations are interior means; plastic-strain annotations are global maxima, which need not lie in the displayed layer.
 
-The matched FEM–PD metrics and the sensitivity metrics use different baselines. At matched fine resolution, stress-history NRMSE is 0.55% and displacement RMSE / imposed displacement is 0.96%. Relative to the finest H8 FEM reference, the fine PD deviations are 0.483%, 0.540% and 8.113% for stress history, displacement and maximum plastic strain. The finest FEM is a numerical approximation.
+The matched FEM–PD metrics and the sensitivity metrics use different baselines. At matched fine resolution, stress-history NRMSE is 0.55% and displacement RMSE / imposed displacement is 0.96%. Relative to the finest H8 FEM reference, the fine PD deviations are 0.483%, 0.538% and 8.186% for stress history, displacement and maximum plastic strain. The finest FEM is a numerical approximation.
 
 These plots belong to verification. The four runnable [PD particle demos](../../demos/README.md) have their own folders and discrete-particle animations. FEM is not a demo solver.
 

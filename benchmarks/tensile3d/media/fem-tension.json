@@ -1,7 +1,7 @@
 {
   "solver": "Independent 3D H8 FEM reference",
   "role": "Verification movie; not a PD demo",
-  "source": "Previously delivered Supplementary Movie S1",
+  "source": "Supplementary Movie S1 regenerated from the corrected Rodrigues implementation",
   "case": "fem_coarse",
   "geometry_mm": [
     100,
@@ -20,10 +20,10 @@
   "color_scale": "Fixed full-range scales",
   "field_smoothing": false,
   "time_interpolation": false,
-  "archived_result_comparison": "Verified exact match of final fields, nodal displacement and response histories.",
-  "original_movie_preserved": true,
-  "movie_sha256": "390d81b133fec59e07a6a0cbae48157db83a3e6735f18e5ad6ebc539432aaa59",
-  "gif_sha256": "89cd3b6c66efda0d26c6ffa715d90f7bf594a01c59f1a74afb9ed129b683cee8",
+  "archived_result_comparison": "Corrected coarse FEM histories, final Gauss fields and nodal displacement match the movie source rerun byte for byte.",
+  "original_movie_preserved": false,
+  "movie_sha256": "dbe69d921661ae8167f235155765b99fdb97cee9bc492e8ab0103d55af3895ad",
+  "gif_sha256": "524b25dda5278e87d3c1d514825ff8835dcb8d12082ef9f85b1b8761993759dd",
   "dimensions": [
     1920,
     1080

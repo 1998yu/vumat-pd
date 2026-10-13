@@ -1,5 +1,5 @@
 {
-  "source": "Provided manuscript revision of 2026-10-13",
+  "source": "Corrected 2026-10-13 publication: supplied manuscript diagrams (Figs. 1\u20133) and fresh benchmark results (Figs. 4\u20136).",
   "title": "VUMAT-PD: A plugin-based interface for VUMAT-driven peridynamic correspondence simulations",
   "figures": [
     {
@@ -28,22 +28,22 @@
       "manuscript_figure": 4,
       "file": "coarse-fields.png",
       "caption": "Coarse-grid axial-stress and equivalent-plastic-strain fields at 0.12 ms.",
-      "sha256": "5a7378f094abb6237a309079025d837753a3bc7c87afbe5557d456ed02ca44fb",
-      "processing": "Original embedded PNG, copied without modifying pixels."
+      "sha256": "51183b4903f2f57964746dfee03ea7e0fa4e3127ebf8207cced2ddcc3c6c8014",
+      "processing": "Regenerated from the full corrected FEM\u2013PD case matrix using the public analysis script, with unchanged field-sampling and normalization definitions."
     },
     {
       "manuscript_figure": 5,
       "file": "fine-fields.png",
       "caption": "Fine-grid axial-stress and equivalent-plastic-strain fields at 0.12 ms.",
-      "sha256": "1596cb8c5ed7fb4384f2daf575ccb334843abb5737f24058f16fa002cd28306b",
-      "processing": "Original embedded PNG, copied without modifying pixels."
+      "sha256": "ba4f98d4366fea5973df73a784b46b66410e226251aeb6b4165076403fd9fffa",
+      "processing": "Regenerated from the full corrected FEM\u2013PD case matrix using the public analysis script, with unchanged field-sampling and normalization definitions."
     },
     {
       "manuscript_figure": 6,
       "file": "sensitivity.png",
       "caption": "Spatial and temporal sensitivity relative to the finest H8 FEM numerical reference.",
-      "sha256": "af4dbc0da071a48c26d7afaafc5b536f5be2319630dcc0ff72aa2304ddf352d3",
-      "processing": "Original embedded PNG, copied without modifying pixels."
+      "sha256": "66fe9369ccf486eb1ee9dde18cdfc51bcba4c5fbb0767d386bbfc32a3e70f3f1",
+      "processing": "Regenerated from the full corrected FEM\u2013PD case matrix using the public analysis script, with unchanged field-sampling and normalization definitions."
     }
   ]
 }

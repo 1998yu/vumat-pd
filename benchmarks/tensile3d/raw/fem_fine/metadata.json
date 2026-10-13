@@ -1,1 +1,1 @@
-{"element_type":"H8 fully integrated","mesh":[100,20,4],"spacing_mm":1,"dt_ms":2.5e-05,"steps":4800,"volume_mm3":8000,"planeStrain":false,"finite":true,"mass":62.4}
+{"element_type":"H8 fully integrated","mesh":[100,20,4],"spacing_mm":1,"dt_ms":2.5e-05,"steps":4800,"volume_mm3":8000,"planeStrain":false,"symmetry_reconstruction":false,"finite":true,"mass":62.4}

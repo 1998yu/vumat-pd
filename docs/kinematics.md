@@ -22,6 +22,22 @@ frame:
 \bar D=R^TDR.
 \]
 
+The incremental rotation uses the matrix exponential of the skew material
+spin, with a positive coefficient multiplying \(\Omega^2\):
+
+\[
+Q=I+\frac{\sin(\Delta t|\omega|)}{|\omega|}\Omega
+ +\frac{2\sin^2(\Delta t|\omega|/2)}{|\omega|^2}\Omega^2,
+\qquad R_{n+1}=QR_n.
+\]
+
+The half-angle form avoids cancellation at small increments. Regression
+checks compare finite spins about all three axes with analytic rotations,
+check orthogonality, determinant and isotropic-stress invariance, and follow
+1000 accumulated increments. These checks verify rotation assembly; they do
+not remove the time-discretization error in the reconstructed velocity gradient
+or the explicit left-stretch update.
+
 The adapter also supplies deformation gradients, old/new stretch, and the
 relative-spin increment. VUMAT returns the stress in the corotational material
 frame. The PD force assembly uses the spatial stress

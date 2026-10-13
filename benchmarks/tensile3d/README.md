@@ -60,7 +60,7 @@ These optional FEM fields are verification outputs. The particle-gallery renderi
 
 `expected/direct_pair_metrics.json` compares FEM and PD at matched resolutions. `expected/analysis.json` compares sensitivity cases with the finest FEM reference. Keep these baselines distinct.
 
-The fine direct pair gives 0.55% stress-history NRMSE, 0.96% displacement RMSE/2 mm, 11.52% maximum-plastic-strain difference and 0.17% final mean-stress difference. Relative to the finest FEM, the fine PD baseline gives 0.483%, 0.540% and 8.113% in history, displacement and plastic-strain metrics.
+The fine direct pair gives 0.55% stress-history NRMSE, 0.96% displacement RMSE/2 mm, 11.50% maximum-plastic-strain difference and 0.19% final mean-stress difference. Relative to the finest FEM, the fine PD baseline gives 0.483%, 0.538% and 8.186% in history, displacement and plastic-strain metrics.
 
 Raw metadata retains an earlier elastic-slope diagnostic for hash integrity; the analyzer uses 3D uniaxial E = 210000 MPa. The checked outputs define validation, rather than that embedded earlier diagnostic.
 
@@ -68,4 +68,8 @@ Raw metadata retains an earlier elastic-slope diagnostic for hash integrity; the
 
 ## FEM verification movie
 
-The homepage includes the original [3D FEM tensile movie](media/fem-tension.mp4), also shown as a [GIF preview](media/fem-tension.gif). It is Supplementary Movie S1 for the coarse H8 case, showing actual axial-stress and plastic-strain evolution over 0–0.12 ms. Its [provenance](media/fem-tension.json) records the unchanged MP4 checksum, quadrature-plane sampling and archive comparison. This movie is an independent verification reference; every runnable demo command still launches PD.
+The homepage includes the corrected [3D FEM tensile movie](media/fem-tension.mp4), also shown as a [GIF preview](media/fem-tension.gif). It is Supplementary Movie S1 for the coarse H8 case, showing actual axial-stress and plastic-strain evolution over 0–0.12 ms. Its [provenance](media/fem-tension.json) records its updated MP4 checksum, quadrature-plane sampling and corrected-archive comparison. This movie is an independent verification reference; every runnable demo command still launches PD.
+
+## Publication rotation update
+
+The Rodrigues coefficient multiplying the squared material-spin matrix is positive and uses a stable half-angle form. Finite-spin and 1000-increment checks cover rotation orthogonality, determinant and isotropic-stress invariance. All 11 publication cases and the FEM symmetry check were recomputed; the archived CSVs and both metric baselines now describe this corrected implementation. The earlier publication remains recoverable in Git history at `a47fb8af211f61f3aa5c5f7977234d30a4a28f5f`. These checks verify rotation assembly rather than general finite-rotation accuracy of the complete time-discrete host.
