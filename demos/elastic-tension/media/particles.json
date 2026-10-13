@@ -1,0 +1,36 @@
+{
+  "solver": "correspondence peridynamics",
+  "material": "Elastic",
+  "plugin_file": "elastic_vumat_plugin.dll",
+  "particles": 1683,
+  "actual_states": 240,
+  "simulation_time_ms": [
+    0.0005,
+    0.12
+  ],
+  "field_sampling": "all actual PD particles at saved deformed 3D coordinates",
+  "snapshots_sha256": "d72b532eb2462b9b829e2b7e95b65e7f72d8518a9d8d7bf6eab7fc1a3e121917",
+  "history_sha256": "66afcbc124916b7fdbb487091ed85a63f4fe2b1cf0d409b76611e7b1e6b6fae2",
+  "case": "elastic",
+  "visualization": "All actual PD particle centers at deformed 3D coordinates; orthographic depth-sorted point markers.",
+  "submitted_particle_count": 1683,
+  "marker_diameter": "Display size only; not physical particle volume.",
+  "reference_ghost": false,
+  "surface_mesh": false,
+  "field_smoothing": false,
+  "time_interpolation": false,
+  "geometry_exaggeration": false,
+  "camera_fixed": true,
+  "stress_scale_MPa": [
+    -1.34507789521894e-11,
+    74.6414870965128
+  ],
+  "quantity": "Axial stress (MPa)",
+  "dimensions": [
+    1680,
+    1050
+  ],
+  "playback_seconds": 14.9,
+  "full_decode": "pass",
+  "movie_sha256": "ce8de9248c86a61506d5cba98bee6cdb4fc67d95b6951c31d7d64da99fe629e8"
+}

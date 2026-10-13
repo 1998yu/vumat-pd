@@ -1,0 +1,36 @@
+{
+  "solver": "correspondence peridynamics",
+  "material": "Johnson\u2013Cook",
+  "plugin_file": "jc_vumat_plugin.dll",
+  "particles": 1683,
+  "actual_states": 240,
+  "simulation_time_ms": [
+    0.0005,
+    0.12
+  ],
+  "field_sampling": "all actual PD particles at saved deformed 3D coordinates",
+  "snapshots_sha256": "e1badabade53923a8538c31304d93f4827594f046f312c7b868b610790b2d1b4",
+  "history_sha256": "c1f8bf1ea0047a3a73968dd1349debd73b23ee592f57064a6999d9579ada49ad",
+  "case": "jc",
+  "visualization": "All actual PD particle centers at deformed 3D coordinates; orthographic depth-sorted point markers.",
+  "submitted_particle_count": 1683,
+  "marker_diameter": "Display size only; not physical particle volume.",
+  "reference_ghost": false,
+  "surface_mesh": false,
+  "field_smoothing": false,
+  "time_interpolation": false,
+  "geometry_exaggeration": false,
+  "camera_fixed": true,
+  "stress_scale_MPa": [
+    -146.3595726772865,
+    765.7800999027132
+  ],
+  "quantity": "Axial stress (MPa)",
+  "dimensions": [
+    1680,
+    1050
+  ],
+  "playback_seconds": 14.9,
+  "full_decode": "pass",
+  "movie_sha256": "aed1494e336f9d08f5853cb8e29e6c1a0542ae3200a83269034af776a771989f"
+}

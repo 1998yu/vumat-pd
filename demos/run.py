@@ -69,7 +69,7 @@ def main():
     (out / 'run_manifest.json').write_text(json.dumps({'all_displayed_simulations_use_PD': True,
         'threads': a.threads, 'cases': entries}, indent=2) + '\n', encoding='utf-8')
     if a.demo == 'transient':
-        run([sys.executable, REPO / 'demos/render_pd.py', '--case', 'jc'])
+        run([sys.executable, REPO / 'demos/render_particles.py', '--case', 'jc'])
     print('PD runs completed. Results and executable/plugin provenance: demos/output/run_manifest.json')
 
 if __name__ == '__main__':

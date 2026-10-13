@@ -32,7 +32,7 @@ python benchmarks/tensile3d/analyse_and_plot.py
 python benchmarks/tensile3d/verify_metrics.py
 ```
 
-Data expand to ignored `generated/archive_results`. SHA-256 checks use the original uncompressed CSVs. Recomputed metrics and editable plots are saved under `generated`. For the short fine-resolution project gallery, run `python demos/plot.py --demo tensile`.
+Data expand to ignored `generated/archive_results`. SHA-256 checks use the original uncompressed CSVs. Recomputed metrics and editable plots are saved under `generated`. For the separate coarse-grid PD particle demo, see [Johnson–Cook tension](../../demos/johnson-cook-tension/README.md). Its display is distinct from this benchmark's fine-resolution comparison.
 
 ## Run selected cases
 

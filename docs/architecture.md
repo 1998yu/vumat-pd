@@ -13,9 +13,14 @@ vumat-pd/
 │   └── bridge/            C-compatible Fortran wrapper and standalone shims
 ├── configs/               Material properties and plugin selection
 ├── examples/              Small case inputs
-├── demos/                 Launcher, plots and video renderers
+├── demos/
+│   ├── elastic-tension/       Elastic PD demo and particle media
+│   ├── johnson-cook-tension/  JC PD demo and particle media
+│   ├── neohookean-bending/   150° PD demo and particle media
+│   ├── neohookean-torsion/   540° PD demo and particle media
+│   └── *.py                 Shared launcher, reader and particle renderer
 ├── benchmarks/tensile3d/   Validation cases, data and independent FEM reference
-├── docs/                  Architecture, integration guides and media
+├── docs/                  Architecture and integration guides
 ├── tests/                 Automated numerical checks
 ├── CMakeLists.txt         Build targets
 └── .github/workflows/     Linux build and verification
@@ -54,9 +59,7 @@ The Neo-Hookean bending/torsion entry calls `VumatMaterialAdapter` directly with
 | `vumat_pd_run` | Affine PD checks, material-point updates and regional PD boundary cases |
 | `vumat_pd_large_motion_3d` | Dedicated Neo-Hookean 150° bending and 540° torsion examples |
 | `python demos/run.py` | Select and launch the supported demos |
-| `python demos/plot.py` | Plot freshly computed Elastic/JC PD fields and histories |
-| `python demos/render_pd.py` | Render actual Elastic/JC PD transient fields |
-| `python demos/render_hyperelastic.py` | Render bending and torsion as separate videos |
+| `python demos/render_particles.py` | Render all four PD cases as discrete particles at deformed positions |
 
 ## Verification and reuse
 

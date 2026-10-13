@@ -1,0 +1,36 @@
+{
+  "solver": "correspondence peridynamics",
+  "plugin_file": "neohookean_kv_vumat_plugin",
+  "particles": 1025,
+  "actual_states": 101,
+  "simulation_time_ms": [
+    0.0,
+    1.2
+  ],
+  "snapshots_sha256": "da7cbd8c090c249ac0b174380177503a7d0e0c1f4f3f4f9d695fbdde4be5334a",
+  "history_sha256": "d5e06e66b64840f9e57b16cfea8ba11d28e12ba0c33d466f13ccfd4ec748bcb0",
+  "case": "torsion",
+  "material": "Neo-Hookean",
+  "visualization": "All actual PD particle centers at deformed 3D coordinates; orthographic depth-sorted point markers.",
+  "submitted_particle_count": 1025,
+  "marker_diameter": "Display size only; not physical particle volume.",
+  "reference_ghost": true,
+  "surface_mesh": false,
+  "field_smoothing": false,
+  "time_interpolation": false,
+  "geometry_exaggeration": false,
+  "camera_fixed": true,
+  "stress_scale_MPa": [
+    0.0,
+    609.4809988429816
+  ],
+  "quantity": "von Mises stress (MPa)",
+  "dimensions": [
+    1680,
+    1050
+  ],
+  "playback_seconds": 7.95,
+  "full_decode": "pass",
+  "movie_sha256": "d8f6a370f84ba2fbdb5ee0e0c1c9253dc14b6130a6a1fd36e6784f4db6faee05",
+  "field_sampling": "all actual PD particles at saved deformed 3D coordinates"
+}

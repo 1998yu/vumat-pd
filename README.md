@@ -1,67 +1,68 @@
 # VUMAT–PD
 
-**Run peridynamic simulations with reusable Fortran material plugins.**
+**Reuse constitutive material routines in correspondence peridynamics.**
 
-VUMAT–PD is a C++/Fortran correspondence-peridynamics project. The PD host reconstructs nonlocal deformation gradients, calls the selected material plugin, assembles PD internal forces and advances particle motion. Material state stays with each particle. Abaqus is not required for the supplied examples.
+VUMAT–PD connects compiled Fortran VUMAT-style routines to a standalone C++ peridynamic solver. Its reusable interface handles runtime plugin loading, tensor mapping, block-wise constitutive updates and persistent material history. The PD host retains responsibility for nonlocal kinematics, internal forces and particle motion. The supplied examples run without Abaqus.
 
-Every simulation displayed below is computed with **PD**. Elastic, Johnson–Cook and Neo-Hookean routines provide the corresponding constitutive response. Only support and loaded-end particles have prescribed motion; interior particles are solved from PD force balance.
+This project implements the interface described in *VUMAT-PD: A plugin-based interface for VUMAT-driven peridynamic correspondence simulations*. The main contribution is constitutive reuse: a compatible material routine can serve a PD host without rewriting its material algorithm inside that solver.
 
-[Architecture](docs/architecture.md) · [Run the PD demos](demos/README.md) · [Add a material](docs/add-a-vumat.md) · [Interface conventions](docs/interface.md)
+[Architecture](docs/architecture.md) · [Material integration](docs/add-a-vumat.md) · [Interface contract](docs/interface.md) · [Particle demos](demos/README.md) · [Verification](benchmarks/tensile3d/README.md)
 
-## PD demos
+## What the interface enables
 
-### Elastic tension
+| Capability | What it provides | Where to explore |
+|---|---|---|
+| Runtime material plugins | Select a compiled Fortran material library through configuration; keep constitutive code separate from the PD solver. | [Add a material](docs/add-a-vumat.md) |
+| Nonlocal-to-local coupling | Reconstruct PD deformation measures and map tensors into material input arrays; recover stress for PD force assembly. | [Coupling architecture](docs/architecture.md) |
+| Block-wise material updates | Gather point data into contiguous blocks, invoke the VUMAT-style routine and scatter valid results back to particles. | [Block and tensor conventions](docs/interface.md) |
+| Persistent constitutive history | Preserve each particle's stress, state variables and energy across increments. | [Johnson–Cook PD demo](demos/johnson-cook-tension/README.md) |
+| Explicit stress-frame handling | Use the documented corotational route for Elastic/JC; use a dedicated spatial-stress route for the supplied Neo-Hookean demos. | [Frame conventions](docs/interface.md) |
+| Reproducible verification | Check the material and coupling layers, retain original benchmark data and compare independent spatial formulations. | [3D benchmark](benchmarks/tensile3d/README.md) |
 
-Correspondence PD coupled to `Elastic.f`: a 100 × 20 × 4 mm bar, 0.02 mm end displacement over 0.12 ms, free lateral faces and no damage. The movie shows computed axial stress and displacement.
-
-![PD with Elastic VUMAT](docs/media/elastic.gif)
-
-[MP4](docs/media/elastic.mp4) · [Field and history plot](docs/media/elastic.png)
-
-```bash
-python demos/run.py elastic
-python demos/render_pd.py --case elastic
+```mermaid
+flowchart LR
+    PD["PD particles and neighborhoods"] --> K["Nonlocal kinematics"]
+    K --> A["Tensor mapping and block adapter"]
+    A --> V["Fortran material plugin"]
+    V --> S["Stress and persistent state"]
+    S --> F["PD force assembly"]
+    F --> T["Explicit particle motion"]
+    T --> K
 ```
 
-### Johnson–Cook elastoplastic tension
+The material plugin never needs access to PD neighborhoods or bonds. A new routine supplies constitutive response through the interface; the PD host continues to assemble nonlocal forces and advance the body.
 
-Correspondence PD coupled to `JohnsonCook.f90`: the same bar geometry, with 2 mm end displacement. The movie shows actual PD axial stress, equivalent plastic strain and the developing axial stress profile.
+## Explore the PD demonstrations
 
-![PD with Johnson-Cook VUMAT](docs/media/transient.gif)
+Each demo has its own folder with a particle animation, final-state preview, setup, rerun commands and data provenance. Every colored point represents an actual PD particle at its computed deformed position. Free interior particles evolve under PD forces.
 
-[MP4](docs/media/transient.mp4) · [Field and history plot](docs/media/tensile.png)
+| Demo | What it illustrates | Open |
+|---|---|---|
+| Elastic tension | Elastic material reuse and dynamic stress propagation | [Demo folder](demos/elastic-tension/README.md) |
+| Johnson–Cook tension | Elastoplastic updates and evolving particle history | [Demo folder](demos/johnson-cook-tension/README.md) |
+| Neo-Hookean 150° bending | Finite deformation through the dedicated spatial-stress route | [Demo folder](demos/neohookean-bending/README.md) |
+| Neo-Hookean 540° torsion | Large prescribed end rotation with PD interior motion | [Demo folder](demos/neohookean-torsion/README.md) |
 
-```bash
-python demos/run.py tensile
-python demos/render_pd.py --case jc
-```
+These demonstrations expose different material paths. The Neo-Hookean examples extend the gallery beyond the paper's JC benchmark; they do not establish general finite-rotation accuracy or convergence.
 
-### Neo-Hookean 150° bending
+## Verification supported by the paper
 
-A 3D PD bar coupled to `NeoHookeanKV.f90`, with constitutive viscosities set to zero. The prescribed end turns through 150°; interior particles deform under the computed PD forces.
+The paper evaluates constitutive-transfer consistency with a three-dimensional nonfracturing tensile benchmark. Both independent spatial solvers execute the same Johnson–Cook plugin under the same interface contract.
 
-![PD with Neo-Hookean VUMAT: bending](docs/media/bending.gif)
+| Fine-resolution FEM–PD comparison | Reported result |
+|---|---:|
+| Mean axial stress difference | 0.17% |
+| Stress-history NRMSE | 0.55% |
+| Displacement RMSE / imposed displacement | 0.96% |
+| Maximum local plastic-strain difference | 11.52% |
 
-[Bending MP4](docs/media/bending.mp4)
+Mean stress and displacement agree closely for this case; local plastic strain remains resolution-sensitive. The [benchmark directory](benchmarks/tensile3d/README.md) contains the independent FEM reference, final PD cases, archived data and sensitivity metrics. FEM is a verification tool and is excluded from the installed PD runtime.
 
-### Neo-Hookean 540° torsion
+Standard Abaqus shear ordering and stretch conventions require explicit mapping for routines that depend on them. Additional materials and hosts need their own checks. Thermal calibration, general finite-rotation accuracy and production impact/fracture capability are outside the paper's verified scope. See [the interface contract](docs/interface.md) before integrating another routine.
 
-The same PD material path under a 540° end rotation. Bending and torsion are displayed independently, using true deformation scale and actual boundary-particle facets.
+## Build and start
 
-![PD with Neo-Hookean VUMAT: torsion](docs/media/torsion.gif)
-
-[Torsion MP4](docs/media/torsion.mp4)
-
-```bash
-python demos/run.py hyperelastic
-python demos/render_hyperelastic.py
-```
-
-Both hyperelastic cases use an 80 × 8 × 8 mm bar and host dynamic relaxation of 8/ms. They demonstrate finite deformation and have no independent spatial FEM/experimental reference. Damage and deletion are disabled throughout the gallery.
-
-## Build and rerun everything
-
-Use CMake 3.25+, a C++17 compiler, gfortran, Ninja and OpenMP. GCC/gfortran builds are checked on Windows MSYS2 UCRT64 and in the Ubuntu workflow. On Windows, use an ASCII checkout path and put compiler runtimes on `PATH`.
+Requirements: CMake 3.25+, C++17, gfortran, Ninja and OpenMP. Builds are checked with Windows MSYS2 UCRT64 and Ubuntu GCC/gfortran. Use an ASCII checkout path on Windows and place compiler runtimes on `PATH`.
 
 ```bash
 cmake --preset release
@@ -70,41 +71,27 @@ ctest --preset release
 python demos/run.py all --threads 2
 ```
 
-The launcher always executes new simulations. Its four-case run manifest records the PD executable, loaded material plugin, checksums and output locations. See [the gallery run provenance](docs/media/pd_runs.json).
-
-Python 3.10+ is used for orchestration. To regenerate figures and videos, install the plotting dependencies and FFmpeg (`ffmpeg` and `ffprobe` on `PATH`):
+The launcher runs all four PD cases and records the actual executables, plugins and result hashes. For a PD build without the FEM verification target:
 
 ```bash
-python -m pip install -r demos/requirements.txt
-python demos/plot.py --demo elastic
-python demos/plot.py --demo tensile
-python demos/render_pd.py --case elastic
-python demos/render_pd.py --case jc
-python demos/render_hyperelastic.py
+cmake -S . -B build/pd-only -G Ninja -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF
+cmake --build build/pd-only --parallel
 ```
 
-## Shared interface and verification
+Python 3.10+ is needed for the demo launcher. Plotting and movie generation also require the [demo dependencies](demos/requirements.txt) and FFmpeg. See [the demo index](demos/README.md) for particle-rendering commands.
 
-`VumatMaterialAdapter` handles compiled material libraries, tensor packing, block calls and persistent state. Elastic/JC spatial cases use the corotational coupling wrapper; the supplied Neo-Hookean demo uses spatial deformation gradients and spatial Cauchy stress directly. These frame conventions require explicit mapping when integrating another routine. Read [the interface guide](docs/interface.md).
-
-Affine checks, material-point checks and the independent H8 FEM solver are **verification tools**. The [3D tensile benchmark](benchmarks/tensile3d/README.md) retains matched JC FEM–PD comparisons, final sensitivity cases, original data hashes and metric baselines. FEM outputs and material-point histories are not used as PD demo footage.
-
-The archived fine JC pair gives 0.55% stress-history NRMSE, displacement RMSE of 0.96% of the imposed displacement and an 11.52% difference in local maximum plastic strain. These figures describe that benchmark; they do not validate every material or application.
-
-The JC temperature state is numerical history, not calibrated adiabatic heating. Existing contact/damage code does not establish production fracture or impact capability. Start a custom routine with one thread until its reentrancy has been checked.
-
-## Project layout
+## Repository map
 
 ```text
 src/                  PD hosts and material coupling
 include/              Public C++ interfaces
-materials/            Fortran material routines and standalone bridge
-configs/              Material properties and plugin configuration
+materials/            Fortran material routines and bridge
+configs/              Material properties and plugin selection
 examples/             PD inputs and small verification cases
-demos/                PD launcher, plotting and movie generation
+demos/                Four demo folders and shared particle-rendering tools
 benchmarks/tensile3d/  Independent validation inputs, data and metrics
-docs/                 Architecture, integration guides and PD gallery
+docs/                 Architecture and integration guides
 tests/                Automated numerical checks
 ```
 
-Generated outputs and build files are ignored by Git. The [BSD 3-Clause License](LICENSE) covers the project. Use [GitHub issues](https://github.com/1998yu/vumat-pd/issues) for reproducible bug reports and integration questions; see [CONTRIBUTING.md](CONTRIBUTING.md).
+Generated runs and builds are ignored by Git. The project uses the [BSD 3-Clause License](LICENSE). For reproducible bug reports or integration questions, use [GitHub issues](https://github.com/1998yu/vumat-pd/issues) and the [contribution guide](CONTRIBUTING.md).
