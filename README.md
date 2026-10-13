@@ -46,6 +46,14 @@ The manuscript tests the same Johnson–Cook plugin in independent 3D PD and H8 
 
 These results support constitutive-transfer consistency for the documented nonfracturing JC case. They do not establish universal VUMAT compatibility or full convergence.
 
+### 3D FEM tensile response — verification movie
+
+![3D H8 FEM tensile reference: axial stress and equivalent plastic strain evolve over time](benchmarks/tensile3d/media/fem-tension.gif)
+
+[Watch/download the original MP4](benchmarks/tensile3d/media/fem-tension.mp4) · [Movie provenance](benchmarks/tensile3d/media/fem-tension.json)
+
+*Supplementary Movie S1 from the coarse 3D H8 FEM benchmark: axial stress and equivalent plastic strain evolve over 0–0.12 ms under one-sided end displacement. The displayed fields average the two nearest mid-thickness Gauss planes. This movie supports independent verification; the four runnable particle demos use PD.*
+
 <details>
 <summary>Geometry, verification pathway and coarse-grid fields</summary>
 

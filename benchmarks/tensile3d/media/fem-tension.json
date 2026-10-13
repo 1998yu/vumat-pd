@@ -1,0 +1,34 @@
+{
+  "solver": "Independent 3D H8 FEM reference",
+  "role": "Verification movie; not a PD demo",
+  "source": "Previously delivered Supplementary Movie S1",
+  "case": "fem_coarse",
+  "geometry_mm": [
+    100,
+    20,
+    4
+  ],
+  "spacing_mm": 2,
+  "material": "Johnson-Cook VUMAT",
+  "end_displacement_mm": 2,
+  "simulation_time_ms": [
+    0,
+    0.12
+  ],
+  "saved_states": 241,
+  "field_sampling": "Mean of the two nearest z Gauss planes in reference-coordinate quadrature subcells.",
+  "color_scale": "Fixed full-range scales",
+  "field_smoothing": false,
+  "time_interpolation": false,
+  "archived_result_comparison": "Verified exact match of final fields, nodal displacement and response histories.",
+  "original_movie_preserved": true,
+  "movie_sha256": "390d81b133fec59e07a6a0cbae48157db83a3e6735f18e5ad6ebc539432aaa59",
+  "gif_sha256": "89cd3b6c66efda0d26c6ffa715d90f7bf594a01c59f1a74afb9ed129b683cee8",
+  "dimensions": [
+    1920,
+    1080
+  ],
+  "playback_seconds": 14.95,
+  "full_mp4_decode": "pass",
+  "gif_frames_decoded": 150
+}
