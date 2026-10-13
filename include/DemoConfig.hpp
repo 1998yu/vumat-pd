@@ -1,6 +1,7 @@
 #pragma once
 
 #include "MaterialConfig.hpp"
+#include "SimpleDamageModel.hpp"
 
 #include <string>
 #include <vector>
@@ -92,6 +93,7 @@ struct DemoCaseConfig {
   TimeIntegrationConfig timeIntegration;
   BoundaryConditionConfig boundaryCondition;
   DynamicsConfig dynamics;
+  SimpleDamageConfig damage;
   OutputConfig output;
   ValidationToleranceConfig tolerances;
   std::vector<DemoMaterialConfig> materials;

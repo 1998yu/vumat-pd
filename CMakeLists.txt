@@ -61,6 +61,8 @@ set_target_properties(neohookean_kv_vumat_plugin PROPERTIES PREFIX "")
 add_library(vumat_pd STATIC
   src/MaterialConfigJson.cpp
   src/SimpleJson.cpp
+  src/SimpleDamageModel.cpp
+  src/PdSimpleDamage.cpp
   src/TensorVoigtMap.cpp
   src/VumatMaterialAdapter.cpp
   src/DemoConfig.cpp
@@ -105,6 +107,8 @@ if(BUILD_TESTING)
   target_link_libraries(neohookean_material_test PRIVATE vumat_pd)
   add_executable(neighbor_lattice_regression tests/neighbor_lattice_regression.cpp)
   target_link_libraries(neighbor_lattice_regression PRIVATE vumat_pd)
+  add_executable(outer_damage_test tests/outer_damage_test.cpp)
+  target_link_libraries(outer_damage_test PRIVATE vumat_pd)
   add_executable(jc_3d_fem benchmarks/tensile3d/src/main_jc_3d_fem.cpp)
   target_link_libraries(jc_3d_fem PRIVATE vumat_pd)
 
@@ -115,6 +119,7 @@ if(BUILD_TESTING)
   add_test(NAME jc_vumat_material_point COMMAND vumat_pd_run examples/jc_material_point.json)
   add_test(NAME fem_h8_patch COMMAND jc_3d_fem --selftest)
   add_test(NAME neighbor_lattice_regression COMMAND neighbor_lattice_regression)
+  add_test(NAME outer_damage COMMAND outer_damage_test)
   add_test(NAME neohookean_material COMMAND neohookean_material_test
     configs/neohookean.json demos/output/hyperelastic/material-point-check)
   add_test(NAME hyperelastic_bending COMMAND vumat_pd_large_motion_3d
@@ -126,7 +131,7 @@ if(BUILD_TESTING)
 
   get_filename_component(VUMAT_FORTRAN_RUNTIME_DIR "${CMAKE_Fortran_COMPILER}" DIRECTORY)
   set_tests_properties(corotational_kinematics neighbor_search affine_bar_elastic
-    affine_shear_elastic jc_vumat_material_point fem_h8_patch neighbor_lattice_regression
+    affine_shear_elastic jc_vumat_material_point fem_h8_patch neighbor_lattice_regression outer_damage
     neohookean_material hyperelastic_bending hyperelastic_torsion elastic_pd_tension jc_pd_tension
     PROPERTIES WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
       ENVIRONMENT_MODIFICATION "PATH=path_list_prepend:${VUMAT_FORTRAN_RUNTIME_DIR}"

@@ -44,5 +44,11 @@
     "affine deformation-gradient recovery",
     "elastic shear stress",
     "global force balance"
-  ]
+  ],
+  "damage": {
+    "model": "none",
+    "initiation": 1e+30,
+    "failure": 1e+30,
+    "deletionEnabled": false
+  }
 }

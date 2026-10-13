@@ -45,5 +45,11 @@
   ],
   "checks": [
     "The VUMAT loads and returns finite stress and state-variable histories."
-  ]
+  ],
+  "damage": {
+    "model": "none",
+    "initiation": 0.0,
+    "failure": 1.0,
+    "deletionEnabled": false
+  }
 }

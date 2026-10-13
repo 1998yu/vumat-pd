@@ -20,7 +20,7 @@ vumat-pd/
 │   ├── neohookean-torsion/   540° PD demo and particle media
 │   └── *.py                 Shared launcher, reader and particle renderer
 ├── benchmarks/tensile3d/   Validation cases, data and independent FEM reference
-├── docs/                  Architecture and integration guides
+├── docs/                  Architecture, integration guides and manuscript figures
 ├── tests/                 Automated numerical checks
 ├── CMakeLists.txt         Build targets
 └── .github/workflows/     Linux build and verification
@@ -71,3 +71,9 @@ The hyperelastic spatial examples are demonstrations with dynamic relaxation; th
 
 To integrate a new material, start with [the integration guide](add-a-vumat.md). A larger host can replace geometry, neighborhoods, force assembly and output while retaining the adapter and compatible material plugins.
 
+
+## Optional outer damage path
+
+`SimpleDamageModel` supplies point-threshold degradation; `PdSimpleDamage` supplies the host result and critical-stretch bond attenuation. The corotational spatial and affine hosts invoke this path after the material update and before PD force assembly. Raw constitutive stress and material history remain separate. Supplied demos and the paper benchmark use `damage.model = none`.
+
+The standalone outer-damage test is built only with `BUILD_TESTING=ON`. The [damage guide](outer-damage.md) defines modes, configuration and the limits of the algorithmic checks. The manuscript's [coupling and verification figures](paper-figures/README.md) illustrate the documented material-transfer workflow.

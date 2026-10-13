@@ -8,7 +8,7 @@
       "executable": "vumat_pd_run.exe",
       "material_config": "configs/elastic.json",
       "plugin": "elastic_vumat_plugin.dll",
-      "executable_sha256": "1c02c360981bcb0ca345d0f923e40fdf1c46058ba4bbd7be05763b96bbc97253",
+      "executable_sha256": "cea3b8ecb926846474f45df062e37df2362f0003249622cc43cbfa26dbd0f09d",
       "plugin_sha256": "0bd94cbfcb01860dbd5ab9a48afc8076d178e2a47f42ae4f3900fbb939373bc6",
       "result_directory": "demos/output/elastic_pd",
       "snapshots_sha256": "d72b532eb2462b9b829e2b7e95b65e7f72d8518a9d8d7bf6eab7fc1a3e121917",
@@ -21,7 +21,7 @@
       "executable": "vumat_pd_run.exe",
       "material_config": "configs/johnson_cook.json",
       "plugin": "jc_vumat_plugin.dll",
-      "executable_sha256": "1c02c360981bcb0ca345d0f923e40fdf1c46058ba4bbd7be05763b96bbc97253",
+      "executable_sha256": "cea3b8ecb926846474f45df062e37df2362f0003249622cc43cbfa26dbd0f09d",
       "plugin_sha256": "891a71442ada62b2586553b82e103f0b9372fc878c0283836b2ddf473158a17c",
       "result_directory": "demos/output/jc_pd",
       "snapshots_sha256": "e1badabade53923a8538c31304d93f4827594f046f312c7b868b610790b2d1b4",
@@ -34,7 +34,7 @@
       "executable": "vumat_pd_large_motion_3d.exe",
       "material_config": "configs/neohookean.json",
       "plugin": "neohookean_kv_vumat_plugin.dll",
-      "executable_sha256": "c1a110dbc78a8d98f243b9263d9a9b25aa0567a3c484c0adcaab50a3193c3330",
+      "executable_sha256": "c93aeddb584633896e483339f02b8880e844bad53b62b14925a56f6c71f186ca",
       "plugin_sha256": "4958a7bfed0882ae43a0eb614bee0f8bf48ed9fb59339c217a5a6d7e4f9ff004",
       "result_directory": "demos/output/hyperelastic/bending",
       "snapshots_sha256": "189203962d7648adcb5d0afab98c017a860bdca50cc0c1a5e1e4a0a920271731",
@@ -47,7 +47,7 @@
       "executable": "vumat_pd_large_motion_3d.exe",
       "material_config": "configs/neohookean.json",
       "plugin": "neohookean_kv_vumat_plugin.dll",
-      "executable_sha256": "c1a110dbc78a8d98f243b9263d9a9b25aa0567a3c484c0adcaab50a3193c3330",
+      "executable_sha256": "c93aeddb584633896e483339f02b8880e844bad53b62b14925a56f6c71f186ca",
       "plugin_sha256": "4958a7bfed0882ae43a0eb614bee0f8bf48ed9fb59339c217a5a6d7e4f9ff004",
       "result_directory": "demos/output/hyperelastic/torsion",
       "snapshots_sha256": "da7cbd8c090c249ac0b174380177503a7d0e0c1f4f3f4f9d695fbdde4be5334a",
@@ -56,10 +56,10 @@
     }
   ],
   "regression_check": {
-    "baseline_commit": "1b1b5dba7783bf54ff6a8251ca1d0bb7926dd907",
+    "baseline_commit": "25801ce53bc872f575059a1fcee3168fbc41624b",
     "case_count": 4,
     "complete_csv_files": 8,
-    "comparison": "All complete particle-field and history CSVs are byte-identical to the pre-cleanup runs.",
+    "comparison": "All complete particle-field and history CSVs are byte-identical after restoring the optional outer damage path with damage disabled.",
     "maximum_absolute_numeric_difference": 0.0,
     "tested_platform": "Windows MSYS2 UCRT64; GCC/gfortran 16.1; 2 OpenMP threads"
   }

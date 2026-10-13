@@ -1,64 +1,99 @@
 # VUMAT–PD
 
-**Reuse constitutive material routines in correspondence peridynamics.**
+**Reuse existing material routines in correspondence peridynamics.**
 
-VUMAT–PD connects compiled Fortran VUMAT-style routines to a standalone C++ peridynamic solver. Its reusable interface handles runtime plugin loading, tensor mapping, block-wise constitutive updates and persistent material history. The PD host retains responsibility for nonlocal kinematics, internal forces and particle motion. The supplied examples run without Abaqus.
+VUMAT–PD connects compiled Fortran VUMAT-style routines to a standalone C++ PD solver. The interface handles runtime plugin loading, tensor mapping, block-wise constitutive updates and persistent material history. The PD host handles particle neighborhoods, nonlocal kinematics, internal forces and explicit motion. The supplied examples run without Abaqus.
 
-This project implements the interface described in *VUMAT-PD: A plugin-based interface for VUMAT-driven peridynamic correspondence simulations*. The main contribution is constitutive reuse: a compatible material routine can serve a PD host without rewriting its material algorithm inside that solver.
+The project implements the interface described in *VUMAT-PD: A plugin-based interface for VUMAT-driven peridynamic correspondence simulations*. Its central capability is constitutive reuse: integrate a compatible material routine without rewriting its material algorithm inside the PD solver.
 
-[Architecture](docs/architecture.md) · [Material integration](docs/add-a-vumat.md) · [Interface contract](docs/interface.md) · [Particle demos](demos/README.md) · [Verification](benchmarks/tensile3d/README.md)
+[Architecture](docs/architecture.md) · [Add a material](docs/add-a-vumat.md) · [Interface contract](docs/interface.md) · [PD particle demos](demos/README.md) · [Verification](benchmarks/tensile3d/README.md)
 
-## What the interface enables
+## How the coupling works
 
-| Capability | What it provides | Where to explore |
-|---|---|---|
-| Runtime material plugins | Select a compiled Fortran material library through configuration; keep constitutive code separate from the PD solver. | [Add a material](docs/add-a-vumat.md) |
-| Nonlocal-to-local coupling | Reconstruct PD deformation measures and map tensors into material input arrays; recover stress for PD force assembly. | [Coupling architecture](docs/architecture.md) |
-| Block-wise material updates | Gather point data into contiguous blocks, invoke the VUMAT-style routine and scatter valid results back to particles. | [Block and tensor conventions](docs/interface.md) |
-| Persistent constitutive history | Preserve each particle's stress, state variables and energy across increments. | [Johnson–Cook PD demo](demos/johnson-cook-tension/README.md) |
-| Explicit stress-frame handling | Use the documented corotational route for Elastic/JC; use a dedicated spatial-stress route for the supplied Neo-Hookean demos. | [Frame conventions](docs/interface.md) |
-| Reproducible verification | Check the material and coupling layers, retain original benchmark data and compare independent spatial formulations. | [3D benchmark](benchmarks/tensile3d/README.md) |
+![Constitutive coupling from PD particle kinematics through the VUMAT interface and back to PD forces](docs/paper-figures/coupling-workflow.png)
 
-```mermaid
-flowchart LR
-    PD["PD particles and neighborhoods"] --> K["Nonlocal kinematics"]
-    K --> A["Tensor mapping and block adapter"]
-    A --> V["Fortran material plugin"]
-    V --> S["Stress and persistent state"]
-    S --> F["PD force assembly"]
-    F --> T["Explicit particle motion"]
-    T --> K
-```
+*The coupling workflow from the manuscript: nonlocal PD kinematics → objective material inputs → compiled VUMAT plugin → spatial stress recovery and PD force assembly.*
 
-The material plugin never needs access to PD neighborhoods or bonds. A new routine supplies constitutive response through the interface; the PD host continues to assemble nonlocal forces and advance the body.
+The plugin receives material-point arrays rather than neighborhoods or bonds. The coupling layer gathers particle data into blocks, applies the declared tensor and frame conventions, invokes the material routine and returns updated stress, state and energy. Each particle retains its material history across increments.
 
-## Explore the PD demonstrations
+## What you can use
 
-Each demo has its own folder with a particle animation, final-state preview, setup, rerun commands and data provenance. Every colored point represents an actual PD particle at its computed deformed position. Free interior particles evolve under PD forces.
+| Capability | Project support |
+|---|---|
+| Reusable constitutive plugins | Select a compiled Fortran material library and its properties through configuration. |
+| Block-wise material updates | Maintain point-to-row ownership, tensor ordering and state transfer through the shared adapter. |
+| Correspondence PD simulation | Reconstruct deformation measures, recover spatial stress and assemble nonlocal particle forces. |
+| Different material paths | Elastic and Johnson–Cook use the corotational coupling route; the supplied Neo-Hookean demos use a dedicated spatial-stress route. |
+| Optional outer damage | Retain pointwise degradation and critical-stretch bond attenuation outside the VUMAT update. See [damage configuration](docs/outer-damage.md). |
+| Reproducible verification | Material-point checks, coupling checks, archived 3D comparisons and parameter-sensitivity studies. |
 
-| Demo | What it illustrates | Open |
-|---|---|---|
-| Elastic tension | Elastic material reuse and dynamic stress propagation | [Demo folder](demos/elastic-tension/README.md) |
-| Johnson–Cook tension | Elastoplastic updates and evolving particle history | [Demo folder](demos/johnson-cook-tension/README.md) |
-| Neo-Hookean 150° bending | Finite deformation through the dedicated spatial-stress route | [Demo folder](demos/neohookean-bending/README.md) |
-| Neo-Hookean 540° torsion | Large prescribed end rotation with PD interior motion | [Demo folder](demos/neohookean-torsion/README.md) |
+Start with [the material integration guide](docs/add-a-vumat.md). The [interface contract](docs/interface.md) explains shear ordering, left/right stretch and stress-frame conventions that must be mapped explicitly for another routine.
 
-These demonstrations expose different material paths. The Neo-Hookean examples extend the gallery beyond the paper's JC benchmark; they do not establish general finite-rotation accuracy or convergence.
+## Material-transfer verification
 
-## Verification supported by the paper
+The manuscript tests the same Johnson–Cook plugin in independent 3D PD and H8 FEM formulations. Both use a 100 × 20 × 4 mm body and a smooth 2 mm end displacement over 0.12 ms. FEM provides an independent verification reference; the project runtime and all four demo simulations use PD.
 
-The paper evaluates constitutive-transfer consistency with a three-dimensional nonfracturing tensile benchmark. Both independent spatial solvers execute the same Johnson–Cook plugin under the same interface contract.
+![Fine-resolution PD and FEM verification of axial stress and equivalent plastic strain](docs/paper-figures/fine-fields.png)
 
-| Fine-resolution FEM–PD comparison | Reported result |
+*Fine-resolution fields from the manuscript. The two formulations reproduce similar stress and plastic-strain distributions; the local plastic-strain maximum remains resolution-sensitive.*
+
+| Matched fine-resolution comparison | Result |
 |---|---:|
-| Mean axial stress difference | 0.17% |
+| Final mean axial stress difference | 0.17% |
 | Stress-history NRMSE | 0.55% |
 | Displacement RMSE / imposed displacement | 0.96% |
 | Maximum local plastic-strain difference | 11.52% |
 
-Mean stress and displacement agree closely for this case; local plastic strain remains resolution-sensitive. The [benchmark directory](benchmarks/tensile3d/README.md) contains the independent FEM reference, final PD cases, archived data and sensitivity metrics. FEM is a verification tool and is excluded from the installed PD runtime.
+These results support constitutive-transfer consistency for the documented nonfracturing JC case. They do not establish universal VUMAT compatibility or full convergence.
 
-Standard Abaqus shear ordering and stretch conventions require explicit mapping for routines that depend on them. Additional materials and hosts need their own checks. Thermal calibration, general finite-rotation accuracy and production impact/fracture capability are outside the paper's verified scope. See [the interface contract](docs/interface.md) before integrating another routine.
+<details>
+<summary>Geometry, verification pathway and coarse-grid fields</summary>
+
+![Three-dimensional tensile geometry and prescribed loading history](docs/paper-figures/benchmark-setup.png)
+
+*Fixed 100 × 20 × 4 mm geometry, free lateral/thickness faces and 2 mm end bands.*
+
+![Common material interface with independent FEM and PD kinematics and force assembly](docs/paper-figures/verification-path.png)
+
+*Shared material input and plugin; independent kinematic reconstruction and internal-force assembly.*
+
+![Coarse-resolution PD and FEM verification fields](docs/paper-figures/coarse-fields.png)
+
+*Coarse comparison at h = 2 mm and PD horizon = 6 mm. These are verification fields, separate from the discrete-particle demo views.*
+
+</details>
+
+## Spatial and temporal sensitivity
+
+The benchmark also varies PD grid spacing, horizon and time step against one finest H8 FEM numerical reference. Stress histories are more stable than local plastic-strain maxima; parameter refinement does not reduce every deviation monotonically.
+
+<details>
+<summary>View the manuscript's sensitivity results</summary>
+
+![Grid, horizon and time-step sensitivity against the same finest FEM reference](docs/paper-figures/sensitivity.png)
+
+*For the fine PD baseline, stress-history, displacement and maximum-plastic-strain deviations are 0.483%, 0.540% and 8.113%. These use the finest FEM reference and differ from the matched-pair metrics above.*
+
+</details>
+
+The [benchmark directory](benchmarks/tensile3d/README.md) preserves original data hashes, final case inputs, separate metric baselines and reproduction tools. Browse [all six manuscript figures](docs/paper-figures/README.md) and their source traceability.
+
+## Explore the PD particle demos
+
+Each demo folder contains its own setup, discrete-particle animation, final-state preview, rerun commands and provenance. Every colored point is an actual PD particle at its computed deformed position. Free interior particles evolve under PD forces.
+
+| Demo | What it shows | Open |
+|---|---|---|
+| Elastic tension | Material reuse and transient elastic stress | [Demo folder](demos/elastic-tension/README.md) |
+| Johnson–Cook tension | Elastoplastic stress and persistent material history | [Demo folder](demos/johnson-cook-tension/README.md) |
+| Neo-Hookean 150° bending | Finite deformation through the dedicated spatial-stress route | [Demo folder](demos/neohookean-bending/README.md) |
+| Neo-Hookean 540° torsion | Large end rotation and computed PD interior motion | [Demo folder](demos/neohookean-torsion/README.md) |
+
+The Neo-Hookean demos extend the gallery beyond the paper's JC benchmark; they have no independent spatial FEM/experimental reference. All four gallery cases disable the optional outer damage layer.
+
+## Optional outer damage
+
+`SimpleDamageModel` and `PdSimpleDamage` remain available with their host calls and configuration. Point modes use material-state or principal-strain thresholds; the bond mode uses critical stretch. This host layer is separate from the constitutive routine's raw stress and persistent history. Its algorithmic checks cover degradation, irreversibility and bond failure; they do not validate physical fracture applications. Read [the damage guide](docs/outer-damage.md) before enabling it.
 
 ## Build and start
 
@@ -71,26 +106,28 @@ ctest --preset release
 python demos/run.py all --threads 2
 ```
 
-The launcher runs all four PD cases and records the actual executables, plugins and result hashes. For a PD build without the FEM verification target:
+The launcher executes new PD simulations and records the actual programs, plugins and result hashes. Python 3.10+ is used for orchestration. Particle rendering requires the [demo dependencies](demos/requirements.txt) and FFmpeg.
+
+For a PD runtime build without FEM or standalone verification executables:
 
 ```bash
 cmake -S . -B build/pd-only -G Ninja -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF
 cmake --build build/pd-only --parallel
 ```
 
-Python 3.10+ is needed for the demo launcher. Plotting and movie generation also require the [demo dependencies](demos/requirements.txt) and FFmpeg. See [the demo index](demos/README.md) for particle-rendering commands.
+## Scope and reuse
 
-## Repository map
+The demonstrated scope is material transfer under the documented interface conventions. Standard Abaqus shear ordering and stretch conventions require explicit mapping for affected routines. Additional materials and hosts need separate checks. Thermal calibration, general finite-rotation accuracy and production impact/fracture capability remain outside the paper's verified scope.
 
 ```text
-src/                  PD hosts and material coupling
+src/                  PD hosts, material coupling and optional outer damage
 include/              Public C++ interfaces
 materials/            Fortran material routines and bridge
 configs/              Material properties and plugin selection
 examples/             PD inputs and small verification cases
-demos/                Four demo folders and shared particle-rendering tools
+demos/                Four particle-demo folders and shared rendering tools
 benchmarks/tensile3d/  Independent validation inputs, data and metrics
-docs/                 Architecture and integration guides
+docs/                 Integration guides and manuscript figures
 tests/                Automated numerical checks
 ```
 

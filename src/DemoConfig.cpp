@@ -116,6 +116,27 @@ UnitSystemConfig loadUnits(const json::Value& root) {
   return units;
 }
 
+SimpleDamageConfig loadDamage(const json::Value& root) {
+  SimpleDamageConfig damage;
+  const json::Value* object = json::find(root, "damage");
+  if (!object || object->type != json::Value::Type::Object)
+    return damage;
+
+  const std::string model = json::getString(*object, "model", false, "");
+  if (model == "critical_stretch" || model == "Critical Stretch")
+    damage.mode = "critical_stretch";
+  else if (!model.empty())
+    damage.mode = model;
+
+  damage.initiation = json::getDouble(*object, "initiation", false, damage.initiation);
+  if (damage.initiation <= 0.0)
+    damage.initiation = json::getDouble(*object, "criticalStretch", false, damage.initiation);
+  damage.failure = json::getDouble(*object, "failure", false, damage.failure);
+  damage.deletionEnabled =
+      json::getBool(*object, "deletionEnabled", false, damage.deletionEnabled);
+  return damage;
+}
+
 OutputConfig loadOutput(const json::Value& root, const std::string& defaultName) {
   OutputConfig output;
   output.directory = "validation_cases/output/" + defaultName;
@@ -249,9 +270,6 @@ DemoCaseConfig loadDemoCaseConfigFromJson(const std::string& casePath,
   if (schemaVersion != "1.0")
     throw std::runtime_error("Unsupported VUMAT-PD case schemaVersion: " + schemaVersion);
 
-  if (json::find(root, "damage"))
-    throw std::runtime_error("Outer damage configuration is no longer supported; remove the damage field.");
-
   DemoCaseConfig config;
   config.name = json::getString(root, "name");
   config.type = json::getString(root, "type", false, "vumat_pd_demo");
@@ -262,6 +280,7 @@ DemoCaseConfig loadDemoCaseConfigFromJson(const std::string& casePath,
   config.timeIntegration = loadTimeIntegration(root);
   config.boundaryCondition = loadBoundaryCondition(root);
   config.dynamics = loadDynamics(root);
+  config.damage = loadDamage(root);
   config.output = loadOutput(root, config.name);
   config.tolerances = loadTolerances(root);
   config.checks = loadChecks(root);

@@ -1,0 +1,49 @@
+{
+  "source": "Provided manuscript revision of 2026-10-13",
+  "title": "VUMAT-PD: A plugin-based interface for VUMAT-driven peridynamic correspondence simulations",
+  "figures": [
+    {
+      "manuscript_figure": 1,
+      "file": "coupling-workflow.png",
+      "caption": "Constitutive coupling between correspondence-PD kinematics and VUMAT.",
+      "sha256": "d007289e56c5ca21f4b4239e1de551634153f40c80c9095d01f5f811fb3a4fb8",
+      "processing": "Original embedded EMF rendered with Windows GDI+ to PNG at 2400 pixels wide; no content redrawing.",
+      "original_vector_sha256": "7033fd38150e125f1e1b7c1b838b262ca79acfc92b196c991747a1663852982a"
+    },
+    {
+      "manuscript_figure": 2,
+      "file": "benchmark-setup.png",
+      "caption": "Common three-dimensional geometry, end bands and loading history.",
+      "sha256": "a85273a4fa18ac911a79b930ecf74641b6602c7f140bb655ffdae3cbac965ead",
+      "processing": "Original embedded PNG, copied without modifying pixels."
+    },
+    {
+      "manuscript_figure": 3,
+      "file": "verification-path.png",
+      "caption": "Shared material transfer through independent three-dimensional FEM and PD paths.",
+      "sha256": "266b004bedf79a0bc426e207d076383154eae151c5c32df0d2ee73a1ab137891",
+      "processing": "Original embedded PNG, copied without modifying pixels."
+    },
+    {
+      "manuscript_figure": 4,
+      "file": "coarse-fields.png",
+      "caption": "Coarse-grid axial-stress and equivalent-plastic-strain fields at 0.12 ms.",
+      "sha256": "5a7378f094abb6237a309079025d837753a3bc7c87afbe5557d456ed02ca44fb",
+      "processing": "Original embedded PNG, copied without modifying pixels."
+    },
+    {
+      "manuscript_figure": 5,
+      "file": "fine-fields.png",
+      "caption": "Fine-grid axial-stress and equivalent-plastic-strain fields at 0.12 ms.",
+      "sha256": "1596cb8c5ed7fb4384f2daf575ccb334843abb5737f24058f16fa002cd28306b",
+      "processing": "Original embedded PNG, copied without modifying pixels."
+    },
+    {
+      "manuscript_figure": 6,
+      "file": "sensitivity.png",
+      "caption": "Spatial and temporal sensitivity relative to the finest H8 FEM numerical reference.",
+      "sha256": "af4dbc0da071a48c26d7afaafc5b536f5be2319630dcc0ff72aa2304ddf352d3",
+      "processing": "Original embedded PNG, copied without modifying pixels."
+    }
+  ]
+}

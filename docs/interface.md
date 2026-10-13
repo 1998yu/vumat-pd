@@ -29,7 +29,7 @@ The spatial benchmark uses mm, ms, N and MPa, with solver density 0.0078 N·ms²
 
 Comparisons verify the included JC routine in documented 3D nonfracturing tensile models. Core tests cover affine response, neighbor search, an H8 patch, corotational updates and the supplied PD demos. Local maximum plastic strain remains resolution-sensitive.
 
-The dedicated Neo-Hookean examples demonstrate 150° bending and 540° torsion with dynamic relaxation, but have no independent spatial reference or convergence study. General finite-rotation accuracy, arbitrary VUMAT compatibility, damage–neighborhood coupling, deletion and production impact/fracture need separate evaluation. This release does not include the retired outer damage or rigid-wall contact extensions. VUMAT constitutive state and plasticity remain part of the interface.
+The dedicated Neo-Hookean examples demonstrate 150° bending and 540° torsion with dynamic relaxation, but have no independent spatial reference or convergence study. General finite-rotation accuracy, arbitrary VUMAT compatibility, damage–neighborhood coupling, deletion and production impact/fracture need separate evaluation. The optional outer damage layer is retained separately from the VUMAT update; see [damage configuration](outer-damage.md). The supplied benchmark and demos disable it. The removed rigid-wall contact extension is not part of the current runtime.
 
 ## Threading
 
@@ -39,4 +39,4 @@ Start custom routines with one thread. Before concurrent blocks, audit mutable s
 
 Case output configuration selects a directory; the runners always write CSV and metadata. The former `csv`, `svg` and `metadata` switches were unused and have been removed. SVG generation belongs to the Python particle renderer.
 
-Remove the retired outer `damage` configuration from input files; the loader rejects that field. This does not remove material state variables or the Johnson–Cook plastic update. Existing CSV layouts retain legacy zero-valued `simple_damage`/`damage` diagnostics and equal raw/effective-stress columns so archived comparisons and field readers remain compatible. These columns do not enable an outer damage model.
+The optional outer `damage` configuration is supported; its default is `none`. This host layer is separate from material state variables and the Johnson–Cook plastic update. Existing CSV layouts retain `simple_damage`/`damage` diagnostics and raw/effective-stress columns. They are zero/equal for the supplied nonfracturing cases and reflect host-level degradation when configured. See [the damage guide](outer-damage.md).

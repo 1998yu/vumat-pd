@@ -5,6 +5,7 @@
 #include "Geometry.hpp"
 #include "ParticleSets.hpp"
 #include "PdCorrespondenceSkeleton.hpp"
+#include "PdSimpleDamage.hpp"
 #include "VumatPdCorrespondenceMaterial.hpp"
 
 #include <algorithm>
@@ -114,6 +115,7 @@ void writeSnapshot(std::ofstream& out, const std::string& materialName,
                    int step, double time, const pd::ParticleBlock& block,
                    const pd::ExplicitDynamicState& dynamicState,
                    const pd::MaterialUpdateResult& result,
+                   const pd::PdDamageResult& damage,
                    const pd::MaterialState& materialState,
                    const DemoMaterialConfig& material, int axis) {
   for(size_t i=0;i<block.referencePosition.size();++i) {
@@ -131,7 +133,7 @@ void writeSnapshot(std::ofstream& out, const std::string& materialName,
         << result.strain[i][static_cast<size_t>(4*axis)] << ','
         << result.rawStress[i][static_cast<size_t>(4*axis)] << ','
         << eqps << ',' << internalIndicator(material,materialState.vumatStateN[i]) << ','
-        << 0.0 << '\n'; // Legacy simple_damage column: no outer damage.
+        << damage.damageIndex[i] << '\n';
   }
 }
 
@@ -176,6 +178,9 @@ RunSummary runMaterial(const DemoCaseConfig& config,
   pd::VumatPdCorrespondenceMaterial bridge(materialConfig);
   pd::MaterialState materialState;
   bridge.initialize(skeleton.computeDeformationGradients(block,correspondenceState),materialState);
+  pd::PdSimpleDamage damageModel(config.damage);
+  pd::PdDamageState damageState;
+  damageModel.initialize(block,damageState);
   pd::ExplicitTimeIntegrator integrator(config.dynamics.density);
   pd::ExplicitDynamicState dynamicState;
   integrator.initialize(block,dynamicState);
@@ -188,6 +193,8 @@ RunSummary runMaterial(const DemoCaseConfig& config,
   double externalWork=0.0;
   double previousPower=0.0;
   double slopeX2=0.0,slopeXY=0.0;
+  pd::MaterialUpdateResult finalResult;
+  pd::PdDamageResult finalDamage;
 
   for(int step=1;step<=config.timeIntegration.steps;++step) {
     const double time=static_cast<double>(step)*config.timeIntegration.dt;
@@ -198,8 +205,10 @@ RunSummary runMaterial(const DemoCaseConfig& config,
     const auto deformationGradient=skeleton.computeDeformationGradients(block,correspondenceState);
     auto result=bridge.update(deformationGradient,materialState,config.timeIntegration.dt,
                               time,time);
+    auto damage=damageModel.update(block,result.strain,result.rawStress,
+                                   materialState.vumatStateN,damageState);
     auto force=skeleton.computeForceDensity(block,correspondenceState,
-        result.deformationGradient,result.rawStress);
+        result.deformationGradient,damage.effectiveStress,damage.bondDamage);
     integrator.correctVelocity(dynamicState,force,config.timeIntegration.dt);
     constraints.apply(block,dynamicState,time);
 
@@ -233,7 +242,7 @@ RunSummary runMaterial(const DemoCaseConfig& config,
         maxEqps=std::max(maxEqps,materialState.vumatStateN[i][static_cast<size_t>(material.equivalentPlasticStrainIndex)]);
       maxIndicator=std::max(maxIndicator,internalIndicator(material,materialState.vumatStateN[i]));
       summary.finite=summary.finite && finiteTensor(result.rawStress[i]) &&
-          finiteTensor(result.strain[i]) &&
+          finiteTensor(result.strain[i]) && std::isfinite(damage.damageIndex[i]) &&
           std::isfinite(force[i][0]) && std::isfinite(force[i][1]) && std::isfinite(force[i][2]);
       for(double value:materialState.vumatStateN[i]) summary.finite=summary.finite&&std::isfinite(value);
     }
@@ -278,8 +287,10 @@ RunSummary runMaterial(const DemoCaseConfig& config,
           << maxIndicator << ',' << kinetic << ',' << internalEnergy << ',' << externalWork << ','
           << energyError << ',' << vectorNorm(netInternal) << ',' << (summary.finite?1:0) << '\n';
     if(step%config.dynamics.snapshotEvery==0 || step==config.timeIntegration.steps)
-      writeSnapshot(snapshots,material.label,step,time,block,dynamicState,result,
+      writeSnapshot(snapshots,material.label,step,time,block,dynamicState,result,damage,
                     materialState,material,axis);
+    finalResult=std::move(result);
+    finalDamage=std::move(damage);
   }
 
   summary.earlyElasticSlope=slopeX2>0.0?slopeXY/slopeX2:0.0;
