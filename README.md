@@ -107,14 +107,42 @@ The Neo-Hookean demos extend the gallery beyond the paper's JC benchmark; they h
 
 Requirements: CMake 3.25+, C++17, gfortran, Ninja and OpenMP. Builds are checked with Windows MSYS2 UCRT64 and Ubuntu GCC/gfortran. Use an ASCII checkout path on Windows and place compiler runtimes on `PATH`.
 
+Clone the project, enter its root directory and build with the GNU compiler tools available on `PATH`:
+
+```bash
+git clone https://github.com/1998yu/vumat-pd.git
+cd vumat-pd
+```
+
 ```bash
 cmake --preset release
 cmake --build --preset release --parallel
 ctest --preset release
-python demos/run.py all --threads 2
 ```
 
-The launcher executes new PD simulations and records the actual programs, plugins and result hashes. Python 3.10+ is used for orchestration. Particle rendering requires the [demo dependencies](demos/requirements.txt) and FFmpeg.
+Python 3.10+ is used for orchestration. Install the plotting dependencies before post-processing; MP4/GIF export also requires `ffmpeg` and `ffprobe` on `PATH`:
+
+```bash
+python -m pip install -r demos/requirements.txt -r benchmarks/tensile3d/requirements.txt
+```
+
+Run a single elastic PD example and render its particles:
+
+```bash
+python demos/run.py elastic --threads 2
+python demos/render_particles.py --case elastic
+```
+
+The simulation writes CSV fields and histories to `demos/output/elastic_pd`. The renderer writes the MP4, GIF, final PNG and source-provenance JSON to `demos/output/particles/elastic-tension`. The launcher records the actual executables, plugins and result hashes in `demos/output/run_manifest.json`. To generate images without video encoding, use `--preview-only` on the renderer.
+
+Recompute and display all four PD demos:
+
+```bash
+python demos/run.py all --threads 2
+python demos/render_particles.py --case all
+```
+
+For individual JC, bending and torsion commands, case definitions and output locations, see [the demo guide](demos/README.md). Start a new material routine with one thread until its reentrancy has been checked.
 
 For a PD runtime build without FEM or standalone verification executables:
 
@@ -122,6 +150,37 @@ For a PD runtime build without FEM or standalone verification executables:
 cmake -S . -B build/pd-only -G Ninja -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF
 cmake --build build/pd-only --parallel
 ```
+
+## Reproduce the verification results
+
+To inspect the published numerical evidence without running new simulations, expand the checked archive, regenerate its plots and compare the metrics with the frozen baselines:
+
+```bash
+python benchmarks/tensile3d/analyse_and_plot.py
+python benchmarks/tensile3d/verify_metrics.py
+```
+
+This verifies the checksums of 26 archived CSV files and regenerates figures, sampled coordinates and quantitative comparisons under `benchmarks/tensile3d/generated`. Matched FEM–PD comparisons and comparisons with the finest FEM reference use separate baselines.
+
+To recompute the complete validation matrix with the compiled solvers:
+
+```bash
+python benchmarks/tensile3d/run_cases.py --threads 2 --workers 1 --overwrite
+python benchmarks/tensile3d/analyse_and_plot.py --results benchmarks/tensile3d/generated/results
+python benchmarks/tensile3d/verify_metrics.py
+```
+
+The matrix includes the independent H8 FEM reference and requires a build with `BUILD_TESTING=ON`, as used by the release preset. It is more expensive than a single PD demo. See [the benchmark guide](benchmarks/tensile3d/README.md) for selected cases, reference definitions, tolerances and optional FEM movie snapshots.
+
+## Developer documentation
+
+| Guide | What it explains |
+|---|---|
+| [Architecture](docs/architecture.md) | PD hosts, material adapter, plugin boundaries and verification responsibilities |
+| [Add a material](docs/add-a-vumat.md) | Compile a compatible VUMAT, configure properties/history and check its integration |
+| [Interface conventions](docs/interface.md) | Component order, stress frames, stretch tensors, thermal history and threading |
+| [Corotational kinematics](docs/kinematics.md) | Deformation reconstruction, corrected rotation update and its numerical limits |
+| [Outer damage](docs/outer-damage.md) | Optional point/bond degradation, configuration and unvalidated fracture scope |
 
 ## Scope and reuse
 
@@ -139,4 +198,10 @@ docs/                 Integration guides and manuscript figures
 tests/                Automated numerical checks
 ```
 
-Generated runs and builds are ignored by Git. The project uses the [BSD 3-Clause License](LICENSE). For reproducible bug reports or integration questions, use [GitHub issues](https://github.com/1998yu/vumat-pd/issues) and the [contribution guide](CONTRIBUTING.md).
+Generated runs and builds are ignored by Git.
+
+## License and support
+
+The project uses the [BSD 3-Clause License](LICENCE.txt). The root `LICENCE.txt` contains the complete license required for SoftwareX submission; `LICENSE` carries the same terms for standard repository license discovery.
+
+For reproducible bug reports or integration questions, use [GitHub issues](https://github.com/1998yu/vumat-pd/issues) and the [contribution guide](CONTRIBUTING.md). Include the code revision, platform, compiler versions, case input, executed command and relevant error output. The manuscript identifies the frozen software revision used for its numerical results.
