@@ -18,6 +18,7 @@ add_library(elastic_vumat_plugin SHARED
 )
 target_include_directories(elastic_vumat_plugin PRIVATE materials/bridge)
 target_compile_options(elastic_vumat_plugin PRIVATE
+  $<$<COMPILE_LANGUAGE:Fortran>:-frecursive>
   $<$<COMPILE_LANGUAGE:Fortran>:-std=legacy>
   $<$<COMPILE_LANGUAGE:Fortran>:-ffixed-line-length-none>
   $<$<COMPILE_LANGUAGE:Fortran>:-fallow-argument-mismatch>
@@ -135,8 +136,11 @@ target_link_libraries(vumat_pd PUBLIC OpenMP::OpenMP_CXX)
 target_compile_options(jc_vumat_plugin PRIVATE
   $<$<COMPILE_LANGUAGE:Fortran>:-frecursive>)
 
-add_executable(jc_3d_fem src/main_jc_3d_fem.cpp)
-target_link_libraries(jc_3d_fem PRIVATE vumat_pd)
+if(BUILD_TESTING)
+  # Independent reference solver belongs to validation, not the PD runtime.
+  add_executable(jc_3d_fem benchmarks/tensile3d/src/main_jc_3d_fem.cpp)
+  target_link_libraries(jc_3d_fem PRIVATE vumat_pd)
+endif()
 add_executable(vumat_pd_large_motion_3d src/main_large_motion_3d.cpp)
 target_link_libraries(vumat_pd_large_motion_3d PRIVATE vumat_pd)
 add_executable(neohookean_material_test tests/neohookean_material_test.cpp)
@@ -159,13 +163,18 @@ if(BUILD_TESTING)
     configure_vumat_test(${test_name})
   endforeach()
   set_tests_properties(hyperelastic_bending hyperelastic_torsion PROPERTIES TIMEOUT 120)
+  add_test(NAME elastic_pd_tension COMMAND vumat_pd_run examples/elastic_tension_pd.json)
+  add_test(NAME jc_pd_tension COMMAND vumat_pd_run examples/jc_tension_pd.json)
+  configure_vumat_test(elastic_pd_tension)
+  configure_vumat_test(jc_pd_tension)
+  set_tests_properties(elastic_pd_tension jc_pd_tension PROPERTIES TIMEOUT 180)
   set_tests_properties(corotational_kinematics neighbor_search rigid_wall_contact
     affine_bar_elastic affine_shear_elastic jc_vumat_material_point
     fem_h8_patch neighbor_lattice_regression neohookean_material
-    hyperelastic_bending hyperelastic_torsion
+    hyperelastic_bending hyperelastic_torsion elastic_pd_tension jc_pd_tension
     PROPERTIES ENVIRONMENT "OMP_NUM_THREADS=2;OMP_DYNAMIC=FALSE")
 endif()
 
 install(TARGETS vumat_pd vumat_pd_run elastic_vumat_plugin jc_vumat_plugin
-  neohookean_kv_vumat_plugin jc_3d_fem vumat_pd_large_motion_3d)
+  neohookean_kv_vumat_plugin vumat_pd_large_motion_3d)
 install(DIRECTORY include/ DESTINATION include)

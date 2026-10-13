@@ -17,7 +17,7 @@ The Neo-Hookean bending/torsion demo uses a separate contract: spatial deformati
 
 ## Batches and plugin entry
 
-Spatial coupling uses at most 256 points per block. Rows retain point ownership. The last block is padded by duplicating its final valid row and discards padded outputs. Properties, old state, stress and energy histories pass through the adapter.
+Corotational spatial coupling uses at most 256 points per block. Rows retain point ownership. The last block is padded by duplicating its final valid row and discards padded outputs. The dedicated Neo-Hookean host calls the adapter directly for its particle block. Properties, old state, stress and energy histories pass through the adapter in both routes.
 
 The Fortran wrapper uses the recent `jInfoArray/dtArray` signature through a C-compatible entry. The included Abaqus shims permit standalone example builds; no commercial solver is required.
 

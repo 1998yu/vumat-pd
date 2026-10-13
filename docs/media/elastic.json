@@ -1,12 +1,35 @@
 {
-  "affine_bar_elastic": {
-    "status": "pass",
-    "maximum_stress_error_MPa": 0.001342701315319772,
-    "max_net_force_N": 5.186726233405765e-14
-  },
-  "affine_shear_elastic": {
-    "status": "pass",
-    "maximum_stress_error_MPa": 0.000383653908329283,
-    "max_net_force_N": 1.391725562512403e-14
-  }
+  "solver": "correspondence peridynamics",
+  "material": "Elastic",
+  "plugin_file": "elastic_vumat_plugin.dll",
+  "particles": 1683,
+  "actual_states": 240,
+  "simulation_time_ms": [
+    0.0005,
+    0.12
+  ],
+  "field_sampling": "actual PD z=0 particles in reference coordinates",
+  "snapshots_sha256": "d72b532eb2462b9b829e2b7e95b65e7f72d8518a9d8d7bf6eab7fc1a3e121917",
+  "history_sha256": "66afcbc124916b7fdbb487091ed85a63f4fe2b1cf0d409b76611e7b1e6b6fae2",
+  "case": "elastic",
+  "spacing_mm": 2,
+  "dt_ns": 25.0,
+  "playback_seconds": 14.9,
+  "dimensions": [
+    1920,
+    1080
+  ],
+  "stress_scale_MPa": [
+    -9.63969195296333e-28,
+    51.65551980846364
+  ],
+  "secondary_field": "ux",
+  "secondary_scale": [
+    0,
+    0.02106051235525944
+  ],
+  "movie_sha256": "2aafdb52a86710982c780b57b50f4cd7d40566e3a6d3c5c035d7dc5701e86b47",
+  "smoothing": false,
+  "time_interpolation": false,
+  "full_decode": "pass"
 }

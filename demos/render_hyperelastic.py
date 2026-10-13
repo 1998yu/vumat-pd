@@ -36,6 +36,7 @@ def boundary_faces(frame):
 
 def read_case(root):
     meta = json.loads((root / 'metadata.json').read_text(encoding='utf-8'))
+    assert meta['solver'] == 'correspondence peridynamics'
     history = np.genfromtxt(root / 'timeseries.csv', delimiter=',', names=True)
     raw = np.genfromtxt(root / 'field_snapshots.csv', delimiter=',', names=True)
     for data in [history, raw]:
@@ -56,7 +57,7 @@ def render(case, output, norm, ffmpeg, ffprobe, preview_only):
     name = case['meta']['scenario']
     fig = plt.figure(figsize=(12, 8), dpi=120, facecolor='white')
     plt.rcParams.update({'font.family': 'sans-serif', 'font.sans-serif': ['Arial', 'DejaVu Sans'], 'font.size': 12})
-    fig.text(.045, .948, f'Neo-Hookean | {name.capitalize()}', fontsize=25, weight='bold', color='#182630')
+    fig.text(.045, .948, f'PD + Neo-Hookean | {name.capitalize()}', fontsize=23, weight='bold', color='#182630')
     fig.text(.045, .906, f'{case["meta"]["maximumAngle_deg"]}° end rotation · fixed base · free interior particles', fontsize=14, color='#435966')
     timer = fig.text(.79, .948, '', fontsize=18, weight='bold', color='#182630')
     status = fig.text(.045, .865, '', fontsize=13, color='#435966')
@@ -130,7 +131,8 @@ def render(case, output, norm, ffmpeg, ffprobe, preview_only):
     assert probe['streams'][0]['codec_name'] == 'h264' and probe['streams'][0]['pix_fmt'] == 'yuv420p'
     palette = 'fps=10,scale=960:-1:flags=lanczos,split[s0][s1];[s0]palettegen=stats_mode=diff:max_colors=128[p];[s1][p]paletteuse=dither=bayer:bayer_scale=3'
     subprocess.run([ffmpeg, '-v', 'error', '-y', '-i', str(output), '-filter_complex', palette, '-loop', '0', str(output.with_suffix('.gif'))], check=True)
-    provenance = {'material': 'compressible Neo-Hookean', 'scenario': name, 'angle_deg': case['meta']['maximumAngle_deg'],
+    provenance = {'solver': case['meta']['solver'], 'plugin_file': case['meta']['plugin_file'],
+                  'material': 'compressible Neo-Hookean', 'scenario': name, 'angle_deg': case['meta']['maximumAngle_deg'],
                   'layout': 'single demo', 'actual_states': len(case['steps']), 'simulation_time_ms': [0, float(case['rows'][-1]['time_ms'])],
                   'dimensions': [width, height], 'playback_seconds': float(probe['format']['duration']),
                   'stress_scale_MPa': [float(norm.vmin), float(norm.vmax)], 'geometry_exaggeration': False,

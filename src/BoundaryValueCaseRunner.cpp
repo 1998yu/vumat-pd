@@ -341,6 +341,7 @@ int runBoundaryValueCase(const DemoCaseConfig& config) {
                         [](const RunSummary& item){return item.pass;});
   std::ofstream metadata(config.output.directory+"/metadata.json");
   metadata << "{\n  \"name\": \"" << config.name << "\",\n"
+      << "  \"solver\": \"correspondence peridynamics\",\n"
       << "  \"status\": \"" << (pass?"pass":"fail") << "\",\n"
       << "  \"classification\": \"" << config.classification << "\",\n"
       << "  \"scope\": \"" << config.scope << "\",\n"
@@ -365,7 +366,8 @@ int runBoundaryValueCase(const DemoCaseConfig& config) {
     const auto& s=summaries[i];
     const auto& material=config.materials[i];
     metadata << "    {\"name\": \"" << s.material << "\", \"status\": \""
-        << (s.pass?"pass":"fail") << "\", \"sourceDensity_kg_per_m3\": "
+        << (s.pass?"pass":"fail") << "\", \"plugin_file\": \""
+        << std::filesystem::path(material.material.pluginPath).filename().string() << "\", \"sourceDensity_kg_per_m3\": "
         << jsonNumber(material.material.density) << ", \"solverDensity\": " << jsonNumber(config.dynamics.density)
         << ", \"runtimeSeconds\": " << jsonNumber(s.runtimeSeconds)
         << ", \"maxNetInternalForce_N\": " << jsonNumber(s.maxNetInternalForce)

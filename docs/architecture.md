@@ -1,12 +1,12 @@
 # Architecture
 
-VUMAT–PD separates material updates from spatial solvers. C++ hosts handle geometry, kinematics, force assembly and time integration; Fortran plugins handle constitutive response. The adapter connects them through one documented tensor and state-array contract.
+VUMAT–PD is a correspondence-peridynamics framework with reusable material plugins. Its C++ PD host handles particle geometry, nonlocal kinematics, PD force assembly and time integration; Fortran plugins provide constitutive response. The adapter connects them through a documented tensor and state-array contract. All gallery simulations run through this PD framework.
 
 ## Repository map
 
 ```text
 vumat-pd/
-├── src/                   Current C++ implementation and solver entry points
+├── src/                   PD implementation and runtime entry points
 ├── include/               Public C++ interfaces
 ├── materials/
 │   ├── examples/          Elastic, Johnson–Cook and Neo-Hookean routines
@@ -14,7 +14,7 @@ vumat-pd/
 ├── configs/               Material properties and plugin selection
 ├── examples/              Small case inputs
 ├── demos/                 Launcher, plots and video renderers
-├── benchmarks/tensile3d/   Final 3D cases, compressed data and metric baselines
+├── benchmarks/tensile3d/   Validation cases, data and independent FEM reference
 ├── docs/                  Architecture, integration guides and media
 ├── tests/                 Automated numerical checks
 ├── CMakeLists.txt         Build targets
@@ -28,18 +28,15 @@ Generated runs, temporary plots and compiler outputs are excluded from Git.
 ```mermaid
 flowchart TD
     Inputs["Case inputs + material configuration"] --> PD["Correspondence PD host"]
-    Inputs --> FEM["Independent H8 FEM host"]
     PD --> PF["Nonlocal deformation gradient"]
-    FEM --> FF["Element deformation gradient"]
     PF --> Corot["Corotational coupling: Elastic / JC"]
-    FF --> Corot
     PF --> Spatial["Dedicated spatial-stress route: Neo-Hookean demo"]
     Corot --> Adapter["VumatMaterialAdapter"]
     Spatial --> Adapter
     Adapter --> Plugin["Compiled Fortran material plugin"]
     Plugin --> Returned["Stress + updated material state"]
     Returned --> Frame["Host applies the route's stress-frame convention"]
-    Frame --> Forces["PD force state / FEM force assembly"]
+    Frame --> Forces["Correspondence PD force assembly"]
     Forces --> Motion["Time integration + boundary conditions"]
     Motion --> Outputs["CSV outputs → plots and demo videos"]
 ```
@@ -55,16 +52,17 @@ The Neo-Hookean bending/torsion entry calls `VumatMaterialAdapter` directly with
 | Entry | Role |
 |---|---|
 | `vumat_pd_run` | Affine PD checks, material-point updates and regional PD boundary cases |
-| `jc_3d_fem` | Independent H8 tensile solver using the same JC material plugin |
 | `vumat_pd_large_motion_3d` | Dedicated Neo-Hookean 150° bending and 540° torsion examples |
 | `python demos/run.py` | Select and launch the supported demos |
-| `python demos/plot.py` | Plot small demos or the matched 3D tensile comparison |
-| `python demos/render_transient.py` | Render actual FEM transient fields |
+| `python demos/plot.py` | Plot freshly computed Elastic/JC PD fields and histories |
+| `python demos/render_pd.py` | Render actual Elastic/JC PD transient fields |
 | `python demos/render_hyperelastic.py` | Render bending and torsion as separate videos |
 
 ## Verification and reuse
 
-Core checks cover neighborhood construction, corotational updates, affine response, an H8 patch and basic contact. The Neo-Hookean material check covers finite stretch, three shear planes and rotation. The tensile benchmark retains independent FEM–PD comparisons and sensitivity cases.
+PD checks cover neighborhood construction, corotational updates, affine response, basic contact and the actual Elastic/JC tensile solves. The Neo-Hookean material check covers finite stretch, three shear planes and rotation. The tensile benchmark retains independent FEM–PD comparisons and sensitivity cases.
+
+The independent H8 FEM reference is located at `benchmarks/tensile3d/src/main_jc_3d_fem.cpp`. It is built as `jc_3d_fem` when `BUILD_TESTING=ON` and has an H8 patch check. It belongs to the verification workflow, is excluded from the installed PD runtime, and is not invoked by any demo command. Configure with `BUILD_TESTING=OFF` for a PD build without the FEM reference.
 
 The hyperelastic spatial examples are demonstrations with dynamic relaxation; they do not yet have an independent FEM or experimental reference. The archived 3D tensile comparison establishes the documented JC case, not arbitrary material compatibility.
 

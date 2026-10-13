@@ -439,6 +439,8 @@ int main(int argc, char** argv) {
     const bool completed = finite && finalMinJ > 0.0;
     std::ofstream metadata(outputDirectory + "/metadata.json");
     metadata << "{\n"
+             << "  \"solver\": \"correspondence peridynamics\",\n"
+             << "  \"plugin_file\": \"neohookean_kv_vumat_plugin\",\n"
              << "  \"name\": \"large_motion_3d_" << scenario << "\",\n"
              << "  \"status\": \"" << (completed ? "completed" : "failed") << "\",\n"
              << "  \"interpretation\": \"3D VUMAT-PD boundary-value demonstration; not a benchmark validation\",\n"

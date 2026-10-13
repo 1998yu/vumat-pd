@@ -1,0 +1,58 @@
+{
+  "all_displayed_simulations_use_PD": true,
+  "threads": 2,
+  "cases": [
+    {
+      "case": "elastic_tension",
+      "solver": "correspondence peridynamics",
+      "executable": "vumat_pd_run.exe",
+      "material_config": "configs/elastic.json",
+      "plugin": "elastic_vumat_plugin.dll",
+      "executable_sha256": "15648dd0dd95ec97947b2374f3c8b9216a3a0ed776c86a217a14876ecd6fd0cc",
+      "plugin_sha256": "0bd94cbfcb01860dbd5ab9a48afc8076d178e2a47f42ae4f3900fbb939373bc6",
+      "result_directory": "demos/output/elastic_pd",
+      "snapshots_sha256": "d72b532eb2462b9b829e2b7e95b65e7f72d8518a9d8d7bf6eab7fc1a3e121917",
+      "history_sha256": "66afcbc124916b7fdbb487091ed85a63f4fe2b1cf0d409b76611e7b1e6b6fae2",
+      "status": "pass"
+    },
+    {
+      "case": "johnson_cook_tension",
+      "solver": "correspondence peridynamics",
+      "executable": "vumat_pd_run.exe",
+      "material_config": "configs/johnson_cook.json",
+      "plugin": "jc_vumat_plugin.dll",
+      "executable_sha256": "15648dd0dd95ec97947b2374f3c8b9216a3a0ed776c86a217a14876ecd6fd0cc",
+      "plugin_sha256": "891a71442ada62b2586553b82e103f0b9372fc878c0283836b2ddf473158a17c",
+      "result_directory": "demos/output/jc_pd",
+      "snapshots_sha256": "e1badabade53923a8538c31304d93f4827594f046f312c7b868b610790b2d1b4",
+      "history_sha256": "c1f8bf1ea0047a3a73968dd1349debd73b23ee592f57064a6999d9579ada49ad",
+      "status": "pass"
+    },
+    {
+      "case": "bending",
+      "solver": "correspondence peridynamics",
+      "executable": "vumat_pd_large_motion_3d.exe",
+      "material_config": "configs/neohookean.json",
+      "plugin": "neohookean_kv_vumat_plugin.dll",
+      "executable_sha256": "996d96845fc09c1a0ee8b6f143ff3192537c21760c18539ff07e99c65614e2f9",
+      "plugin_sha256": "4958a7bfed0882ae43a0eb614bee0f8bf48ed9fb59339c217a5a6d7e4f9ff004",
+      "result_directory": "demos/output/hyperelastic/bending",
+      "snapshots_sha256": "189203962d7648adcb5d0afab98c017a860bdca50cc0c1a5e1e4a0a920271731",
+      "history_sha256": "877133bad5a6302187089cbd4b99e2d65279297ed5a06b28dd1aae20b11e96ee",
+      "status": "completed"
+    },
+    {
+      "case": "torsion",
+      "solver": "correspondence peridynamics",
+      "executable": "vumat_pd_large_motion_3d.exe",
+      "material_config": "configs/neohookean.json",
+      "plugin": "neohookean_kv_vumat_plugin.dll",
+      "executable_sha256": "996d96845fc09c1a0ee8b6f143ff3192537c21760c18539ff07e99c65614e2f9",
+      "plugin_sha256": "4958a7bfed0882ae43a0eb614bee0f8bf48ed9fb59339c217a5a6d7e4f9ff004",
+      "result_directory": "demos/output/hyperelastic/torsion",
+      "snapshots_sha256": "da7cbd8c090c249ac0b174380177503a7d0e0c1f4f3f4f9d695fbdde4be5334a",
+      "history_sha256": "d5e06e66b64840f9e57b16cfea8ba11d28e12ba0c33d466f13ccfd4ec748bcb0",
+      "status": "completed"
+    }
+  ]
+}

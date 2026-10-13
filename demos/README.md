@@ -1,101 +1,69 @@
-# Run the demos
+# Run the PD demos
 
-Build first and run from the repository root. The launcher uses `build/release/bin`, handles Windows `.exe` names, and accepts `--bin-dir` for another build. The default is one OpenMP thread; choose more only for a reentrant material routine.
+Every gallery simulation uses correspondence PD and a compiled Fortran material plugin. No demo command launches the FEM solver. Build first, then run from the repository root.
 
-## 1 Elastic extension and shear
+```bash
+python demos/run.py all --threads 2
+```
+
+This recomputes all four spatial cases and writes `demos/output/run_manifest.json`. The manifest records the executed PD program, selected plugin and checksums of the actual results. `--bin-dir` selects another CMake build; the default is `build/release/bin`. Use one thread until a custom material routine is known to be reentrant.
+
+## Cases and materials
+
+| Gallery case | PD executable | Material plugin | Input/output |
+|---|---|---|---|
+| Elastic tension | `vumat_pd_run` | `elastic_vumat_plugin` | `examples/elastic_tension_pd.json` → `demos/output/elastic_pd` |
+| Elastoplastic tension | `vumat_pd_run` | `jc_vumat_plugin` | `examples/jc_tension_pd.json` → `demos/output/jc_pd` |
+| 150° bending | `vumat_pd_large_motion_3d` | `neohookean_kv_vumat_plugin` | CLI bending parameters → `demos/output/hyperelastic/bending` |
+| 540° torsion | `vumat_pd_large_motion_3d` | `neohookean_kv_vumat_plugin` | CLI torsion parameters → `demos/output/hyperelastic/torsion` |
 
 ```bash
 python demos/run.py elastic
-python demos/plot.py --demo elastic
-```
-
-Two affine PD checks use the elastic Fortran plugin. Extension constrains transverse strain, so its analytical reference is the constrained elastic modulus, not the free-sided tensile modulus. Shear uses the tensor-shear convention. The checks report finite values, stress errors and global force balance.
-
-Outputs: `examples/output/affine_bar_elastic` and `affine_shear_elastic`; plot: `demos/output/elastic.png`.
-
-## 2 Johnson–Cook material point
-
-```bash
-python demos/run.py material-point
-python demos/plot.py --demo material-point
-```
-
-This calls the material plugin directly, rather than solving a spatial PD model. The prescribed mixed condition has zero lateral y stress and constrained z strain. Outputs are under `examples/output/jc_material_point`, including stress and material-state histories. The temperature state is numerical history, not a physically calibrated temperature-rise prediction.
-
-## 3 Matched 3D FEM and PD tension
-
-```bash
-python demos/run.py tensile --threads 2
-python demos/plot.py --demo tensile --results generated
-```
-
-The default uses the coarse 100 × 20 × 4 mm model: full-domain H8 FEM and PD at 2 mm spacing, the same JC plugin, 2 mm end bands and a half-cosine displacement. FEM is implemented here, without Abaqus.
-
-Use `--resolution fine` for the 1 mm pair, which costs more than the coarse case:
-
-```bash
-python demos/run.py tensile --resolution fine --threads 2
-python demos/plot.py --demo tensile --results generated --resolution fine
-```
-
-Completed cases are reused; `--overwrite` recomputes them. Outputs are under `benchmarks/tensile3d/generated/results`.
-
-Display the shipped, verified fine archive without solving:
-
-```bash
-python demos/plot.py --demo tensile
-```
-
-The plot labels its data source and resolution. FEM fields average the two Gauss planes nearest z = 0 and use quadrature subcells; PD uses the z = 0 layer. Reference coordinates and shared full-range scales are used, without nodal extrapolation or smoothing.
-
-## 4 Transient FEM animation
-
-Install plotting dependencies and [FFmpeg](https://ffmpeg.org/download.html). Both `ffmpeg` and `ffprobe` must be on `PATH`.
-
-```bash
-python demos/run.py transient --threads 2
-```
-
-The launcher saves FEM fields every 20 steps and creates `demos/output/transient.mp4` and `transient.gif`. A completed case is rerun if its snapshot file is missing. Use `--overwrite` to regenerate existing movie data.
-
-The video shows axial stress, equivalent plastic strain, prescribed displacement and an axial stress profile compared with its reflection about x = 50 mm. Physical time is 0–0.12 ms; playback is slowed and on-screen time is simulation time. Scales remain fixed. Damage and deletion are disabled, with no fabricated intermediate fields or smoothing.
-
-Render an existing snapshot file:
-
-```bash
-python demos/render_transient.py \
-  --snapshots benchmarks/tensile3d/generated/results/fem_coarse/movie_slice.csv \
-  --output demos/output/transient.mp4 --gif
-```
-
-## 5 Hyperelastic large deformation
-
-```bash
+python demos/run.py tensile
 python demos/run.py hyperelastic
-python demos/render_hyperelastic.py
 ```
 
-The material check verifies the Neo-Hookean plugin against closed-form spatial Cauchy stress in tension, compression, xy/xz/yz shear, rigid rotation and rotated finite stretch. Then the launcher runs both the 150° bending and 540° torsion examples, with no Abaqus dependency.
+`transient` is a shortcut that reruns the JC PD case and renders its movie. It uses the same PD result as `tensile`.
 
-Each example uses a 41 × 5 × 5 particle grid spanning 80 × 8 × 8 mm, 2 mm spacing, 6 mm horizon and clipped boundary-cell volumes from the current PD host. Three end layers are fixed and three loaded layers follow a smooth rigid-motion ramp. The remaining particles are advanced by explicit PD force balance. There are 2400 steps of 0.0005 ms, with real field snapshots every 24 steps. Solver density is 0.0078 N·ms²/mm⁴; E = 2000 MPa and nu = 0.30 set the initial Neo-Hookean tangent. Constitutive viscosities are zero; host dynamic relaxation is 8/ms. Damage and deletion are disabled.
+## Elastic and Johnson–Cook PD tension
 
-Outputs are under `demos/output/hyperelastic/bending` and `torsion`. The renderer creates separate `demos/output/bending.mp4` and `torsion.mp4`, each with a GIF preview, checkpoint PNGs and a provenance JSON. The README displays them one above the other, with a full-size frame for each example. Surface facets connect actual boundary particles, and each face color averages its corner stresses. Deformation is not exaggerated. Plotting dependencies and FFmpeg are required for rendering. The gallery is available under `docs/media`.
+Both cases use a 100 × 20 × 4 mm bar, 51 × 11 × 3 particles, 2 mm spacing, 6 mm horizon and clipped boundary-cell volumes. Three-dimensional correspondence kinematics and corotational material updates feed the PD force state. The 2 mm end bands carry a half-cosine displacement ramp; other particles move under force balance, with free lateral/thickness faces and rigid-body pins.
 
-Render one example, or inspect its initial, middle and final frames before encoding:
+Each case takes 4800 increments of 25 ns over 0.12 ms. End displacement is 0.02 mm for Elastic and 2 mm for JC. Solver density is 0.0078 N·ms²/mm⁴. No damping, mass scaling, damage or deletion is applied in these tensile cases.
+
+Snapshots are saved every 20 increments. The first movie state is the actual saved state at 0.0005 ms, and the last is 0.12 ms; no fictitious initial or intermediate fields are inserted. Stress fields use the actual z = 0 PD particles in reference coordinates. The elastic movie's second field is displacement; the JC movie's second field is equivalent plastic strain.
 
 ```bash
+python demos/plot.py --demo elastic
+python demos/plot.py --demo tensile
+python demos/render_pd.py --case elastic
+python demos/render_pd.py --case jc
+```
+
+## Neo-Hookean PD bending and torsion
+
+These cases use an 80 × 8 × 8 mm bar, 41 × 5 × 5 particles, 2 mm spacing, 6 mm horizon and the current host's clipped boundary volumes. Three base layers are fixed and three loaded layers follow a smooth rigid-motion ramp. Free interior particles are advanced by explicit PD forces.
+
+There are 2400 increments of 0.0005 ms and snapshots every 24 increments. E = 2000 MPa and nu = 0.30 specify the initial Neo-Hookean tangent. Constitutive viscosities are zero; host dynamic relaxation is 8/ms. No damage/deletion is enabled.
+
+The material consumes the spatial deformation gradient and returns spatial Cauchy stress through `VumatMaterialAdapter`, directly into the PD force assembly. It receives no additional corotational stress rotation. This differs from the corotational Elastic/JC route; do not interchange those material/frame contracts unchanged.
+
+```bash
+python demos/render_hyperelastic.py
 python demos/render_hyperelastic.py --scenario bending
 python demos/render_hyperelastic.py --preview-only
 ```
 
-The material routine consumes the spatial deformation gradient and returns spatial Cauchy stress. The dedicated demo calls the adapter directly and applies no additional corotational stress rotation. Do not use that routine unchanged through the corotational JC host. Large rotations are demonstrated in this specific path; spatial convergence, damping sensitivity and comparison with independent FEM/experiments remain unverified.
+The separate bending and torsion movies show true deformation scale. Surface facets connect actual boundary particles, and face colors average their corner stresses. The material's seven finite-stretch/shear/rotation checks pass; spatial convergence and independent FEM/experimental comparison remain unverified.
 
-These examples reproduce the earlier bending/torsion setup using the current host's boundary volumes. The displayed outputs are freshly computed; earlier uniform-volume output tables are not mixed into this project.
-
-## Plotting and outputs
+## Rendering and provenance
 
 ```bash
 python -m pip install -r demos/requirements.txt
 ```
 
-Plots also save editable SVGs next to PNGs. The final gallery in `docs/media` can be viewed without local installation. Generated runs and logs are ignored; completion markers are removed before reruns. The raw validation archive is unchanged and checked by hashes when expanded. See [benchmark details](../benchmarks/tensile3d/README.md).
+Install FFmpeg for MP4/GIF encoding. `render_pd.py` rejects result metadata from a solver other than correspondence PD. Renderers read saved solver states, keep fixed color scales and record data hashes. Files appear under `demos/output`: `elastic`, `transient`, `bending` and `torsion`, each with MP4/GIF/JSON; field plots also save PNG/SVG files. The checked gallery is under `docs/media`.
+
+## Verification tools
+
+The material-point runner, affine checks and H8 FEM comparison are separate verification tools. They are exercised by `ctest --preset release`. For independent JC comparison and final sensitivity metrics, see [the tensile benchmark](../benchmarks/tensile3d/README.md). Its FEM data are not used to render the PD gallery.

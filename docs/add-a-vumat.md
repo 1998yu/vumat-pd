@@ -41,7 +41,14 @@ Before running a PD case, verify:
 - temperature and energy fields;
 - one-point and multi-point block consistency.
 
-Run `python demos/run.py material-point` to inspect the supplied workflow.
+Use the standalone material-point check as a verification step:
+
+```bash
+build/release/bin/vumat_pd_run examples/jc_material_point.json
+```
+
+On Windows the executable has an `.exe` suffix. For an actual spatial PD run,
+use `python demos/run.py tensile` after building.
 Keep new material cases separate from the validated benchmark inputs.
 
 ## 5. Verify objective behavior

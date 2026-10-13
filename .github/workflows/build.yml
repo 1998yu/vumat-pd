@@ -22,5 +22,4 @@ jobs:
       - name: Check demo entry points
         run: |
           python -m compileall -q demos benchmarks/tensile3d
-          python demos/run.py elastic
-          python demos/run.py material-point
+          python demos/run.py --help

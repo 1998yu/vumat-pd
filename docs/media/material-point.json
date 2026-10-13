@@ -1,7 +1,0 @@
-{
-  "case": "jc_material_point",
-  "condition": "zero lateral y stress; constrained z strain",
-  "eqps_state_index_zero_based": 1,
-  "final_stress_MPa": 543.7411805965646,
-  "final_eqps": 0.02075161540741785
-}
