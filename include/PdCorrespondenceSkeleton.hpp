@@ -18,8 +18,7 @@ public:
       const ParticleBlock& block,
       const CorrespondenceState& state,
       const std::vector<Tensor3>& deformationGradient,
-      const std::vector<Tensor3>& cauchyStress,
-      const std::vector<std::vector<double>>& bondDamage) const;
+      const std::vector<Tensor3>& cauchyStress) const;
 
 private:
   double horizon_;

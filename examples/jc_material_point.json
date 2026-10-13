@@ -22,17 +22,8 @@
     "mode": "plane_strain_x_uniaxial_stress",
     "maxStrain": 0.02040816326530612
   },
-  "damage": {
-    "model": "none",
-    "initiation": 0.0,
-    "failure": 1.0,
-    "deletionEnabled": false
-  },
   "output": {
-    "directory": "examples/output/jc_material_point",
-    "csv": true,
-    "svg": false,
-    "metadata": true
+    "directory": "examples/output/jc_material_point"
   },
   "materials": [
     {

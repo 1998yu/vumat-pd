@@ -49,7 +49,7 @@ Omit `--cases` to run the final matrix. Fine PD and the finest FEM cost more tha
 python benchmarks/tensile3d/run_cases.py --cases fem_coarse --snapshots 20 --threads 2
 ```
 
-Movie generation is described in [the demo guide](../../demos/README.md#4-transient-fem-animation).
+These optional FEM fields are verification outputs. The particle-gallery rendering workflow uses only PD results; see [the demo guide](../../demos/README.md).
 
 ## Definitions and expected response
 

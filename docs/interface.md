@@ -27,10 +27,16 @@ The spatial benchmark uses mm, ms, N and MPa, with solver density 0.0078 N·ms²
 
 ## Verified scope
 
-Comparisons verify the included JC routine in documented 3D nonfracturing tensile models. Core tests cover affine response, neighbor search, an H8 patch, corotational updates and basic rigid-wall contact. Local maximum plastic strain remains resolution-sensitive.
+Comparisons verify the included JC routine in documented 3D nonfracturing tensile models. Core tests cover affine response, neighbor search, an H8 patch, corotational updates and the supplied PD demos. Local maximum plastic strain remains resolution-sensitive.
 
-The dedicated Neo-Hookean examples demonstrate 150° bending and 540° torsion with dynamic relaxation, but have no independent spatial reference or convergence study. General finite-rotation accuracy, arbitrary VUMAT compatibility, damage–neighborhood coupling, deletion and production impact/fracture need separate evaluation. Contact and damage source code is not application-validation evidence.
+The dedicated Neo-Hookean examples demonstrate 150° bending and 540° torsion with dynamic relaxation, but have no independent spatial reference or convergence study. General finite-rotation accuracy, arbitrary VUMAT compatibility, damage–neighborhood coupling, deletion and production impact/fracture need separate evaluation. This release does not include the retired outer damage or rigid-wall contact extensions. VUMAT constitutive state and plasticity remain part of the interface.
 
 ## Threading
 
 Start custom routines with one thread. Before concurrent blocks, audit mutable saved/global state and external libraries. The JC plugin is compiled with recursive local Fortran storage; its tested path does not establish thread safety of new routines.
+
+## Case inputs and legacy output fields
+
+Case output configuration selects a directory; the runners always write CSV and metadata. The former `csv`, `svg` and `metadata` switches were unused and have been removed. SVG generation belongs to the Python particle renderer.
+
+Remove the retired outer `damage` configuration from input files; the loader rejects that field. This does not remove material state variables or the Johnson–Cook plastic update. Existing CSV layouts retain legacy zero-valued `simple_damage`/`damage` diagnostics and equal raw/effective-stress columns so archived comparisons and field readers remain compatible. These columns do not enable an outer damage model.

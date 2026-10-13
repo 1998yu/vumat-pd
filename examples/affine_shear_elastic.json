@@ -13,40 +13,33 @@
   },
   "time_integration": {
     "steps": 20,
-    "dt": 1.0e-6,
-    "totalTime": 2.0e-5
+    "dt": 1e-06,
+    "totalTime": 2e-05
   },
   "boundary_conditions": {
     "type": "affine_displacement",
     "mode": "simple_shear_xy",
     "maxStrain": 0.0001
   },
-  "damage": {
-    "model": "none",
-    "initiation": 1.0e30,
-    "failure": 1.0e30,
-    "deletionEnabled": false
-  },
   "tolerances": {
-    "deformationGradientAbsolute": 1.0e-12,
+    "deformationGradientAbsolute": 1e-12,
     "referenceStressAbsolute": 0.002,
-    "netForceAbsolute": 1.0e-7
+    "netForceAbsolute": 1e-07
   },
   "output": {
-    "directory": "examples/output/affine_shear_elastic",
-    "csv": true,
-    "svg": false,
-    "metadata": true
+    "directory": "examples/output/affine_shear_elastic"
   },
-  "materials": [{
-    "name": "Elastic",
-    "materialConfigPath": "configs/elastic.json",
-    "kinematicsMode": "corotational",
-    "reference": true,
-    "elasticE": 210000.0,
-    "elasticNu": 0.30,
-    "referenceTemperature": 293.0
-  }],
+  "materials": [
+    {
+      "name": "Elastic",
+      "materialConfigPath": "configs/elastic.json",
+      "kinematicsMode": "corotational",
+      "reference": true,
+      "elasticE": 210000.0,
+      "elasticNu": 0.3,
+      "referenceTemperature": 293.0
+    }
+  ],
   "checks": [
     "affine deformation-gradient recovery",
     "elastic shear stress",

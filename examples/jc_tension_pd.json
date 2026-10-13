@@ -46,17 +46,8 @@
     "minimumPlasticStrain": 0.001,
     "kineticToInternalLimit": 10
   },
-  "damage": {
-    "model": "none",
-    "initiation": 0,
-    "failure": 1,
-    "deletionEnabled": false
-  },
   "output": {
-    "directory": "demos/output/jc_pd",
-    "csv": true,
-    "svg": true,
-    "metadata": true
+    "directory": "demos/output/jc_pd"
   },
   "materials": [
     {

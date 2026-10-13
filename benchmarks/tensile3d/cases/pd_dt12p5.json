@@ -46,17 +46,8 @@
     "minimumPlasticStrain": 0.001,
     "kineticToInternalLimit": 10
   },
-  "damage": {
-    "model": "none",
-    "initiation": 0,
-    "failure": 1,
-    "deletionEnabled": false
-  },
   "output": {
-    "directory": "benchmarks/tensile3d/generated/results/pd_dt12p5",
-    "csv": true,
-    "svg": true,
-    "metadata": true
+    "directory": "benchmarks/tensile3d/generated/results/pd_dt12p5"
   },
   "materials": [
     {

@@ -43,8 +43,8 @@ Rendering uses only existing computed data; it does not rerun the solver or alte
 
 ## Media and traceability
 
-Each checked demo folder contains `media/particles.mp4`, `particles.gif`, `overview.png`, `overview.svg` and `particles.json`. The JSON records the solver, plugin, particle count, source CSV hashes, color range, projection and movie hash. The [PD run manifest](provenance.json) records the executables and plugins used for the four underlying runs.
+Each checked demo folder contains `media/particles.mp4`, `particles.gif`, `overview.png` and `particles.json`. The JSON records the solver, plugin, particle count, source CSV hashes, color range, projection and movie hash. The [PD run manifest](provenance.json) records the executables and plugins used for the four underlying runs.
 
-Generated CSVs and working previews stay under ignored `demos/output`; they are not duplicate public source files. The checked media are published separately in each demo folder.
+Generated CSVs and working previews stay under ignored `demos/output`; they are not duplicate public source files. The checked media are published separately in each demo folder. Editable SVG previews can be regenerated with the renderer; they are not stored as duplicate gallery files.
 
 Material-point checks and the independent H8 FEM comparison belong to [verification](../benchmarks/tensile3d/README.md). The Neo-Hookean spatial demos have no independent FEM/experimental validation.

@@ -63,9 +63,9 @@ The Neo-Hookean bending/torsion entry calls `VumatMaterialAdapter` directly with
 
 ## Verification and reuse
 
-PD checks cover neighborhood construction, corotational updates, affine response, basic contact and the actual Elastic/JC tensile solves. The Neo-Hookean material check covers finite stretch, three shear planes and rotation. The tensile benchmark retains independent FEM–PD comparisons and sensitivity cases.
+PD checks cover neighborhood construction, corotational updates, affine response and the actual Elastic/JC tensile solves. The Neo-Hookean material check covers finite stretch, three shear planes and rotation. The tensile benchmark retains independent FEM–PD comparisons and sensitivity cases.
 
-The independent H8 FEM reference is located at `benchmarks/tensile3d/src/main_jc_3d_fem.cpp`. It is built as `jc_3d_fem` when `BUILD_TESTING=ON` and has an H8 patch check. It belongs to the verification workflow, is excluded from the installed PD runtime, and is not invoked by any demo command. Configure with `BUILD_TESTING=OFF` for a PD build without the FEM reference.
+The independent H8 FEM reference is located at `benchmarks/tensile3d/src/main_jc_3d_fem.cpp`. It is built as `jc_3d_fem` when `BUILD_TESTING=ON` and has an H8 patch check. It belongs to the verification workflow, is excluded from the installed PD runtime, and is not invoked by any demo command. Configure with `BUILD_TESTING=OFF` for a PD runtime build without the FEM reference or standalone test executables.
 
 The hyperelastic spatial examples are demonstrations with dynamic relaxation; they do not yet have an independent FEM or experimental reference. The archived 3D tensile comparison establishes the documented JC case, not arbitrary material compatibility.
 

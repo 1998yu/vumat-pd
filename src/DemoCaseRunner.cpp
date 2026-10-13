@@ -5,7 +5,6 @@
 #include "DemoConfig.hpp"
 #include "Geometry.hpp"
 #include "PdCorrespondenceSkeleton.hpp"
-#include "PdSimpleDamage.hpp"
 #include "VumatPdCorrespondenceMaterial.hpp"
 
 #include <algorithm>
@@ -20,12 +19,6 @@
 #include <string>
 #include <utility>
 #include <vector>
-
-#ifdef _WIN32
-#include <direct.h>
-#else
-#include <sys/stat.h>
-#endif
 
 namespace vumat {
 namespace demo {
@@ -43,7 +36,6 @@ struct MaterialRunSummary {
   double maxFError = 0.0;
   double maxStressReferenceError = 0.0;
   double maxNetForceNorm = 0.0;
-  double maxDamage = 0.0;
   bool finite = true;
 };
 
@@ -51,27 +43,6 @@ enum class KinematicsMode {
   UniaxialXx,
   SimpleShearXy,
 };
-
-std::string joinPath(const std::string& left, const std::string& right) {
-  if (left.empty())
-    return right;
-  const char last = left.back();
-  if (last == '/' || last == '\\')
-    return left + right;
-#ifdef _WIN32
-  return left + "\\" + right;
-#else
-  return left + "/" + right;
-#endif
-}
-
-void makeDirectoryIfNeeded(const std::string& path) {
-#ifdef _WIN32
-  _mkdir(path.c_str());
-#else
-  mkdir(path.c_str(), 0755);
-#endif
-}
 
 double elasticUniaxialStrainStressXx(double youngModulus, double poissonRatio,
                                      double strainXx) {
@@ -267,14 +238,12 @@ void writeMetadata(const DemoCaseConfig& config, const std::vector<MaterialRunSu
   double maxFError = 0.0;
   double maxReferenceError = 0.0;
   double maxNetForceNorm = 0.0;
-  double maxDamage = 0.0;
   bool finite = true;
   for (const auto& summary : summaries) {
     maxFError = std::max(maxFError, summary.maxFError);
     if (summary.reference)
       maxReferenceError = std::max(maxReferenceError, summary.maxStressReferenceError);
     maxNetForceNorm = std::max(maxNetForceNorm, summary.maxNetForceNorm);
-    maxDamage = std::max(maxDamage, summary.maxDamage);
     finite = finite && summary.finite;
   }
 
@@ -284,7 +253,7 @@ void writeMetadata(const DemoCaseConfig& config, const std::vector<MaterialRunSu
                      maxReferenceError < config.tolerances.referenceStressAbsolute) &&
                     maxNetForceNorm < config.tolerances.netForceAbsolute;
 
-  std::ofstream out(joinPath(config.output.directory, "metadata.json"));
+  std::ofstream out(std::filesystem::path(config.output.directory) / "metadata.json");
   out << "{\n";
   out << "  \"name\": \"" << config.name << "\",\n";
   out << "  \"status\": \"" << (pass ? "pass" : "fail") << "\",\n";
@@ -295,7 +264,7 @@ void writeMetadata(const DemoCaseConfig& config, const std::vector<MaterialRunSu
   out << "  \"maxReferenceStressError\": " << std::setprecision(16) << maxReferenceError << ",\n";
   out << "  \"maxJcRawStressError\": " << std::setprecision(16) << maxReferenceError << ",\n";
   out << "  \"maxNetForceNorm\": " << std::setprecision(16) << maxNetForceNorm << ",\n";
-  out << "  \"maxDamage\": " << std::setprecision(16) << maxDamage << ",\n";
+  out << "  \"maxDamage\": " << 0.0 << ",\n";
   out << "  \"allValuesFinite\": " << (finite ? "true" : "false") << ",\n";
   out << "  \"tolerances\": {\"deformationGradientAbsolute\": "
       << config.tolerances.deformationGradientAbsolute
@@ -323,7 +292,7 @@ void writeMetadata(const DemoCaseConfig& config, const std::vector<MaterialRunSu
         << summary.maxStressReferenceError
         << ", \"maxNetForceNorm\": " << std::setprecision(16)
         << summary.maxNetForceNorm
-        << ", \"maxDamage\": " << std::setprecision(16) << summary.maxDamage
+        << ", \"maxDamage\": " << 0.0
         << ", \"finite\": " << (summary.finite ? "true" : "false") << "}";
     out << (i + 1 == summaries.size() ? "\n" : ",\n");
   }
@@ -339,7 +308,6 @@ MaterialRunSummary runMaterial(const DemoCaseConfig& config,
                                double dt,
                                const BoundaryCondition& boundaryCondition,
                                const BoundaryConditionConfig& boundaryConditionConfig) {
-  vumat::SimpleDamageConfig damageConfig = config.damage;
   const KinematicsMode mode = parseKinematicsMode(boundaryConditionConfig.mode);
 
   vumat::pd::VumatPdCorrespondenceConfig pdConfig;
@@ -360,15 +328,11 @@ MaterialRunSummary runMaterial(const DemoCaseConfig& config,
   vumat::pd::MaterialState materialState;
   materialBridge.initialize(skeleton.computeDeformationGradients(block, correspondenceState),
                             materialState);
-  vumat::pd::PdSimpleDamage damageModel(damageConfig);
-  vumat::pd::PdDamageState damageState;
-  damageModel.initialize(block, damageState);
 
   MaterialRunSummary summary;
   summary.key = material.label;
   summary.reference = material.reference;
   vumat::pd::MaterialUpdateResult finalResult;
-  vumat::pd::PdDamageResult finalDamage;
   std::vector<vumat::pd::Vec3> finalForceDensity;
 
   for (int step = 1; step <= steps; ++step) {
@@ -386,35 +350,21 @@ MaterialRunSummary runMaterial(const DemoCaseConfig& config,
     auto result = materialBridge.update(deformationGradient, materialState, dt,
                                         static_cast<double>(step - 1) * dt,
                                         static_cast<double>(step - 1) * dt);
-    auto damage = damageModel.update(block, result.strain, result.rawStress,
-                                     materialState.vumatStateN, damageState);
     const auto forceDensity = skeleton.computeForceDensity(
         block, correspondenceState, result.deformationGradient,
-        damage.effectiveStress, damage.bondDamage);
+        result.rawStress);
     const double maxFError =
         maxTensorError(result.deformationGradient, referenceDeformationGradient);
 
     double rawStressSum = 0.0;
     double rawStressXySum = 0.0;
-    double effectiveStressSum = 0.0;
-    double effectiveStressXySum = 0.0;
-    double damageSum = 0.0;
-    double maxDamage = 0.0;
     double maxStressReferenceError = 0.0;
     for (size_t i = 0; i < block.referencePosition.size(); ++i) {
       summary.finite = summary.finite && tensorFinite(result.rawStress[i]) &&
-                       tensorFinite(damage.effectiveStress[i]) &&
-                       vectorFinite(forceDensity[i]) &&
-                       std::isfinite(damage.damageIndex[i]);
+                       vectorFinite(forceDensity[i]);
       rawStressSum += result.rawStress[i][0];
-      effectiveStressSum += damage.effectiveStress[i][0];
       const double stressXy = 0.5 * (result.rawStress[i][1] + result.rawStress[i][3]);
-      const double effectiveStressXy =
-          0.5 * (damage.effectiveStress[i][1] + damage.effectiveStress[i][3]);
       rawStressXySum += stressXy;
-      effectiveStressXySum += effectiveStressXy;
-      damageSum += damage.damageIndex[i];
-      maxDamage = std::max(maxDamage, damage.damageIndex[i]);
       const double stressErrorXx = std::abs(result.rawStress[i][0] - referenceStressXxValue);
       const double stressErrorXy = std::abs(stressXy - referenceStressXyValue);
       maxStressReferenceError = std::max(maxStressReferenceError,
@@ -431,7 +381,6 @@ MaterialRunSummary runMaterial(const DemoCaseConfig& config,
     summary.maxStressReferenceError =
         std::max(summary.maxStressReferenceError, maxStressReferenceError);
     summary.maxNetForceNorm = std::max(summary.maxNetForceNorm, netForceNorm);
-    summary.maxDamage = std::max(summary.maxDamage, maxDamage);
     summary.finite = summary.finite && vectorFinite(forceSummary.net) &&
                      stateFinite(materialState.vumatStateN) &&
                      std::isfinite(avgInternalIndicator) &&
@@ -445,14 +394,14 @@ MaterialRunSummary runMaterial(const DemoCaseConfig& config,
             << loadValue << ','
             << maxFError << ','
             << rawStressSum / pointCount << ','
-            << effectiveStressSum / pointCount << ','
+            << rawStressSum / pointCount << ','
             << rawStressXySum / pointCount << ','
-            << effectiveStressXySum / pointCount << ','
+            << rawStressXySum / pointCount << ','
             << referenceStressXxValue << ','
             << referenceStressXyValue << ','
             << maxStressReferenceError << ','
-            << maxDamage << ','
-            << damageSum / pointCount << ','
+            << 0.0 << ','
+            << 0.0 << ','
             << forceSummary.net[0] << ','
             << forceSummary.net[1] << ','
             << forceSummary.net[2] << ','
@@ -464,7 +413,6 @@ MaterialRunSummary runMaterial(const DemoCaseConfig& config,
             << (summary.finite ? 1 : 0) << '\n';
 
     finalResult = std::move(result);
-    finalDamage = std::move(damage);
     finalForceDensity = forceDensity;
   }
 
@@ -482,8 +430,8 @@ MaterialRunSummary runMaterial(const DemoCaseConfig& config,
       fieldOut << value << ',';
     fieldOut << finalResult.strain[i][0] << ','
              << finalResult.rawStress[i][0] << ','
-             << finalDamage.effectiveStress[i][0] << ','
-             << finalDamage.damageIndex[i] << ','
+             << finalResult.rawStress[i][0] << ','
+             << 0.0 << ','
              << internalDamageIndicator(material, materialState.vumatStateN[i]) << ','
              << finalForceDensity[i][0] << ','
              << finalForceDensity[i][1] << ','
@@ -506,7 +454,7 @@ int runDemoCaseFromJson(const std::string& casePath, const std::string& pluginDi
     const std::string outputRoot = config.output.directory;
     std::filesystem::create_directories(outputRoot);
 
-    std::ofstream timeOut(joinPath(outputRoot, "timeseries.csv"));
+    std::ofstream timeOut(std::filesystem::path(outputRoot) / "timeseries.csv");
     timeOut << "material,step,time,applied_strain,max_f_error,avg_raw_stress_xx,"
             << "avg_effective_stress_xx,avg_raw_stress_xy,avg_effective_stress_xy,"
             << "elastic_reference_stress_xx,elastic_reference_stress_xy,"
@@ -514,7 +462,7 @@ int runDemoCaseFromJson(const std::string& casePath, const std::string& pluginDi
             << "net_force_y,net_force_z,net_force_norm,left_reaction_x,"
             << "right_reaction_x,avg_internal_indicator,max_internal_indicator,finite\n";
 
-    std::ofstream fieldOut(joinPath(outputRoot, "field_final.csv"));
+    std::ofstream fieldOut(std::filesystem::path(outputRoot) / "field_final.csv");
     fieldOut << "material,particle,x0,y0,z0,ux,uy,uz,x,y,z,"
              << "Fxx,Fxy,Fxz,Fyx,Fyy,Fyz,Fzx,Fzy,Fzz,"
              << "strain_xx,raw_stress_xx,effective_stress_xx,damage,"
@@ -544,7 +492,7 @@ int runDemoCaseFromJson(const std::string& casePath, const std::string& pluginDi
       std::cout << summary.key
                 << ": max_f_error=" << summary.maxFError
                 << " max_stress_reference_error=" << summary.maxStressReferenceError
-                << " max_damage=" << summary.maxDamage
+                << " max_damage=" << 0.0
                 << " max_net_force_norm=" << summary.maxNetForceNorm
                 << " finite=" << (summary.finite ? "true" : "false") << "\n";
     }

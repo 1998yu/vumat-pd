@@ -1,9 +1,7 @@
 #pragma once
 
 #include "MaterialConfig.hpp"
-#include "SimpleDamageModel.hpp"
 
-#include <array>
 #include <string>
 #include <vector>
 
@@ -50,14 +48,6 @@ struct DynamicsConfig {
   double kineticToInternalLimit = 1.0;
 };
 
-struct RigidWallContactConfig {
-  bool enabled = false;
-  std::array<double, 3> point{0.0, 0.0, 0.0};
-  std::array<double, 3> normal{1.0, 0.0, 0.0};
-  double penaltyStiffness = 0.0;
-  double frictionCoefficient = 0.0;
-};
-
 struct UnitSystemConfig {
   std::string length = "mm";
   std::string time = "ms";
@@ -69,9 +59,6 @@ struct UnitSystemConfig {
 
 struct OutputConfig {
   std::string directory;
-  bool csv = true;
-  bool svg = true;
-  bool metadata = true;
 };
 
 struct ValidationToleranceConfig {
@@ -105,7 +92,6 @@ struct DemoCaseConfig {
   TimeIntegrationConfig timeIntegration;
   BoundaryConditionConfig boundaryCondition;
   DynamicsConfig dynamics;
-  SimpleDamageConfig damage;
   OutputConfig output;
   ValidationToleranceConfig tolerances;
   std::vector<DemoMaterialConfig> materials;

@@ -304,9 +304,6 @@ int main(int argc, char** argv) {
     for (auto& item : hyperelasticState) item[0] = 1.0;
     std::vector<double> hyperelasticInternalEnergy(particleCount, 0.0);
     std::vector<double> hyperelasticInelasticEnergy(particleCount, 0.0);
-    std::vector<std::vector<double>> intactBonds(particleCount);
-    for (size_t i = 0; i < particleCount; ++i)
-      intactBonds[i].assign(block.neighbors[i].size(), 0.0);
 
     vumat::pd::ExplicitTimeIntegrator integrator(density);
     vumat::pd::ExplicitDynamicState dynamicState;
@@ -360,7 +357,7 @@ int main(int argc, char** argv) {
         hyperelasticInelasticEnergy = std::move(result.inelasticEnergyNew);
         currentStress = hyperelasticStress;
         force = skeleton.computeForceDensity(block, correspondenceState,
-            deformationGradient, currentStress, intactBonds);
+            deformationGradient, currentStress);
         hyperelasticFOld = deformationGradient;
       }
 

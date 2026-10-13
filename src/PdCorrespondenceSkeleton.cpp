@@ -160,10 +160,9 @@ std::vector<Tensor3> PdCorrespondenceSkeleton::computeDeformationGradients(
 
 std::vector<Vec3> PdCorrespondenceSkeleton::computeForceDensity(
     const ParticleBlock& block, const CorrespondenceState& state,
-    const std::vector<Tensor3>& f, const std::vector<Tensor3>& stress,
-    const std::vector<std::vector<double>>& bondDamage) const {
+    const std::vector<Tensor3>& f, const std::vector<Tensor3>& stress) const {
   const size_t n=block.referencePosition.size();
-  if(f.size()!=n || stress.size()!=n || bondDamage.size()!=n)
+  if(f.size()!=n || stress.size()!=n)
     throw std::runtime_error("PD force-state inputs do not match particle count.");
   std::vector<Tensor3> forceMap(n);
   #pragma omp parallel for schedule(static)
@@ -171,17 +170,14 @@ std::vector<Vec3> PdCorrespondenceSkeleton::computeForceDensity(
   std::vector<Vec3> force(n,{0.0,0.0,0.0});
   #pragma omp parallel for schedule(static)
   for(size_t i=0;i<n;++i){
-    if(bondDamage[i].size()!=block.neighbors[i].size())
-      throw std::runtime_error("PD bond damage does not match neighbor list.");
     for(size_t k=0;k<block.neighbors[i].size();++k){
       const size_t j=static_cast<size_t>(block.neighbors[i][k]);
       const Vec3 xi=subtract(block.referencePosition[j],block.referencePosition[i]);
       const Vec3 ti=multiply(forceMap[i],xi);
       const Vec3 negativeXi{-xi[0],-xi[1],-xi[2]};
       const Vec3 tj=multiply(forceMap[j],negativeXi);
-      const double intact=1.0-std::clamp(bondDamage[i][k],0.0,1.0);
       for(int d=0;d<3;++d) force[i][static_cast<size_t>(d)]+=
-        intact*(ti[static_cast<size_t>(d)]-tj[static_cast<size_t>(d)])*block.volume[j];
+        (ti[static_cast<size_t>(d)]-tj[static_cast<size_t>(d)])*block.volume[j];
     }
   }
   return force;

@@ -6,7 +6,7 @@ This case illustrates persistent plastic state in a dynamic correspondence-PD si
 
 ![Johnson–Cook elastoplastic tension: actual PD particle evolution](media/particles.gif)
 
-[High-quality MP4](media/particles.mp4) · [Final-state preview](media/overview.png) · [Editable SVG](media/overview.svg) · [Rendering provenance](media/particles.json)
+[High-quality MP4](media/particles.mp4) · [Final-state preview](media/overview.png) · [Rendering provenance](media/particles.json)
 
 ## Setup
 
@@ -32,7 +32,7 @@ python demos/run.py tensile
 python demos/render_particles.py --case jc
 ```
 
-Use `--preview-only` on the renderer to save initial, middle and final PNGs without encoding a video. Generated particle media appear in `demos/output/particles/johnson-cook-tension`. The shared [rendering guide](../README.md#recompute-and-render) lists Python/FFmpeg dependencies.
+The renderer also exports an editable SVG to the ignored output folder when needed. Use `--preview-only` on the renderer to save initial, middle and final PNGs without encoding a video. Generated particle media appear in `demos/output/particles/johnson-cook-tension`. The shared [rendering guide](../README.md#recompute-and-render) lists Python/FFmpeg dependencies.
 
 ## What the view represents
 
