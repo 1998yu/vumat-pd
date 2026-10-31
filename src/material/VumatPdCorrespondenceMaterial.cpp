@@ -19,17 +19,6 @@ Tensor3 identityTensor() {
   return {1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0};
 }
 
-Tensor3 legacySmallStrain(const Tensor3 &f) {
-  Tensor3 strain{};
-  strain[0] = f[0] - 1.0;
-  strain[4] = f[4] - 1.0;
-  strain[8] = f[8] - 1.0;
-  strain[1] = strain[3] = 0.5 * (f[1] + f[3]);
-  strain[2] = strain[6] = 0.5 * (f[2] + f[6]);
-  strain[5] = strain[7] = 0.5 * (f[5] + f[7]);
-  return strain;
-}
-
 void validateState(size_t pointCount, const MaterialState &state) {
   if (state.deformationGradientN.size() != pointCount || state.leftStretchN.size() != pointCount ||
       state.rotationN.size() != pointCount || state.strainN.size() != pointCount ||
@@ -43,6 +32,10 @@ void validateState(size_t pointCount, const MaterialState &state) {
 
 VumatPdCorrespondenceMaterial::VumatPdCorrespondenceMaterial(VumatPdCorrespondenceConfig config)
     : config_(std::move(config)), adapter_(config_.material) {
+  if (config_.kinematicsMode != KinematicsMode::Corotational)
+    throw std::runtime_error("Only corotational kinematics is implemented by this host.");
+  if (config_.material.stressFrame != "corotational")
+    throw std::runtime_error("Spatial-stress plugins require the dedicated spatial host.");
   for (int t = 0; t < omp_get_max_threads(); ++t)
     threadAdapters_.push_back(std::make_unique<VumatMaterialAdapter>(config_.material));
   if (config_.charLength <= 0.0)
@@ -64,9 +57,7 @@ void VumatPdCorrespondenceMaterial::initialize(
   state.strainN.resize(n);
 #pragma omp parallel for schedule(static)
   for (size_t i = 0; i < n; ++i)
-    state.strainN[i] = config_.kinematicsMode == KinematicsMode::Corotational
-                           ? greenLagrangeStrain(initialDeformationGradient[i])
-                           : legacySmallStrain(initialDeformationGradient[i]);
+    state.strainN[i] = greenLagrangeStrain(initialDeformationGradient[i]);
   state.rawStressN.assign(n, zeroTensor());
   const std::vector<double> initialState =
       config_.initialState.empty()

@@ -70,6 +70,12 @@ VumatMaterialConfig loadMaterialConfigFromJson(const std::string &configPath,
   VumatMaterialConfig config;
   config.name = json::getString(root, "name");
   config.cmname = json::getString(root, "cmname");
+  config.tensorConvention = json::getString(root, "tensorConvention", false, "legacy_vumat_pd");
+  config.stressFrame = json::getString(root, "stressFrame", false, "corotational");
+  if (config.tensorConvention != "legacy_vumat_pd")
+    throw std::runtime_error("Unsupported tensorConvention; explicit mapping is required.");
+  if (config.stressFrame != "corotational" && config.stressFrame != "spatial")
+    throw std::runtime_error("stressFrame must be corotational or spatial.");
   config.symbolName = json::getString(root, "symbolName", false,
                                       json::getString(root, "symbol", false, "vumat_adapter_call"));
   config.ndir = json::getInt(root, "ndir", false, 3);

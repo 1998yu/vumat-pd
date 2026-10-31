@@ -48,14 +48,21 @@ elasticE (MPa), elasticNu, referenceTemperature (K), optional initialState or
 zero-based initialStateOverrides, and equivalentPlasticStrainIndex (-1 disables).
 internalIndicator has zero-based indices, reduction (max or min) and transform
 (identity or one_minus); these are model-specific observers.
-The legacy_small_strain selector is historical and is not a separate verified
-dynamic boundary solver; use corotational for the supplied tensile cases.
+The legacy_small_strain selector is rejected because it did not control an
+implemented alternate update. Use corotational for the supplied tensile cases.
+Unsupported indicator reductions/transforms and inconsistent initial-state lengths
+are also rejected before simulation, including before applying state overrides.
 
 The separate material file declares name, cmname (Fortran material identifier),
 plugin or pluginPath, symbol/symbolName (default vumat_adapter_call), ndir=3,
 nshr=3, nstatev, nfieldv, density and ordered props. density passed to the supplied
 VUMAT is in kg/m^3, distinct from dynamics.density. Property/state layout is
 material-specific; do not infer it from an array length.
+
+tensorConvention defaults to legacy_vumat_pd (the only implemented packing).
+stressFrame defaults to corotational; spatial is valid only for a compatible direct
+adapter caller such as the dedicated Neo-Hookean host. Generic JSON case hosts
+reject spatial. These labels are user declarations, not automatic compatibility checks.
 
 | JC property (Fortran 1-based) | Meaning / supplied value |
 |---|---|

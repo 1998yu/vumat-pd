@@ -2,6 +2,22 @@
 
 A routine with a different frame, component order or signature needs an adapter change and verification. VUMAT–PD provides one documented calling contract.
 
+Material JSON can explicitly declare `tensorConvention: legacy_vumat_pd` and
+`stressFrame: corotational` or `spatial`. Omitted values retain the historical
+legacy/corotational defaults; they do not auto-detect a routine. No other tensor
+convention is currently implemented. The supplied Neo-Hookean configuration declares
+spatial stress and is rejected by the generic JSON case hosts. Use its dedicated
+spatial host. Existing Elastic/JC inputs retain their numerical contract.
+
+Rebuild C++ callers against the new headers: the configuration struct has new fields.
+Use named member assignments rather than positional aggregate initialization.
+No stable binary ABI for the C++ configuration struct is promised.
+
+`kinematicsMode: legacy_small_strain` is now rejected: the former implementation
+changed initialization but still used the corotational update. It was not an
+implemented alternate solver. The enum is retained for source compatibility and
+rejected by the bridge constructor as well as the JSON loader.
+
 | Input | Current convention | Integration consequence |
 |---|---|---|
 | Symmetric arrays | 11, 22, 33, 23, 13, 12 | Standard Abaqus order is 11, 22, 33, 12, 23, 31; component-specific routines need permutation |
@@ -17,13 +33,38 @@ The Neo-Hookean bending/torsion demo uses a separate contract: spatial deformati
 
 ## Batches and plugin entry
 
+Supplied hosts now pass stepTime and totalTime at the start of the increment;
+output histories retain end-of-increment times. Regional PD, FEM and the spatial
+demo formerly passed end time, unlike the affine/material-point routes. This
+changes time-dependent user routines and requires their revalidation. Included
+Elastic/JC/Neo-Hookean routines do not use these two time arguments for response.
+The probe verifies distinct step/total times arrive unchanged through the bridge.
+
 Corotational spatial coupling uses at most 256 points per block. Rows retain point ownership. The last block is padded by duplicating its final valid row and discards padded outputs. The dedicated Neo-Hookean host calls the adapter directly for its particle block. Properties, old state, stress and energy histories pass through the adapter in both routes.
 
 The Fortran wrapper uses the recent `jInfoArray/dtArray` signature through a C-compatible entry. The included Abaqus shims permit standalone example builds; no commercial solver is required.
 
+This is a limited standalone ABI: only dtArray(1) is provided; effective-modulus
+dtArray extensions are unsupported. Coordinates and predefined fields are zero-filled.
+jInfoArray labels are block-local, including padded rows, not global mesh labels.
+The wrapper does not implement annealing, global-element queries or Abaqus service
+callbacks. The supplied examples use only supported fields. Materials relying on
+unsupported fields require an explicit adapter extension and tests.
+
+The relative-spin array uses the historical [23,31,12] extraction. This, the
+symmetric shear order and left stretch are tested as the current contract, not
+certified as standard Abaqus interchange. `tests/fixtures/ContractProbe.f90` is
+a test-only component-sensitive probe through the actual wrapper; it is not a
+physical material. Tests cover 1/255/256/257/513 rows, distinct shear coefficients,
+F/stretch/spin packing, two-step history, temperature/energy return and host padding.
+
 ## Units and thermal history
 
 The spatial benchmark uses mm, ms, N and MPa, with solver density 0.0078 N·ms²/mm⁴. JC thermal inputs use their documented SI values. The work-to-heat multiplier is 1 and does not supply the MPa-to-J/m³ conversion needed for a physical temperature increment. Treat the temperature state as transferred numerical history, not validated adiabatic heating.
+
+`configs/johnson_cook_heat_units.json` isolates a workToHeat=1e6 conversion.
+It is an audit configuration, not a replacement of the frozen benchmark. See
+[the thermal audit](thermal-audit.md) for remaining energy/work limitations.
 
 ## Verified scope
 

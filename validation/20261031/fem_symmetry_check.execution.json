@@ -4,12 +4,12 @@
   "elapsed_seconds": 12.717999999999847,
   "threads": 2,
   "command": [
-    "E:\\Codex\\Workspace\\projects\\vumat-pd-3d-revision\\reviewer-revision-20261031\\build\\release\\bin\\jc_3d_fem.exe",
-    "E:\\Codex\\Workspace\\projects\\vumat-pd-3d-revision\\reviewer-revision-20261031\\configs\\johnson_cook.json",
-    "E:\\Codex\\Workspace\\projects\\vumat-pd-3d-revision\\reviewer-revision-20261031\\build\\release\\bin",
+    "<CHECKOUT>\\build\\release\\bin\\jc_3d_fem.exe",
+    "<CHECKOUT>\\configs\\johnson_cook.json",
+    "<CHECKOUT>\\build\\release\\bin",
     "2",
     "2.4999999999999998e-05",
     "4800",
-    "E:\\Codex\\Workspace\\projects\\vumat-pd-3d-revision\\reviewer-revision-20261031\\benchmarks\\tensile3d\\generated\\results\\fem_symmetry_check"
+    "<CHECKOUT>\\benchmarks\\tensile3d\\generated\\results\\fem_symmetry_check"
   ]
 }

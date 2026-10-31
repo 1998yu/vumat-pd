@@ -1,0 +1,47 @@
+{
+  "scope": "isolated heat-unit sensitivity; not physical thermomechanical validation",
+  "spatial_settings": {
+    "h_mm": 2,
+    "delta_mm": 6,
+    "dt_ns": 25,
+    "duration_ms": 0.12
+  },
+  "material_point": {
+    "legacy_point": {
+      "stress": 543.7411805965646,
+      "temperature": 293.0000010473501,
+      "state_indicator": 0.02075161540741785
+    },
+    "heat_units_point": {
+      "stress": 544.0955855422326,
+      "temperature": 294.0467887214373,
+      "state_indicator": 0.02074997106786245
+    }
+  },
+  "coarse_comparisons": {
+    "pd": {
+      "average_axial_stress_MPa": {
+        "legacy": 334.2865437115309,
+        "heat_units": 334.1927603099694,
+        "change_pct_of_legacy": -0.028054794105749212
+      },
+      "max_eqps": {
+        "legacy": 0.02780182243716117,
+        "heat_units": 0.02785620537508725,
+        "change_pct_of_legacy": 0.19560925564862247
+      }
+    },
+    "fem": {
+      "average_axial_stress_MPa": {
+        "legacy": 332.4898112958709,
+        "heat_units": 332.5804010231097,
+        "change_pct_of_legacy": 0.027245865635923155
+      },
+      "max_eqps": {
+        "legacy": 0.02546562393606112,
+        "heat_units": 0.0254822691173136,
+        "change_pct_of_legacy": 0.06536333566486931
+      }
+    }
+  }
+}

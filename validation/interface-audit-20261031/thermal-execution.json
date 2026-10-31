@@ -1,0 +1,43 @@
+[
+  {
+    "case": "legacy_point",
+    "returncode": 0,
+    "elapsed_seconds": 0.15599999999994907,
+    "command": [
+      "<CHECKOUT>\\build\\release\\bin\\vumat_pd_run.exe",
+      "<CHECKOUT>\\benchmarks\\tensile3d\\generated\\thermal_audit\\legacy_point.json"
+    ]
+  },
+  {
+    "case": "heat_units_point",
+    "returncode": 0,
+    "elapsed_seconds": 0.1710000000002765,
+    "command": [
+      "<CHECKOUT>\\build\\release\\bin\\vumat_pd_run.exe",
+      "<CHECKOUT>\\benchmarks\\tensile3d\\generated\\thermal_audit\\heat_units_point.json"
+    ]
+  },
+  {
+    "case": "pd_heat_units",
+    "returncode": 0,
+    "elapsed_seconds": 39.4380000000001,
+    "command": [
+      "<CHECKOUT>\\build\\release\\bin\\vumat_pd_run.exe",
+      "<CHECKOUT>\\benchmarks\\tensile3d\\generated\\thermal_audit\\pd_heat_units.json"
+    ]
+  },
+  {
+    "case": "fem_heat_units",
+    "returncode": 0,
+    "elapsed_seconds": 70.60899999999947,
+    "command": [
+      "<CHECKOUT>\\build\\release\\bin\\jc_3d_fem.exe",
+      "<CHECKOUT>\\configs\\johnson_cook_heat_units.json",
+      "<CHECKOUT>\\build\\release\\bin",
+      "2",
+      "0.000025",
+      "4800",
+      "<CHECKOUT>\\benchmarks\\tensile3d\\generated\\thermal_audit\\fem_heat_units"
+    ]
+  }
+]

@@ -8,6 +8,13 @@ import shutil
 ROOT = Path(__file__).resolve().parent
 
 
+def archive_digest(content, relative):
+    """JSON permits CRLF/LF checkouts; all other bytes, especially CSV, are exact."""
+    if relative.endswith('.json'):
+        content = content.replace(b'\r\n', b'\n')
+    return hashlib.sha256(content).hexdigest()
+
+
 def unpack():
     dest = ROOT / 'generated' / 'archive_results'
     for source in (ROOT / 'raw').rglob('*'):
@@ -22,7 +29,7 @@ def unpack():
             shutil.copyfile(source, target)
     expected = json.loads((ROOT / 'expected' / 'archive_hashes.json').read_text())
     for relative, digest in expected.items():
-        actual = hashlib.sha256((dest / relative).read_bytes()).hexdigest()
+        actual = archive_digest((dest / relative).read_bytes(), relative)
         if actual != digest:
             raise RuntimeError(f'Archive hash mismatch: {relative}')
     print(f"Verified {len(expected)} archived CSV/metadata hashes (including FEM symmetry).")

@@ -99,6 +99,21 @@ add_executable(vumat_pd_large_motion_3d src/apps/main_large_motion_3d.cpp)
 target_link_libraries(vumat_pd_large_motion_3d PRIVATE vumat_pd)
 
 if(BUILD_TESTING)
+  find_package(Python3 REQUIRED COMPONENTS Interpreter)
+  add_test(NAME archive_integrity_contract COMMAND "${Python3_EXECUTABLE}"
+    "${CMAKE_CURRENT_SOURCE_DIR}/tests/archive_integrity_test.py")
+  add_library(contract_probe_plugin SHARED tests/fixtures/ContractProbe.f90
+    materials/bridge/vumat_c_wrapper_jinfo.f90)
+  target_compile_options(contract_probe_plugin PRIVATE $<$<COMPILE_LANGUAGE:Fortran>:-frecursive>)
+  set_target_properties(contract_probe_plugin PROPERTIES PREFIX "")
+  add_executable(interface_contract_test tests/interface_contract_test.cpp)
+  target_link_libraries(interface_contract_test PRIVATE vumat_pd)
+  add_test(NAME interface_contract COMMAND interface_contract_test $<TARGET_FILE:contract_probe_plugin>)
+  add_test(NAME config_rejection COMMAND "${Python3_EXECUTABLE}"
+    "${CMAKE_CURRENT_SOURCE_DIR}/tests/config_rejection_test.py" $<TARGET_FILE:vumat_pd_run>)
+  add_executable(jc_thermal_units_test tests/jc_thermal_units_test.cpp)
+  target_link_libraries(jc_thermal_units_test PRIVATE vumat_pd)
+  add_test(NAME jc_thermal_units COMMAND jc_thermal_units_test $<TARGET_FILE_DIR:jc_vumat_plugin>)
   if(VUMAT_PD_EIGEN_CHECK)
     find_path(EIGEN3_INCLUDE_DIR Eigen/Core PATH_SUFFIXES eigen3 REQUIRED)
     add_executable(eigen_rotation_test tests/eigen_rotation_test.cpp)
@@ -147,7 +162,7 @@ if(BUILD_TESTING)
   add_test(NAME jc_pd_tension COMMAND vumat_pd_run examples/jc_tension_pd.json)
 
   get_filename_component(VUMAT_FORTRAN_RUNTIME_DIR "${CMAKE_Fortran_COMPILER}" DIRECTORY)
-  set_tests_properties(observation_window correspondence_sampling corotational_kinematics neighbor_search affine_bar_elastic
+  set_tests_properties(jc_thermal_units config_rejection interface_contract observation_window correspondence_sampling corotational_kinematics neighbor_search affine_bar_elastic
     affine_shear_elastic jc_vumat_material_point fem_h8_patch neighbor_lattice_regression outer_damage
     neohookean_material hyperelastic_bending hyperelastic_torsion elastic_pd_tension jc_pd_tension
     PROPERTIES WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"

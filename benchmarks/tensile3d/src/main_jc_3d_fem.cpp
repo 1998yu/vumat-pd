@@ -215,7 +215,7 @@ int main(int argc, char **argv) {
               for (int j = 0; j < 3; ++j)
                 f[3 * i + j] += u[elem[e][a]][i] * shapes[q].grad[a][j];
         }
-      result = bridge.update(F, state, dt, time, time);
+      result = bridge.update(F, state, dt, (step - 1) * dt, (step - 1) * dt);
       std::fill(force.begin(), force.end(), V{});
       double meanS = 0, meanE = 0, vol = 0, maxEQ = 0;
       for (size_t e = 0; e < elem.size(); ++e)

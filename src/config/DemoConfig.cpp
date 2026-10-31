@@ -205,6 +205,9 @@ DemoMaterialConfig loadMaterial(const json::Value &entry, const std::string &plu
     throw std::runtime_error("Material entry requires materialConfigPath or configPath.");
 
   material.material = loadMaterialConfigFromJson(configPath, pluginDirectory);
+  if (material.material.stressFrame != "corotational")
+    throw std::runtime_error(
+        "JSON case hosts require corotational stress; use the dedicated spatial demo.");
   material.reference = json::getBool(entry, "reference", false, false);
   material.elasticE = json::getDouble(entry, "elasticE", false, 0.0);
   material.elasticNu = json::getDouble(entry, "elasticNu", false, 0.0);
@@ -212,9 +215,12 @@ DemoMaterialConfig loadMaterial(const json::Value &entry, const std::string &plu
       json::getDouble(entry, "referenceTemperature", false, material.referenceTemperature);
   material.kinematicsMode =
       json::getString(entry, "kinematicsMode", false, material.kinematicsMode);
-  if (material.kinematicsMode != "corotational" && material.kinematicsMode != "legacy_small_strain")
+  if (material.kinematicsMode != "corotational")
     throw std::runtime_error("Unsupported kinematicsMode for material: " + material.label);
   material.initialState = loadOptionalDoubleArray(entry, "initialState");
+  if (!material.initialState.empty() &&
+      material.initialState.size() != static_cast<size_t>(material.material.nstatev))
+    throw std::runtime_error("initialState length does not match nstatev.");
   material.equivalentPlasticStrainIndex =
       json::getInt(entry, "equivalentPlasticStrainIndex", false, -1);
   if (material.equivalentPlasticStrainIndex >= material.material.nstatev)
@@ -243,6 +249,12 @@ DemoMaterialConfig loadMaterial(const json::Value &entry, const std::string &plu
     material.internalIndicatorReduction = json::getString(*indicator, "reduction", false, "max");
     material.internalIndicatorTransform =
         json::getString(*indicator, "transform", false, "identity");
+    if (material.internalIndicatorReduction != "min" &&
+        material.internalIndicatorReduction != "max")
+      throw std::runtime_error("internalIndicator.reduction must be min or max.");
+    if (material.internalIndicatorTransform != "identity" &&
+        material.internalIndicatorTransform != "one_minus")
+      throw std::runtime_error("internalIndicator.transform must be identity or one_minus.");
     for (int index : material.internalIndicatorIndices)
       if (index < 0 || index >= material.material.nstatev)
         throw std::runtime_error("internalIndicator index is outside nstatev for material: " +

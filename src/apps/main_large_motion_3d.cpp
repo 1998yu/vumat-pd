@@ -323,8 +323,8 @@ int main(int argc, char **argv) {
       {
         vumat::VumatBlockInput input;
         input.dt = dt;
-        input.stepTime = time;
-        input.totalTime = time;
+        input.stepTime = (step - 1) * dt;
+        input.totalTime = input.stepTime;
         input.charLength.assign(particleCount, spacing);
         input.temperature.assign(particleCount, 293.0);
         input.strainRateFull.resize(particleCount);

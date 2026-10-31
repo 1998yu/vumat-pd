@@ -7,6 +7,7 @@
 #include <array>
 #include <cstddef>
 #include <cstring>
+#include <cmath>
 #include <iterator>
 #include <stdexcept>
 #include <string>
@@ -65,6 +66,10 @@ VumatMaterialAdapter::VumatMaterialAdapter(VumatMaterialConfig config)
     throw std::runtime_error("nstatev must be non-negative.");
   if (config_.props.empty())
     throw std::runtime_error("VUMAT props cannot be empty.");
+  if (config_.tensorConvention != "legacy_vumat_pd")
+    throw std::runtime_error("Unsupported tensor convention.");
+  if (config_.stressFrame != "corotational" && config_.stressFrame != "spatial")
+    throw std::runtime_error("Unsupported stress frame.");
 
   call_ = reinterpret_cast<VumatCall>(library_->symbol(config_.symbolName));
 }
@@ -92,6 +97,12 @@ size_t requireConsistentBlockSize(const VumatBlockInput &input, int nstatev) {
   requireSize(input.stateOld.size(), "stateOld");
   requireSize(input.internalEnergyOld.size(), "internalEnergyOld");
   requireSize(input.inelasticEnergyOld.size(), "inelasticEnergyOld");
+  if (!input.relSpinIncFull.empty())
+    requireSize(input.relSpinIncFull.size(), "relSpinIncFull");
+  if (!input.stretchOld.empty())
+    requireSize(input.stretchOld.size(), "stretchOld");
+  if (!input.stretchNew.empty())
+    requireSize(input.stretchNew.size(), "stretchNew");
 
   for (size_t block = 0; block < nblock; ++block) {
     if (static_cast<int>(input.stateOld[block].size()) != nstatev)
@@ -135,8 +146,11 @@ VumatPointResult VumatMaterialAdapter::updatePoint(const VumatPointInput &input)
 }
 
 VumatBlockResult VumatMaterialAdapter::updateBlock(const VumatBlockInput &input) const {
-  if (input.dt <= 0.0)
+  if (!std::isfinite(input.dt) || input.dt <= 0.0)
     throw std::runtime_error("VUMAT update requires dt > 0.");
+  // Validate before splitting: otherwise a malformed array can be indexed inside
+  // an OpenMP worker before the fixed-block validation sees it.
+  requireConsistentBlockSize(input, config_.nstatev);
 
   constexpr size_t maxLegacyBlockSize = 256;
   if (input.strainRateFull.size() > maxLegacyBlockSize) {
@@ -222,7 +236,7 @@ VumatBlockResult VumatMaterialAdapter::updateBlock(const VumatBlockInput &input)
 
 const VumatBlockResult &
 VumatMaterialAdapter::updateFixedBlockCached(const VumatBlockInput &input) const {
-  if (input.strainRateFull.size() > 256 || input.dt <= 0.0)
+  if (input.strainRateFull.size() > 256 || !std::isfinite(input.dt) || input.dt <= 0.0)
     throw std::runtime_error(
         "Cached material update requires a positive time step and at most 256 points.");
   int nblock = static_cast<int>(requireConsistentBlockSize(input, config_.nstatev));

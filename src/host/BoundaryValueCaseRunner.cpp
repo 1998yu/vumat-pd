@@ -212,8 +212,9 @@ RunSummary runMaterial(const DemoCaseConfig &config, const DemoMaterialConfig &m
     const auto previousStrain = materialState.strainN;
     const auto deformationGradient =
         skeleton.computeDeformationGradients(block, correspondenceState);
-    auto result =
-        bridge.update(deformationGradient, materialState, config.timeIntegration.dt, time, time);
+    auto result = bridge.update(deformationGradient, materialState, config.timeIntegration.dt,
+                                (step - 1) * config.timeIntegration.dt,
+                                (step - 1) * config.timeIntegration.dt);
     auto damage = damageModel.update(block, result.strain, result.rawStress,
                                      materialState.vumatStateN, damageState);
     auto force =

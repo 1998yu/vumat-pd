@@ -11,6 +11,9 @@ struct VumatMaterialConfig {
   std::string cmname;
   std::string pluginPath;
   std::string symbolName = "vumat_adapter_call";
+  // This repository's documented array ABI, not generic Abaqus compatibility.
+  std::string tensorConvention = "legacy_vumat_pd";
+  std::string stressFrame = "corotational";
   int ndir = 3;
   int nshr = 3;
   int nstatev = 0;

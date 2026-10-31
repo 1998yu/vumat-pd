@@ -1,0 +1,350 @@
+Start testing: Oct 31 13:54 �Ĵ����Ƕ�������ʱ
+----------------------------------------------------------
+1/20 Testing: archive_integrity_contract
+1/20 Test: archive_integrity_contract
+Command: "<PYTHON_HOME>/python.exe" "<CLEAN_CHECKOUT>/tests/archive_integrity_test.py"
+Directory: <CLEAN_CHECKOUT>/build/release
+"archive_integrity_contract" start time: Oct 31 13:54 �Ĵ����Ƕ�������ʱ
+Output:
+----------------------------------------------------------
+..
+----------------------------------------------------------------------
+Ran 2 tests in 0.000s
+
+OK
+<end of output>
+Test time =   0.46 sec
+----------------------------------------------------------
+Test Passed.
+"archive_integrity_contract" end time: Oct 31 13:54 �Ĵ����Ƕ�������ʱ
+"archive_integrity_contract" time elapsed: 00:00:00
+----------------------------------------------------------
+
+2/20 Testing: interface_contract
+2/20 Test: interface_contract
+Command: "<CLEAN_CHECKOUT>/build/release/bin/interface_contract_test.exe" "<CLEAN_CHECKOUT>/build/release/bin/contract_probe_plugin.dll"
+Directory: <CLEAN_CHECKOUT>
+"interface_contract" start time: Oct 31 13:54 �Ĵ����Ƕ�������ʱ
+Output:
+----------------------------------------------------------
+PASS actual Fortran bridge: distinct shear/F/stretch/spin, two-step history, 1/255/256/257/513 rows; malformed arrays and unsupported host modes rejected
+<end of output>
+Test time =   0.16 sec
+----------------------------------------------------------
+Test Passed.
+"interface_contract" end time: Oct 31 13:54 �Ĵ����Ƕ�������ʱ
+"interface_contract" time elapsed: 00:00:00
+----------------------------------------------------------
+
+3/20 Testing: config_rejection
+3/20 Test: config_rejection
+Command: "<PYTHON_HOME>/python.exe" "<CLEAN_CHECKOUT>/tests/config_rejection_test.py" "<CLEAN_CHECKOUT>/build/release/bin/vumat_pd_run.exe"
+Directory: <CLEAN_CHECKOUT>
+"config_rejection" start time: Oct 31 13:54 �Ĵ����Ƕ�������ʱ
+Output:
+----------------------------------------------------------
+PASS five unsupported/malformed JSON configurations rejected before execution
+<end of output>
+Test time =   0.78 sec
+----------------------------------------------------------
+Test Passed.
+"config_rejection" end time: Oct 31 13:54 �Ĵ����Ƕ�������ʱ
+"config_rejection" time elapsed: 00:00:00
+----------------------------------------------------------
+
+4/20 Testing: jc_thermal_units
+4/20 Test: jc_thermal_units
+Command: "<CLEAN_CHECKOUT>/build/release/bin/jc_thermal_units_test.exe" "<CLEAN_CHECKOUT>/build/release/bin"
+Directory: <CLEAN_CHECKOUT>
+"jc_thermal_units" start time: Oct 31 13:54 �Ĵ����Ƕ�������ʱ
+Output:
+----------------------------------------------------------
+PASS isolated thermal conversion: legacy dT=2.58851e-07 K; scaled dT=0.258851 K; identical first-step stress
+<end of output>
+Test time =   0.15 sec
+----------------------------------------------------------
+Test Passed.
+"jc_thermal_units" end time: Oct 31 13:54 �Ĵ����Ƕ�������ʱ
+"jc_thermal_units" time elapsed: 00:00:00
+----------------------------------------------------------
+
+5/20 Testing: eigen_rotation
+5/20 Test: eigen_rotation
+Command: "<CLEAN_CHECKOUT>/build/release/bin/eigen_rotation_test.exe"
+Directory: <CLEAN_CHECKOUT>/build/release
+"eigen_rotation" start time: Oct 31 13:54 �Ĵ����Ƕ�������ʱ
+Output:
+----------------------------------------------------------
+Eigen matrix-exp comparison: 24 rotations, max absolute error=2.22045e-16
+<end of output>
+Test time =   0.12 sec
+----------------------------------------------------------
+Test Passed.
+"eigen_rotation" end time: Oct 31 13:54 �Ĵ����Ƕ�������ʱ
+"eigen_rotation" time elapsed: 00:00:00
+----------------------------------------------------------
+
+6/20 Testing: observation_window
+6/20 Test: observation_window
+Command: "<CLEAN_CHECKOUT>/build/release/bin/observation_window_test.exe"
+Directory: <CLEAN_CHECKOUT>
+"observation_window" start time: Oct 31 13:54 �Ĵ����Ƕ�������ʱ
+Output:
+----------------------------------------------------------
+PASS shifted x/y windows, exact volume and affine mean; reversed bounds rejected
+<end of output>
+Test time =   0.13 sec
+----------------------------------------------------------
+Test Passed.
+"observation_window" end time: Oct 31 13:54 �Ĵ����Ƕ�������ʱ
+"observation_window" time elapsed: 00:00:00
+----------------------------------------------------------
+
+7/20 Testing: correspondence_sampling
+7/20 Test: correspondence_sampling
+Command: "<CLEAN_CHECKOUT>/build/release/bin/correspondence_sampling_test.exe"
+Directory: <CLEAN_CHECKOUT>
+"correspondence_sampling" start time: Oct 31 13:54 �Ĵ����Ƕ�������ʱ
+Output:
+----------------------------------------------------------
+PASS volume and affine completeness; unresolved alternating displacement is invisible at 27 interior nodes (max |F-I|=0)
+<end of output>
+Test time =   0.12 sec
+----------------------------------------------------------
+Test Passed.
+"correspondence_sampling" end time: Oct 31 13:54 �Ĵ����Ƕ�������ʱ
+"correspondence_sampling" time elapsed: 00:00:00
+----------------------------------------------------------
+
+8/20 Testing: corotational_kinematics
+8/20 Test: corotational_kinematics
+Command: "<CLEAN_CHECKOUT>/build/release/bin/corotational_kinematics_test.exe"
+Directory: <CLEAN_CHECKOUT>
+"corotational_kinematics" start time: Oct 31 13:54 �Ĵ����Ƕ�������ʱ
+Output:
+----------------------------------------------------------
+Corotational kinematics tests passed.
+<end of output>
+Test time =   0.10 sec
+----------------------------------------------------------
+Test Passed.
+"corotational_kinematics" end time: Oct 31 13:54 �Ĵ����Ƕ�������ʱ
+"corotational_kinematics" time elapsed: 00:00:00
+----------------------------------------------------------
+
+9/20 Testing: neighbor_search
+9/20 Test: neighbor_search
+Command: "<CLEAN_CHECKOUT>/build/release/bin/neighbor_search_test.exe"
+Directory: <CLEAN_CHECKOUT>
+"neighbor_search" start time: Oct 31 13:54 �Ĵ����Ƕ�������ʱ
+Output:
+----------------------------------------------------------
+Neighbor lists identical for 459 particles; brute_ms=1.1066 linked_ms=2.3884
+<end of output>
+Test time =   0.12 sec
+----------------------------------------------------------
+Test Passed.
+"neighbor_search" end time: Oct 31 13:54 �Ĵ����Ƕ�������ʱ
+"neighbor_search" time elapsed: 00:00:00
+----------------------------------------------------------
+
+10/20 Testing: affine_bar_elastic
+10/20 Test: affine_bar_elastic
+Command: "<CLEAN_CHECKOUT>/build/release/bin/vumat_pd_run.exe" "examples/affine_bar_elastic.json"
+Directory: <CLEAN_CHECKOUT>
+"affine_bar_elastic" start time: Oct 31 13:54 �Ĵ����Ƕ�������ʱ
+Output:
+----------------------------------------------------------
+Elastic: max_f_error=8.88178e-16 max_stress_reference_error=0.0013427 max_damage=0 max_net_force_norm=5.18673e-14 finite=true
+VUMAT-PD demo case written to examples/output/affine_bar_elastic
+<end of output>
+Test time =   0.07 sec
+----------------------------------------------------------
+Test Passed.
+"affine_bar_elastic" end time: Oct 31 13:54 �Ĵ����Ƕ�������ʱ
+"affine_bar_elastic" time elapsed: 00:00:00
+----------------------------------------------------------
+
+11/20 Testing: affine_shear_elastic
+11/20 Test: affine_shear_elastic
+Command: "<CLEAN_CHECKOUT>/build/release/bin/vumat_pd_run.exe" "examples/affine_shear_elastic.json"
+Directory: <CLEAN_CHECKOUT>
+"affine_shear_elastic" start time: Oct 31 13:54 �Ĵ����Ƕ�������ʱ
+Output:
+----------------------------------------------------------
+Elastic: max_f_error=5.86133e-16 max_stress_reference_error=0.000383654 max_damage=0 max_net_force_norm=2.31068e-14 finite=true
+VUMAT-PD demo case written to examples/output/affine_shear_elastic
+<end of output>
+Test time =   0.09 sec
+----------------------------------------------------------
+Test Passed.
+"affine_shear_elastic" end time: Oct 31 13:54 �Ĵ����Ƕ�������ʱ
+"affine_shear_elastic" time elapsed: 00:00:00
+----------------------------------------------------------
+
+12/20 Testing: jc_vumat_material_point
+12/20 Test: jc_vumat_material_point
+Command: "<CLEAN_CHECKOUT>/build/release/bin/vumat_pd_run.exe" "examples/jc_material_point.json"
+Directory: <CLEAN_CHECKOUT>
+"jc_vumat_material_point" start time: Oct 31 13:54 �Ĵ����Ƕ�������ʱ
+Output:
+----------------------------------------------------------
+JC: final_stress=543.741 max_reference_error=0 state_indicator=0.0207516 finite=true
+Material-point case written to examples/output/jc_material_point
+<end of output>
+Test time =   0.14 sec
+----------------------------------------------------------
+Test Passed.
+"jc_vumat_material_point" end time: Oct 31 13:54 �Ĵ����Ƕ�������ʱ
+"jc_vumat_material_point" time elapsed: 00:00:00
+----------------------------------------------------------
+
+13/20 Testing: fem_h8_patch
+13/20 Test: fem_h8_patch
+Command: "<CLEAN_CHECKOUT>/build/release/bin/jc_3d_fem.exe" "--selftest"
+Directory: <CLEAN_CHECKOUT>
+"fem_h8_patch" start time: Oct 31 13:54 �Ĵ����Ƕ�������ʱ
+Output:
+----------------------------------------------------------
+H8 partition, affine patch, integrated volume, Piola transform: PASS
+<end of output>
+Test time =   0.18 sec
+----------------------------------------------------------
+Test Passed.
+"fem_h8_patch" end time: Oct 31 13:54 �Ĵ����Ƕ�������ʱ
+"fem_h8_patch" time elapsed: 00:00:00
+----------------------------------------------------------
+
+14/20 Testing: neighbor_lattice_regression
+14/20 Test: neighbor_lattice_regression
+Command: "<CLEAN_CHECKOUT>/build/release/bin/neighbor_lattice_regression.exe"
+Directory: <CLEAN_CHECKOUT>
+"neighbor_lattice_regression" start time: Oct 31 13:54 �Ĵ����Ƕ�������ʱ
+Output:
+----------------------------------------------------------
+PASS 9 grids; both searches match independent integer-lattice neighborhoods at all nodes
+<end of output>
+Test time =   0.25 sec
+----------------------------------------------------------
+Test Passed.
+"neighbor_lattice_regression" end time: Oct 31 13:54 �Ĵ����Ƕ�������ʱ
+"neighbor_lattice_regression" time elapsed: 00:00:00
+----------------------------------------------------------
+
+15/20 Testing: outer_damage
+15/20 Test: outer_damage
+Command: "<CLEAN_CHECKOUT>/build/release/bin/outer_damage_test.exe"
+Directory: <CLEAN_CHECKOUT>
+"outer_damage" start time: Oct 31 13:54 �Ĵ����Ƕ�������ʱ
+Output:
+----------------------------------------------------------
+PASS: optional outer damage modes, irreversibility and material-state separation.
+<end of output>
+Test time =   0.14 sec
+----------------------------------------------------------
+Test Passed.
+"outer_damage" end time: Oct 31 13:54 �Ĵ����Ƕ�������ʱ
+"outer_damage" time elapsed: 00:00:00
+----------------------------------------------------------
+
+16/20 Testing: neohookean_material
+16/20 Test: neohookean_material
+Command: "<CLEAN_CHECKOUT>/build/release/bin/neohookean_material_test.exe" "configs/neohookean.json" "demos/output/hyperelastic/material-point-check"
+Directory: <CLEAN_CHECKOUT>
+"neohookean_material" start time: Oct 31 13:54 �Ĵ����Ƕ�������ʱ
+Output:
+----------------------------------------------------------
+Neo-Hookean VUMAT validation passed; worst error=0 MPa
+<end of output>
+Test time =   0.18 sec
+----------------------------------------------------------
+Test Passed.
+"neohookean_material" end time: Oct 31 13:54 �Ĵ����Ƕ�������ʱ
+"neohookean_material" time elapsed: 00:00:00
+----------------------------------------------------------
+
+17/20 Testing: hyperelastic_bending
+17/20 Test: hyperelastic_bending
+Command: "<CLEAN_CHECKOUT>/build/release/bin/vumat_pd_large_motion_3d.exe" "bending" "demos/output/hyperelastic/bending" "2400" "24" "150"
+Directory: <CLEAN_CHECKOUT>
+"hyperelastic_bending" start time: Oct 31 13:54 �Ĵ����Ƕ�������ʱ
+Output:
+----------------------------------------------------------
+bending: 10% angle=3.67076 deg max_vm=114.873 MPa min_J=0.94703
+bending: 20% angle=14.3237 deg max_vm=266.386 MPa min_J=0.913579
+bending: 30% angle=30.9161 deg max_vm=386.901 MPa min_J=0.905811
+bending: 40% angle=51.8237 deg max_vm=418.56 MPa min_J=0.935921
+bending: 50% angle=75 deg max_vm=338.225 MPa min_J=0.982974
+bending: 60% angle=98.1763 deg max_vm=254.112 MPa min_J=0.985156
+bending: 70% angle=119.084 deg max_vm=256.283 MPa min_J=0.939323
+bending: 80% angle=135.676 deg max_vm=268.34 MPa min_J=0.91609
+bending: 90% angle=146.329 deg max_vm=264.299 MPa min_J=0.915222
+bending: 100% angle=150 deg max_vm=240.295 MPa min_J=0.922693
+Completed bending in 9.25727 s; outputs: demos/output/hyperelastic/bending
+<end of output>
+Test time =   9.45 sec
+----------------------------------------------------------
+Test Passed.
+"hyperelastic_bending" end time: Oct 31 13:54 �Ĵ����Ƕ�������ʱ
+"hyperelastic_bending" time elapsed: 00:00:09
+----------------------------------------------------------
+
+18/20 Testing: hyperelastic_torsion
+18/20 Test: hyperelastic_torsion
+Command: "<CLEAN_CHECKOUT>/build/release/bin/vumat_pd_large_motion_3d.exe" "torsion" "demos/output/hyperelastic/torsion" "2400" "24" "540"
+Directory: <CLEAN_CHECKOUT>
+"hyperelastic_torsion" start time: Oct 31 13:54 �Ĵ����Ƕ�������ʱ
+Output:
+----------------------------------------------------------
+torsion: 10% angle=13.2147 deg max_vm=77.7787 MPa min_J=0.995634
+torsion: 20% angle=51.5654 deg max_vm=196.217 MPa min_J=0.987345
+torsion: 30% angle=111.298 deg max_vm=320.275 MPa min_J=0.965965
+torsion: 40% angle=186.565 deg max_vm=430.803 MPa min_J=0.937449
+torsion: 50% angle=270 deg max_vm=521.04 MPa min_J=0.909163
+torsion: 60% angle=353.435 deg max_vm=580.695 MPa min_J=0.888464
+torsion: 70% angle=428.702 deg max_vm=607.381 MPa min_J=0.880259
+torsion: 80% angle=488.435 deg max_vm=603.193 MPa min_J=0.8856
+torsion: 90% angle=526.785 deg max_vm=569.162 MPa min_J=0.901759
+torsion: 100% angle=540 deg max_vm=514.481 MPa min_J=0.922188
+Completed torsion in 9.50722 s; outputs: demos/output/hyperelastic/torsion
+<end of output>
+Test time =   9.59 sec
+----------------------------------------------------------
+Test Passed.
+"hyperelastic_torsion" end time: Oct 31 13:55 �Ĵ����Ƕ�������ʱ
+"hyperelastic_torsion" time elapsed: 00:00:09
+----------------------------------------------------------
+
+19/20 Testing: elastic_pd_tension
+19/20 Test: elastic_pd_tension
+Command: "<CLEAN_CHECKOUT>/build/release/bin/vumat_pd_run.exe" "examples/elastic_tension_pd.json"
+Directory: <CLEAN_CHECKOUT>
+"elastic_pd_tension" start time: Oct 31 13:55 �Ĵ����Ƕ�������ʱ
+Output:
+----------------------------------------------------------
+elastic_tension_pd/Elastic: particles=1683 runtime_s=48.722 energy_error=0.000218507 max_eqps=0 pass=true
+<end of output>
+Test time =  48.80 sec
+----------------------------------------------------------
+Test Passed.
+"elastic_pd_tension" end time: Oct 31 13:55 �Ĵ����Ƕ�������ʱ
+"elastic_pd_tension" time elapsed: 00:00:48
+----------------------------------------------------------
+
+20/20 Testing: jc_pd_tension
+20/20 Test: jc_pd_tension
+Command: "<CLEAN_CHECKOUT>/build/release/bin/vumat_pd_run.exe" "examples/jc_tension_pd.json"
+Directory: <CLEAN_CHECKOUT>
+"jc_pd_tension" start time: Oct 31 13:55 �Ĵ����Ƕ�������ʱ
+Output:
+----------------------------------------------------------
+jc_tension_pd/JC: particles=1683 runtime_s=46.533 energy_error=0.0224016 max_eqps=0.0278018 pass=true
+<end of output>
+Test time =  46.61 sec
+----------------------------------------------------------
+Test Passed.
+"jc_pd_tension" end time: Oct 31 13:56 �Ĵ����Ƕ�������ʱ
+"jc_pd_tension" time elapsed: 00:00:46
+----------------------------------------------------------
+
+End testing: Oct 31 13:56 �Ĵ����Ƕ�������ʱ

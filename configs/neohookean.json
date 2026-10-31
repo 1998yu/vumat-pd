@@ -2,6 +2,8 @@
   "schemaVersion": "1.0",
   "name": "NeoHookean",
   "cmname": "NEOHOOKEAN",
+  "tensorConvention": "legacy_vumat_pd",
+  "stressFrame": "spatial",
   "plugin": "neohookean_kv_vumat_plugin",
   "symbol": "vumat_adapter_call",
   "ndir": 3,

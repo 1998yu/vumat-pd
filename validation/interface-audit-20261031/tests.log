@@ -1,0 +1,45 @@
+Test project <CLEAN_CHECKOUT>/build/release
+      Start  1: archive_integrity_contract
+ 1/20 Test  #1: archive_integrity_contract .......   Passed    0.46 sec
+      Start  2: interface_contract
+ 2/20 Test  #2: interface_contract ...............   Passed    0.16 sec
+      Start  3: config_rejection
+ 3/20 Test  #3: config_rejection .................   Passed    0.78 sec
+      Start  4: jc_thermal_units
+ 4/20 Test  #4: jc_thermal_units .................   Passed    0.15 sec
+      Start  5: eigen_rotation
+ 5/20 Test  #5: eigen_rotation ...................   Passed    0.12 sec
+      Start  6: observation_window
+ 6/20 Test  #6: observation_window ...............   Passed    0.13 sec
+      Start  7: correspondence_sampling
+ 7/20 Test  #7: correspondence_sampling ..........   Passed    0.12 sec
+      Start  8: corotational_kinematics
+ 8/20 Test  #8: corotational_kinematics ..........   Passed    0.10 sec
+      Start  9: neighbor_search
+ 9/20 Test  #9: neighbor_search ..................   Passed    0.12 sec
+      Start 10: affine_bar_elastic
+10/20 Test #10: affine_bar_elastic ...............   Passed    0.07 sec
+      Start 11: affine_shear_elastic
+11/20 Test #11: affine_shear_elastic .............   Passed    0.09 sec
+      Start 12: jc_vumat_material_point
+12/20 Test #12: jc_vumat_material_point ..........   Passed    0.14 sec
+      Start 13: fem_h8_patch
+13/20 Test #13: fem_h8_patch .....................   Passed    0.18 sec
+      Start 14: neighbor_lattice_regression
+14/20 Test #14: neighbor_lattice_regression ......   Passed    0.25 sec
+      Start 15: outer_damage
+15/20 Test #15: outer_damage .....................   Passed    0.14 sec
+      Start 16: neohookean_material
+16/20 Test #16: neohookean_material ..............   Passed    0.18 sec
+      Start 17: hyperelastic_bending
+17/20 Test #17: hyperelastic_bending .............   Passed    9.45 sec
+      Start 18: hyperelastic_torsion
+18/20 Test #18: hyperelastic_torsion .............   Passed    9.59 sec
+      Start 19: elastic_pd_tension
+19/20 Test #19: elastic_pd_tension ...............   Passed   48.80 sec
+      Start 20: jc_pd_tension
+20/20 Test #20: jc_pd_tension ....................   Passed   46.61 sec
+
+100% tests passed, 0 tests failed out of 20
+
+Total Test time (real) = 117.76 sec

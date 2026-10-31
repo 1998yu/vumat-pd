@@ -157,6 +157,15 @@ The matrix includes the independent H8 FEM reference and requires a build with `
 
 ## Developer documentation
 
+Start with [build/reproduction commands](docs/quickstart.md),
+[module contracts](docs/module-contracts.md), the
+[version-pinned PeriLab comparison](docs/perilab-comparison.md), and the
+[separate thermal-unit audit](docs/thermal-audit.md).
+
+The current review-branch revision is described in
+[the follow-up report](docs/reviewer-followup.md) and
+[its validation record](docs/interface-audit-validation.md).
+
 | Guide | What it explains |
 |---|---|
 | [Architecture](docs/architecture.md) | PD hosts, material adapter, plugin boundaries and verification responsibilities |
