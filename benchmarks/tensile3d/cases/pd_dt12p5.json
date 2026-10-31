@@ -37,6 +37,10 @@
     "planeStrain": false,
     "rigidBodySuppression": true
   },
+  "observation": {
+    "axialMin": 2.0,
+    "axialMax": 98.0
+  },
   "dynamics": {
     "density": 0.0078,
     "energyToleranceRelative": 0.15,

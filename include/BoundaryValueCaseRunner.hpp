@@ -5,7 +5,7 @@
 namespace vumat {
 namespace demo {
 
-int runBoundaryValueCase(const DemoCaseConfig& config);
+int runBoundaryValueCase(const DemoCaseConfig &config);
 
 } // namespace demo
 } // namespace vumat

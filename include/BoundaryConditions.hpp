@@ -13,11 +13,11 @@ class BoundaryCondition {
 public:
   virtual ~BoundaryCondition() = default;
 
-  virtual void apply(vumat::pd::ParticleBlock& block, int step, int steps) const = 0;
+  virtual void apply(vumat::pd::ParticleBlock &block, int step, int steps) const = 0;
   virtual double loadValue(int step, int steps) const = 0;
 };
 
-std::unique_ptr<BoundaryCondition> createBoundaryCondition(const BoundaryConditionConfig& config);
+std::unique_ptr<BoundaryCondition> createBoundaryCondition(const BoundaryConditionConfig &config);
 
 struct RampKinematics {
   double displacement = 0.0;
@@ -27,20 +27,28 @@ struct RampKinematics {
 
 class RegionalConstraintSystem {
 public:
-  RegionalConstraintSystem(const vumat::pd::ParticleBlock& block,
-                           const BoundaryConditionConfig& config,
-                           double spacing);
+  RegionalConstraintSystem(const vumat::pd::ParticleBlock &block,
+                           const BoundaryConditionConfig &config, double spacing);
 
   RampKinematics ramp(double time) const;
-  void apply(vumat::pd::ParticleBlock& block,
-             vumat::pd::ExplicitDynamicState& state,
+  void apply(vumat::pd::ParticleBlock &block, vumat::pd::ExplicitDynamicState &state,
              double time) const;
 
-  const std::vector<size_t>& support() const { return support_; }
-  const std::vector<size_t>& loaded() const { return loaded_; }
-  size_t anchor() const { return anchor_; }
-  int loadComponent() const { return loadComponent_; }
-  int lateralComponent() const { return loadComponent_ == 0 ? 1 : 0; }
+  const std::vector<size_t> &support() const {
+    return support_;
+  }
+  const std::vector<size_t> &loaded() const {
+    return loaded_;
+  }
+  size_t anchor() const {
+    return anchor_;
+  }
+  int loadComponent() const {
+    return loadComponent_;
+  }
+  int lateralComponent() const {
+    return loadComponent_ == 0 ? 1 : 0;
+  }
 
 private:
   BoundaryConditionConfig config_;

@@ -1,0 +1,21 @@
+step=240/4800 stress=27.3729 elapsed_s=0.514757
+step=480/4800 stress=107.909 elapsed_s=0.967108
+step=720/4800 stress=227.464 elapsed_s=1.38849
+step=960/4800 stress=350.733 elapsed_s=1.83197
+step=1200/4800 stress=392.709 elapsed_s=2.33289
+step=1440/4800 stress=407.354 elapsed_s=2.86737
+step=1680/4800 stress=418.844 elapsed_s=3.46478
+step=1920/4800 stress=427.296 elapsed_s=4.01604
+step=2160/4800 stress=434.582 elapsed_s=4.55294
+step=2400/4800 stress=441.326 elapsed_s=5.10008
+step=2640/4800 stress=447.092 elapsed_s=5.6211
+step=2880/4800 stress=451.403 elapsed_s=6.18186
+step=3120/4800 stress=452.527 elapsed_s=6.7023
+step=3360/4800 stress=451.173 elapsed_s=7.20425
+step=3600/4800 stress=443.853 elapsed_s=7.72279
+step=3840/4800 stress=434.657 elapsed_s=8.23808
+step=4080/4800 stress=422.264 elapsed_s=8.74769
+step=4320/4800 stress=403.377 elapsed_s=9.95169
+step=4560/4800 stress=374.451 elapsed_s=11.2305
+step=4800/4800 stress=332.492 elapsed_s=12.3573
+FEM COMPLETED elements=250 gauss_points=2000 volume=8000

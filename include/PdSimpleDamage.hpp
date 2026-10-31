@@ -23,12 +23,11 @@ struct PdDamageResult {
 class PdSimpleDamage {
 public:
   explicit PdSimpleDamage(SimpleDamageConfig config);
-  void initialize(const ParticleBlock& block, PdDamageState& state) const;
-  PdDamageResult update(const ParticleBlock& block,
-                        const std::vector<Tensor3>& strain,
-                        const std::vector<Tensor3>& rawStress,
-                        const std::vector<std::vector<double>>& vumatState,
-                        PdDamageState& state) const;
+  void initialize(const ParticleBlock &block, PdDamageState &state) const;
+  PdDamageResult update(const ParticleBlock &block, const std::vector<Tensor3> &strain,
+                        const std::vector<Tensor3> &rawStress,
+                        const std::vector<std::vector<double>> &vumatState,
+                        PdDamageState &state) const;
 
 private:
   SimpleDamageConfig config_;

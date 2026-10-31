@@ -97,9 +97,19 @@ if (RESULT/'fem_symmetry_check/timeseries.csv').exists():
         'max_history_stress_difference_pct_of_peak':float(100*np.max(abs(sym['average_axial_stress_MPa']-coarse['average_axial_stress_MPa']))/np.max(abs(coarse['average_axial_stress_MPa']))),
         'max_history_plastic_difference_pct_of_peak':float(100*np.max(abs(sym['max_eqps']-coarse['max_eqps']))/np.max(abs(coarse['max_eqps']))),
         'displacement_rmse_pct':float(100*np.sqrt(np.mean(np.sum((sorted_u(sym_nodes)-sorted_u(data['fem_coarse']['nodes']))**2,axis=1)))/2)}
-    assert symmetry_check['max_history_stress_difference_pct_of_peak']<.05
-    assert symmetry_check['max_history_plastic_difference_pct_of_peak']<.05
-    assert symmetry_check['displacement_rmse_pct']<.001
+    # Preserve diagnostics even if reference verification fails; do not silently
+    # relax thresholds or label a finite run as an accurate symmetry reduction.
+    (R/'symmetry_check.json').write_text(json.dumps(symmetry_check,indent=2))
+    for quantity, limit in {
+        'max_history_stress_difference_pct_of_peak': .05,
+        'max_history_plastic_difference_pct_of_peak': .05,
+        'displacement_rmse_pct': .001,
+    }.items():
+        if symmetry_check[quantity] >= limit:
+            raise RuntimeError(
+                f"FEM symmetry verification failed: {quantity}="
+                f"{symmetry_check[quantity]:.9g}% exceeds {limit}%. "
+                f"Diagnostics: {R/'symmetry_check.json'}")
     analysis['fem_symmetry_check']=symmetry_check
 analysis['pd_early_elastic_diagnostic']={name:{
     'measured_early_slope_MPa':data[name]['metadata']['materials'][0]['earlyElasticSlope_MPa'],

@@ -6,13 +6,13 @@ VUMAT–PD connects compiled Fortran VUMAT-style routines to a standalone C++ PD
 
 The project implements the interface described in *VUMAT-PD: A plugin-based interface for VUMAT-driven peridynamic correspondence simulations*. Its central capability is constitutive reuse: integrate a compatible material routine without rewriting its material algorithm inside the PD solver.
 
-[Architecture](docs/architecture.md) · [Add a material](docs/add-a-vumat.md) · [Interface contract](docs/interface.md) · [PD particle demos](demos/README.md) · [Verification](benchmarks/tensile3d/README.md)
+[Start from the PD equation](docs/governing-equations.md) · [Architecture](docs/architecture.md) · [Parameters](docs/parameters.md) · [Add a material](docs/add-a-vumat.md) · [Verification](benchmarks/tensile3d/README.md)
 
 ## How the coupling works
 
-![Constitutive coupling from PD particle kinematics through the VUMAT interface and back to PD forces](docs/paper-figures/coupling-workflow.png)
-
-*The coupling workflow from the manuscript: nonlocal PD kinematics → objective material inputs → compiled VUMAT plugin → spatial stress recovery and PD force assembly.*
+Meshfree nodes and reference volumes → nonlocal deformation gradient →
+corotational material inputs → compiled VUMAT plugin → spatial stress →
+PD force density → explicit nodal motion.
 
 The plugin receives material-point arrays rather than neighborhoods or bonds. The coupling layer gathers particle data into blocks, applies the declared tensor and frame conventions, invokes the material routine and returns updated stress, state and energy. Each particle retains its material history across increments.
 
@@ -33,9 +33,8 @@ Start with [the material integration guide](docs/add-a-vumat.md). The [interface
 
 The manuscript tests the same Johnson–Cook plugin in independent 3D PD and H8 FEM formulations. Both use a 100 × 20 × 4 mm body and a smooth 2 mm end displacement over 0.12 ms. FEM provides an independent verification reference; the project runtime and all four demo simulations use PD.
 
-![Fine-resolution PD and FEM verification of axial stress and equivalent plastic strain](docs/paper-figures/fine-fields.png)
-
-*Fine-resolution fields from the manuscript. The two formulations reproduce similar stress and plastic-strain distributions; the local plastic-strain maximum remains resolution-sensitive.*
+The quantitative comparison is defined in the [benchmark guide](benchmarks/tensile3d/README.md).
+Manuscript illustrations and their provenance remain separate from the runnable workflow.
 
 | Matched fine-resolution comparison | Result |
 |---|---:|
@@ -54,37 +53,18 @@ These results support constitutive-transfer consistency for the documented nonfr
 
 *Supplementary Movie S1 from the coarse 3D H8 FEM benchmark: axial stress and equivalent plastic strain evolve over 0–0.12 ms under one-sided end displacement. The displayed fields average the two nearest mid-thickness Gauss planes. This movie supports independent verification; the four runnable particle demos use PD.*
 
-<details>
-<summary>Geometry, verification pathway and coarse-grid fields</summary>
-
-![Three-dimensional tensile geometry and prescribed loading history](docs/paper-figures/benchmark-setup.png)
-
-*Fixed 100 × 20 × 4 mm geometry, free lateral/thickness faces and 2 mm end bands.*
-
-![Common material interface with independent FEM and PD kinematics and force assembly](docs/paper-figures/verification-path.png)
-
-*Shared material input and plugin; independent kinematic reconstruction and internal-force assembly.*
-
-![Coarse-resolution PD and FEM verification fields](docs/paper-figures/coarse-fields.png)
-
-*Coarse comparison at h = 2 mm and PD horizon = 6 mm. These are verification fields, separate from the discrete-particle demo views.*
-
-</details>
 
 ## Spatial and temporal sensitivity
 
 The benchmark also varies PD grid spacing, horizon and time step against one finest H8 FEM numerical reference. Stress histories are more stable than local plastic-strain maxima; parameter refinement does not reduce every deviation monotonically.
 
-<details>
-<summary>View the manuscript's sensitivity results</summary>
+For the fine PD baseline, stress-history, displacement and maximum-plastic-strain
+deviations are 0.483%, 0.538% and 8.186%. These use the finest FEM reference and
+differ from the matched-pair metrics above.
 
-![Grid, horizon and time-step sensitivity against the same finest FEM reference](docs/paper-figures/sensitivity.png)
-
-*For the fine PD baseline, stress-history, displacement and maximum-plastic-strain deviations are 0.483%, 0.538% and 8.186%. These use the finest FEM reference and differ from the matched-pair metrics above.*
-
-</details>
-
-The [benchmark directory](benchmarks/tensile3d/README.md) preserves the corrected publication data hashes, final case inputs, separate metric baselines and reproduction tools. Browse [all six manuscript figures](docs/paper-figures/README.md) and their source traceability.
+The [benchmark directory](benchmarks/tensile3d/README.md) preserves data hashes,
+case inputs, separate metric baselines and reproduction tools. Manuscript assets
+are retained separately pending the [publication archive](docs/publication-assets.md).
 
 ## Explore the PD particle demos
 
@@ -160,7 +140,10 @@ python benchmarks/tensile3d/analyse_and_plot.py
 python benchmarks/tensile3d/verify_metrics.py
 ```
 
-This verifies the checksums of 26 archived CSV files and regenerates figures, sampled coordinates and quantitative comparisons under `benchmarks/tensile3d/generated`. Matched FEM–PD comparisons and comparisons with the finest FEM reference use separate baselines.
+This verifies 41 archived CSV/metadata files, including the FEM symmetry case,
+and regenerates figures, sampled coordinates and quantitative comparisons under
+`benchmarks/tensile3d/generated`. Matched FEM–PD comparisons and comparisons with
+the finest FEM reference use separate baselines.
 
 To recompute the complete validation matrix with the compiled solvers:
 
@@ -181,13 +164,29 @@ The matrix includes the independent H8 FEM reference and requires a build with `
 | [Interface conventions](docs/interface.md) | Component order, stress frames, stretch tensors, thermal history and threading |
 | [Corotational kinematics](docs/kinematics.md) | Deformation reconstruction, corrected rotation update and its numerical limits |
 | [Outer damage](docs/outer-damage.md) | Optional point/bond degradation, configuration and unvalidated fracture scope |
+| [Governing equations](docs/governing-equations.md) | Continuum equation, nodal quadrature, code correspondence and missing stabilization |
+| [Parameters](docs/parameters.md) | Input fields, units, observation windows and JC property/state indices |
+| [Time increments](docs/time-step.md) | User-selected increments, sensitivity protocol and limits of stability claims |
+| [Eigen cross-check](docs/matrix-library.md) | Optional independent rotation verification and library design rationale |
+| [Publication assets](docs/publication-assets.md) | Code/data boundaries and the pending archival workflow |
 
 ## Scope and reuse
+
+The practical contribution is an inspectable standalone C++/Fortran plugin boundary,
+its explicit tensor/state contract, and a shared-material PD/FEM verification path.
+The project does not claim to introduce constitutive reuse or to be the first PD
+software accepting external material routines. It should be compared with systems
+such as PeriLab on concrete interface conventions, deployment and reproducibility,
+not an unsupported claim that such coupling was previously unavailable. No
+performance superiority is claimed without a matched benchmark.
+
+**No zero-energy-mode stabilization is implemented.** A sampling diagnostic documents
+one limitation of the current gradient. Optional damage is not stabilization.
 
 The demonstrated scope is material transfer under the documented interface conventions. Standard Abaqus shear ordering and stretch conventions require explicit mapping for affected routines. Additional materials and hosts need separate checks. Thermal calibration, general finite-rotation accuracy and production impact/fracture capability remain outside the paper's verified scope.
 
 ```text
-src/                  PD hosts, material coupling and optional outer damage
+src/{apps,config,host,pd,material,damage}/  Modules with distinct responsibilities
 include/              Public C++ interfaces
 materials/            Fortran material routines and bridge
 configs/              Material properties and plugin selection

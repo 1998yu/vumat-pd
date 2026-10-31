@@ -4,6 +4,7 @@
 #include "SimpleDamageModel.hpp"
 
 #include <string>
+#include <limits>
 #include <vector>
 
 namespace vumat {
@@ -62,6 +63,12 @@ struct OutputConfig {
   std::string directory;
 };
 
+struct ObservationConfig {
+  // Reference coordinates along the loading axis, in mm. NaN selects band edges.
+  double axialMin = std::numeric_limits<double>::quiet_NaN();
+  double axialMax = std::numeric_limits<double>::quiet_NaN();
+};
+
 struct ValidationToleranceConfig {
   double deformationGradientAbsolute = 1.0e-12;
   double referenceStressAbsolute = 1.0e-6;
@@ -95,13 +102,14 @@ struct DemoCaseConfig {
   DynamicsConfig dynamics;
   SimpleDamageConfig damage;
   OutputConfig output;
+  ObservationConfig observation;
   ValidationToleranceConfig tolerances;
   std::vector<DemoMaterialConfig> materials;
   std::vector<std::string> checks;
 };
 
-DemoCaseConfig loadDemoCaseConfigFromJson(const std::string& casePath,
-                                         const std::string& pluginDirectory = "");
+DemoCaseConfig loadDemoCaseConfigFromJson(const std::string &casePath,
+                                          const std::string &pluginDirectory = "");
 
 } // namespace demo
 } // namespace vumat

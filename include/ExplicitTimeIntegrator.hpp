@@ -16,15 +16,15 @@ class ExplicitTimeIntegrator {
 public:
   explicit ExplicitTimeIntegrator(double density);
 
-  void initialize(const ParticleBlock& block, ExplicitDynamicState& state) const;
-  void predictDisplacement(ParticleBlock& block,
-                           const ExplicitDynamicState& state,
+  void initialize(const ParticleBlock &block, ExplicitDynamicState &state) const;
+  void predictDisplacement(ParticleBlock &block, const ExplicitDynamicState &state,
                            double dt) const;
-  void correctVelocity(ExplicitDynamicState& state,
-                       const std::vector<Vec3>& forceDensity,
+  void correctVelocity(ExplicitDynamicState &state, const std::vector<Vec3> &forceDensity,
                        double dt) const;
 
-  double density() const { return density_; }
+  double density() const {
+    return density_;
+  }
 
 private:
   double density_;

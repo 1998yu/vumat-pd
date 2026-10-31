@@ -11,34 +11,32 @@ namespace vumat {
 
 class DynamicLibrary {
 public:
-  explicit DynamicLibrary(const std::string& path);
+  explicit DynamicLibrary(const std::string &path);
   ~DynamicLibrary();
 
-  DynamicLibrary(const DynamicLibrary&) = delete;
-  DynamicLibrary& operator=(const DynamicLibrary&) = delete;
+  DynamicLibrary(const DynamicLibrary &) = delete;
+  DynamicLibrary &operator=(const DynamicLibrary &) = delete;
 
-  void* symbol(const std::string& name) const;
+  void *symbol(const std::string &name) const;
 
 private:
-  void* handle_ = nullptr;
+  void *handle_ = nullptr;
 };
 
 class VumatMaterialAdapter {
 public:
   explicit VumatMaterialAdapter(VumatMaterialConfig config);
 
-  VumatPointResult updatePoint(const VumatPointInput& input) const;
-  VumatBlockResult updateBlock(const VumatBlockInput& input) const;
-  const VumatBlockResult& updateFixedBlockCached(const VumatBlockInput& input) const;
+  VumatPointResult updatePoint(const VumatPointInput &input) const;
+  VumatBlockResult updateBlock(const VumatBlockInput &input) const;
+  const VumatBlockResult &updateFixedBlockCached(const VumatBlockInput &input) const;
 
 private:
-  using VumatCall = void (*)(
-      int*, int*, int*, int*, int*, int*, int*,
-      double*, double*, double*, char*,
-      double*, double*, double*, double*, double*, double*,
-      double*, double*, double*, double*, double*, double*, double*,
-      double*, double*, double*, double*, double*, double*, double*,
-      double*, double*);
+  using VumatCall = void (*)(int *, int *, int *, int *, int *, int *, int *, double *, double *,
+                             double *, char *, double *, double *, double *, double *, double *,
+                             double *, double *, double *, double *, double *, double *, double *,
+                             double *, double *, double *, double *, double *, double *, double *,
+                             double *, double *, double *);
 
   static int fortranIndex(int block, int component, int nblock);
 

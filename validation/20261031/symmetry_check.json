@@ -1,0 +1,6 @@
+{
+  "stress_history_nrmse_pct": 0.0005140478292471754,
+  "max_history_stress_difference_pct_of_peak": 0.0021926784270458544,
+  "max_history_plastic_difference_pct_of_peak": 0.007579445552936301,
+  "displacement_rmse_pct": 0.0002890482231976617
+}

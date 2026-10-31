@@ -9,6 +9,8 @@ namespace pd {
 using Vec3 = std::array<double, 3>;
 using Tensor3 = std::array<double, 9>;
 
+// Historical API name: meshfree discretisation nodes of a continuum, not
+// physical particles. Tensor3 uses row-major storage; volumes are reference volumes.
 struct ParticleBlock {
   std::vector<Vec3> referencePosition;
   std::vector<Vec3> displacement;

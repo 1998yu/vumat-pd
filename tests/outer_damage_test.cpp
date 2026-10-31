@@ -8,11 +8,14 @@
 #include <vector>
 
 namespace {
-void require(bool condition, const char* message) {
-  if (!condition) throw std::runtime_error(message);
+void require(bool condition, const char *message) {
+  if (!condition)
+    throw std::runtime_error(message);
 }
-bool close(double a, double b) { return std::abs(a - b) < 1e-12; }
+bool close(double a, double b) {
+  return std::abs(a - b) < 1e-12;
 }
+} // namespace
 
 int main() {
   try {
@@ -48,8 +51,11 @@ int main() {
             "Principal-strain mode must evaluate the full symmetric tensor.");
     config.failure = config.initiation;
     bool rejected = false;
-    try { vumat::SimpleDamageModel(config).update(strain, {}, {}); }
-    catch (const std::runtime_error&) { rejected = true; }
+    try {
+      vumat::SimpleDamageModel(config).update(strain, {}, {});
+    } catch (const std::runtime_error &) {
+      rejected = true;
+    }
     require(rejected, "Invalid threshold range must be rejected.");
 
     vumat::pd::ParticleBlock block;
@@ -58,7 +64,8 @@ int main() {
     block.volume = {1.0, 2.0};
     block.neighbors = {{1}, {0}};
     std::vector<vumat::pd::Tensor3> strains(2), stresses(2);
-    stresses[0].fill(20.0); stresses[1].fill(30.0);
+    stresses[0].fill(20.0);
+    stresses[1].fill(30.0);
     std::vector<std::vector<double>> states(2);
     config.mode = "critical_stretch";
     config.initiation = 0.05;
@@ -68,12 +75,13 @@ int main() {
     bonds.initialize(block, bondState);
     const auto broken = bonds.update(block, strains, stresses, states, bondState);
     require(broken.bondDamage[0][0] == 1.0 && broken.bondDamage[1][0] == 1.0 &&
-            broken.damageIndex[0] == 1.0 && broken.damageIndex[1] == 1.0,
+                broken.damageIndex[0] == 1.0 && broken.damageIndex[1] == 1.0,
             "Critical tensile stretch must break both directed bonds.");
     require(broken.effectiveStress == stresses && bondState.pointDamageN[0].deleted,
             "Bond failure must retain material stress and record the failure state.");
     block.displacement[1] = {0.0, 0.0, 0.0};
-    require(bonds.update(block, strains, stresses, states, bondState).bondDamage == broken.bondDamage,
+    require(bonds.update(block, strains, stresses, states, bondState).bondDamage ==
+                broken.bondDamage,
             "Broken bonds must not heal on unloading.");
     config.failure = 0.02;
     vumat::pd::PdSimpleDamage compression(config);
@@ -81,9 +89,10 @@ int main() {
     block.displacement[1] = {-0.03, 0.0, 0.0};
     require(compression.update(block, strains, stresses, states, bondState).bondDamage[0][0] == 1.0,
             "Configured compression threshold must be honored.");
-    std::cout << "PASS: optional outer damage modes, irreversibility and material-state separation.\n";
+    std::cout
+        << "PASS: optional outer damage modes, irreversibility and material-state separation.\n";
     return 0;
-  } catch (const std::exception& error) {
+  } catch (const std::exception &error) {
     std::cerr << error.what() << '\n';
     return 1;
   }

@@ -16,3 +16,6 @@ Thumbs.db
 desktop.ini
 
 /demos/output/
+
+# Retain the small, reviewed validation logs with this source revision.
+!/validation/20261031/*.log

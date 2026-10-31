@@ -1,0 +1,282 @@
+Start testing: Oct 31 13:03 澳大利亚东部夏令时
+----------------------------------------------------------
+1/16 Testing: eigen_rotation
+1/16 Test: eigen_rotation
+Command: "E:/Codex/Workspace/projects/vumat-pd-3d-revision/reviewer-revision-20261031/build/release/bin/eigen_rotation_test.exe"
+Directory: E:/Codex/Workspace/projects/vumat-pd-3d-revision/reviewer-revision-20261031/build/release
+"eigen_rotation" start time: Oct 31 13:03 澳大利亚东部夏令时
+Output:
+----------------------------------------------------------
+Eigen matrix-exp comparison: 24 rotations, max absolute error=2.22045e-16
+<end of output>
+Test time =   0.19 sec
+----------------------------------------------------------
+Test Passed.
+"eigen_rotation" end time: Oct 31 13:03 澳大利亚东部夏令时
+"eigen_rotation" time elapsed: 00:00:00
+----------------------------------------------------------
+
+2/16 Testing: observation_window
+2/16 Test: observation_window
+Command: "E:/Codex/Workspace/projects/vumat-pd-3d-revision/reviewer-revision-20261031/build/release/bin/observation_window_test.exe"
+Directory: E:/Codex/Workspace/projects/vumat-pd-3d-revision/reviewer-revision-20261031
+"observation_window" start time: Oct 31 13:03 澳大利亚东部夏令时
+Output:
+----------------------------------------------------------
+PASS shifted x/y windows, exact volume and affine mean; reversed bounds rejected
+<end of output>
+Test time =   0.17 sec
+----------------------------------------------------------
+Test Passed.
+"observation_window" end time: Oct 31 13:03 澳大利亚东部夏令时
+"observation_window" time elapsed: 00:00:00
+----------------------------------------------------------
+
+3/16 Testing: correspondence_sampling
+3/16 Test: correspondence_sampling
+Command: "E:/Codex/Workspace/projects/vumat-pd-3d-revision/reviewer-revision-20261031/build/release/bin/correspondence_sampling_test.exe"
+Directory: E:/Codex/Workspace/projects/vumat-pd-3d-revision/reviewer-revision-20261031
+"correspondence_sampling" start time: Oct 31 13:03 澳大利亚东部夏令时
+Output:
+----------------------------------------------------------
+PASS volume and affine completeness; unresolved alternating displacement is invisible at 27 interior nodes (max |F-I|=0)
+<end of output>
+Test time =   0.17 sec
+----------------------------------------------------------
+Test Passed.
+"correspondence_sampling" end time: Oct 31 13:03 澳大利亚东部夏令时
+"correspondence_sampling" time elapsed: 00:00:00
+----------------------------------------------------------
+
+4/16 Testing: corotational_kinematics
+4/16 Test: corotational_kinematics
+Command: "E:/Codex/Workspace/projects/vumat-pd-3d-revision/reviewer-revision-20261031/build/release/bin/corotational_kinematics_test.exe"
+Directory: E:/Codex/Workspace/projects/vumat-pd-3d-revision/reviewer-revision-20261031
+"corotational_kinematics" start time: Oct 31 13:03 澳大利亚东部夏令时
+Output:
+----------------------------------------------------------
+Corotational kinematics tests passed.
+<end of output>
+Test time =   0.20 sec
+----------------------------------------------------------
+Test Passed.
+"corotational_kinematics" end time: Oct 31 13:03 澳大利亚东部夏令时
+"corotational_kinematics" time elapsed: 00:00:00
+----------------------------------------------------------
+
+5/16 Testing: neighbor_search
+5/16 Test: neighbor_search
+Command: "E:/Codex/Workspace/projects/vumat-pd-3d-revision/reviewer-revision-20261031/build/release/bin/neighbor_search_test.exe"
+Directory: E:/Codex/Workspace/projects/vumat-pd-3d-revision/reviewer-revision-20261031
+"neighbor_search" start time: Oct 31 13:03 澳大利亚东部夏令时
+Output:
+----------------------------------------------------------
+Neighbor lists identical for 459 particles; brute_ms=2.1047 linked_ms=4.3036
+<end of output>
+Test time =   0.21 sec
+----------------------------------------------------------
+Test Passed.
+"neighbor_search" end time: Oct 31 13:03 澳大利亚东部夏令时
+"neighbor_search" time elapsed: 00:00:00
+----------------------------------------------------------
+
+6/16 Testing: affine_bar_elastic
+6/16 Test: affine_bar_elastic
+Command: "E:/Codex/Workspace/projects/vumat-pd-3d-revision/reviewer-revision-20261031/build/release/bin/vumat_pd_run.exe" "examples/affine_bar_elastic.json"
+Directory: E:/Codex/Workspace/projects/vumat-pd-3d-revision/reviewer-revision-20261031
+"affine_bar_elastic" start time: Oct 31 13:03 澳大利亚东部夏令时
+Output:
+----------------------------------------------------------
+Elastic: max_f_error=8.88178e-16 max_stress_reference_error=0.0013427 max_damage=0 max_net_force_norm=5.18673e-14 finite=true
+VUMAT-PD demo case written to examples/output/affine_bar_elastic
+<end of output>
+Test time =   0.28 sec
+----------------------------------------------------------
+Test Passed.
+"affine_bar_elastic" end time: Oct 31 13:03 澳大利亚东部夏令时
+"affine_bar_elastic" time elapsed: 00:00:00
+----------------------------------------------------------
+
+7/16 Testing: affine_shear_elastic
+7/16 Test: affine_shear_elastic
+Command: "E:/Codex/Workspace/projects/vumat-pd-3d-revision/reviewer-revision-20261031/build/release/bin/vumat_pd_run.exe" "examples/affine_shear_elastic.json"
+Directory: E:/Codex/Workspace/projects/vumat-pd-3d-revision/reviewer-revision-20261031
+"affine_shear_elastic" start time: Oct 31 13:03 澳大利亚东部夏令时
+Output:
+----------------------------------------------------------
+Elastic: max_f_error=5.86133e-16 max_stress_reference_error=0.000383654 max_damage=0 max_net_force_norm=2.31068e-14 finite=true
+VUMAT-PD demo case written to examples/output/affine_shear_elastic
+<end of output>
+Test time =   0.11 sec
+----------------------------------------------------------
+Test Passed.
+"affine_shear_elastic" end time: Oct 31 13:03 澳大利亚东部夏令时
+"affine_shear_elastic" time elapsed: 00:00:00
+----------------------------------------------------------
+
+8/16 Testing: jc_vumat_material_point
+8/16 Test: jc_vumat_material_point
+Command: "E:/Codex/Workspace/projects/vumat-pd-3d-revision/reviewer-revision-20261031/build/release/bin/vumat_pd_run.exe" "examples/jc_material_point.json"
+Directory: E:/Codex/Workspace/projects/vumat-pd-3d-revision/reviewer-revision-20261031
+"jc_vumat_material_point" start time: Oct 31 13:03 澳大利亚东部夏令时
+Output:
+----------------------------------------------------------
+JC: final_stress=543.741 max_reference_error=0 state_indicator=0.0207516 finite=true
+Material-point case written to examples/output/jc_material_point
+<end of output>
+Test time =   0.21 sec
+----------------------------------------------------------
+Test Passed.
+"jc_vumat_material_point" end time: Oct 31 13:03 澳大利亚东部夏令时
+"jc_vumat_material_point" time elapsed: 00:00:00
+----------------------------------------------------------
+
+9/16 Testing: fem_h8_patch
+9/16 Test: fem_h8_patch
+Command: "E:/Codex/Workspace/projects/vumat-pd-3d-revision/reviewer-revision-20261031/build/release/bin/jc_3d_fem.exe" "--selftest"
+Directory: E:/Codex/Workspace/projects/vumat-pd-3d-revision/reviewer-revision-20261031
+"fem_h8_patch" start time: Oct 31 13:03 澳大利亚东部夏令时
+Output:
+----------------------------------------------------------
+H8 partition, affine patch, integrated volume, Piola transform: PASS
+<end of output>
+Test time =   0.23 sec
+----------------------------------------------------------
+Test Passed.
+"fem_h8_patch" end time: Oct 31 13:03 澳大利亚东部夏令时
+"fem_h8_patch" time elapsed: 00:00:00
+----------------------------------------------------------
+
+10/16 Testing: neighbor_lattice_regression
+10/16 Test: neighbor_lattice_regression
+Command: "E:/Codex/Workspace/projects/vumat-pd-3d-revision/reviewer-revision-20261031/build/release/bin/neighbor_lattice_regression.exe"
+Directory: E:/Codex/Workspace/projects/vumat-pd-3d-revision/reviewer-revision-20261031
+"neighbor_lattice_regression" start time: Oct 31 13:03 澳大利亚东部夏令时
+Output:
+----------------------------------------------------------
+PASS 9 grids; both searches match independent integer-lattice neighborhoods at all nodes
+<end of output>
+Test time =   0.29 sec
+----------------------------------------------------------
+Test Passed.
+"neighbor_lattice_regression" end time: Oct 31 13:03 澳大利亚东部夏令时
+"neighbor_lattice_regression" time elapsed: 00:00:00
+----------------------------------------------------------
+
+11/16 Testing: outer_damage
+11/16 Test: outer_damage
+Command: "E:/Codex/Workspace/projects/vumat-pd-3d-revision/reviewer-revision-20261031/build/release/bin/outer_damage_test.exe"
+Directory: E:/Codex/Workspace/projects/vumat-pd-3d-revision/reviewer-revision-20261031
+"outer_damage" start time: Oct 31 13:03 澳大利亚东部夏令时
+Output:
+----------------------------------------------------------
+PASS: optional outer damage modes, irreversibility and material-state separation.
+<end of output>
+Test time =   0.16 sec
+----------------------------------------------------------
+Test Passed.
+"outer_damage" end time: Oct 31 13:03 澳大利亚东部夏令时
+"outer_damage" time elapsed: 00:00:00
+----------------------------------------------------------
+
+12/16 Testing: neohookean_material
+12/16 Test: neohookean_material
+Command: "E:/Codex/Workspace/projects/vumat-pd-3d-revision/reviewer-revision-20261031/build/release/bin/neohookean_material_test.exe" "configs/neohookean.json" "demos/output/hyperelastic/material-point-check"
+Directory: E:/Codex/Workspace/projects/vumat-pd-3d-revision/reviewer-revision-20261031
+"neohookean_material" start time: Oct 31 13:03 澳大利亚东部夏令时
+Output:
+----------------------------------------------------------
+Neo-Hookean VUMAT validation passed; worst error=0 MPa
+<end of output>
+Test time =   0.15 sec
+----------------------------------------------------------
+Test Passed.
+"neohookean_material" end time: Oct 31 13:03 澳大利亚东部夏令时
+"neohookean_material" time elapsed: 00:00:00
+----------------------------------------------------------
+
+13/16 Testing: hyperelastic_bending
+13/16 Test: hyperelastic_bending
+Command: "E:/Codex/Workspace/projects/vumat-pd-3d-revision/reviewer-revision-20261031/build/release/bin/vumat_pd_large_motion_3d.exe" "bending" "demos/output/hyperelastic/bending" "2400" "24" "150"
+Directory: E:/Codex/Workspace/projects/vumat-pd-3d-revision/reviewer-revision-20261031
+"hyperelastic_bending" start time: Oct 31 13:03 澳大利亚东部夏令时
+Output:
+----------------------------------------------------------
+bending: 10% angle=3.67076 deg max_vm=114.873 MPa min_J=0.94703
+bending: 20% angle=14.3237 deg max_vm=266.386 MPa min_J=0.913579
+bending: 30% angle=30.9161 deg max_vm=386.901 MPa min_J=0.905811
+bending: 40% angle=51.8237 deg max_vm=418.56 MPa min_J=0.935921
+bending: 50% angle=75 deg max_vm=338.225 MPa min_J=0.982974
+bending: 60% angle=98.1763 deg max_vm=254.112 MPa min_J=0.985156
+bending: 70% angle=119.084 deg max_vm=256.283 MPa min_J=0.939323
+bending: 80% angle=135.676 deg max_vm=268.34 MPa min_J=0.91609
+bending: 90% angle=146.329 deg max_vm=264.299 MPa min_J=0.915222
+bending: 100% angle=150 deg max_vm=240.295 MPa min_J=0.922693
+Completed bending in 10.7542 s; outputs: demos/output/hyperelastic/bending
+<end of output>
+Test time =  10.98 sec
+----------------------------------------------------------
+Test Passed.
+"hyperelastic_bending" end time: Oct 31 13:03 澳大利亚东部夏令时
+"hyperelastic_bending" time elapsed: 00:00:10
+----------------------------------------------------------
+
+14/16 Testing: hyperelastic_torsion
+14/16 Test: hyperelastic_torsion
+Command: "E:/Codex/Workspace/projects/vumat-pd-3d-revision/reviewer-revision-20261031/build/release/bin/vumat_pd_large_motion_3d.exe" "torsion" "demos/output/hyperelastic/torsion" "2400" "24" "540"
+Directory: E:/Codex/Workspace/projects/vumat-pd-3d-revision/reviewer-revision-20261031
+"hyperelastic_torsion" start time: Oct 31 13:03 澳大利亚东部夏令时
+Output:
+----------------------------------------------------------
+torsion: 10% angle=13.2147 deg max_vm=77.7787 MPa min_J=0.995634
+torsion: 20% angle=51.5654 deg max_vm=196.217 MPa min_J=0.987345
+torsion: 30% angle=111.298 deg max_vm=320.275 MPa min_J=0.965965
+torsion: 40% angle=186.565 deg max_vm=430.803 MPa min_J=0.937449
+torsion: 50% angle=270 deg max_vm=521.04 MPa min_J=0.909163
+torsion: 60% angle=353.435 deg max_vm=580.695 MPa min_J=0.888464
+torsion: 70% angle=428.702 deg max_vm=607.381 MPa min_J=0.880259
+torsion: 80% angle=488.435 deg max_vm=603.193 MPa min_J=0.8856
+torsion: 90% angle=526.785 deg max_vm=569.162 MPa min_J=0.901759
+torsion: 100% angle=540 deg max_vm=514.481 MPa min_J=0.922188
+Completed torsion in 11.3711 s; outputs: demos/output/hyperelastic/torsion
+<end of output>
+Test time =  11.48 sec
+----------------------------------------------------------
+Test Passed.
+"hyperelastic_torsion" end time: Oct 31 13:03 澳大利亚东部夏令时
+"hyperelastic_torsion" time elapsed: 00:00:11
+----------------------------------------------------------
+
+15/16 Testing: elastic_pd_tension
+15/16 Test: elastic_pd_tension
+Command: "E:/Codex/Workspace/projects/vumat-pd-3d-revision/reviewer-revision-20261031/build/release/bin/vumat_pd_run.exe" "examples/elastic_tension_pd.json"
+Directory: E:/Codex/Workspace/projects/vumat-pd-3d-revision/reviewer-revision-20261031
+"elastic_pd_tension" start time: Oct 31 13:03 澳大利亚东部夏令时
+Output:
+----------------------------------------------------------
+elastic_tension_pd/Elastic: particles=1683 runtime_s=62.7348 energy_error=0.000218507 max_eqps=0 pass=true
+<end of output>
+Test time =  62.84 sec
+----------------------------------------------------------
+Test Passed.
+"elastic_pd_tension" end time: Oct 31 13:04 澳大利亚东部夏令时
+"elastic_pd_tension" time elapsed: 00:01:02
+----------------------------------------------------------
+
+16/16 Testing: jc_pd_tension
+16/16 Test: jc_pd_tension
+Command: "E:/Codex/Workspace/projects/vumat-pd-3d-revision/reviewer-revision-20261031/build/release/bin/vumat_pd_run.exe" "examples/jc_tension_pd.json"
+Directory: E:/Codex/Workspace/projects/vumat-pd-3d-revision/reviewer-revision-20261031
+"jc_pd_tension" start time: Oct 31 13:04 澳大利亚东部夏令时
+Output:
+----------------------------------------------------------
+jc_tension_pd/JC: particles=1683 runtime_s=73.5991 energy_error=0.0224016 max_eqps=0.0278018 pass=true
+<end of output>
+Test time =  73.70 sec
+----------------------------------------------------------
+Test Passed.
+"jc_pd_tension" end time: Oct 31 13:05 澳大利亚东部夏令时
+"jc_pd_tension" time elapsed: 00:01:13
+----------------------------------------------------------
+
+End testing: Oct 31 13:05 澳大利亚东部夏令时

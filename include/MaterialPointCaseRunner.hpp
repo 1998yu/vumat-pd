@@ -5,7 +5,7 @@
 namespace vumat {
 namespace demo {
 
-int runMaterialPointCase(const DemoCaseConfig& config);
+int runMaterialPointCase(const DemoCaseConfig &config);
 
 } // namespace demo
 } // namespace vumat

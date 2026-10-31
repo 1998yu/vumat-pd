@@ -26,12 +26,11 @@ class SimpleDamageModel {
 public:
   explicit SimpleDamageModel(SimpleDamageConfig config);
 
-  SimpleDamageState update(const std::array<double, 9>& strainFull,
-                           const std::vector<double>& stateNew,
-                           SimpleDamageState previous) const;
+  SimpleDamageState update(const std::array<double, 9> &strainFull,
+                           const std::vector<double> &stateNew, SimpleDamageState previous) const;
 
-  std::array<double, 9> degradeStress(const std::array<double, 9>& stress,
-                                      const SimpleDamageState& state) const;
+  std::array<double, 9> degradeStress(const std::array<double, 9> &stress,
+                                      const SimpleDamageState &state) const;
 
 private:
   SimpleDamageConfig config_;

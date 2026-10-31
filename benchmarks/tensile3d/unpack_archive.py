@@ -20,12 +20,12 @@ def unpack():
             target.write_bytes(gzip.decompress(source.read_bytes()))
         else:
             shutil.copyfile(source, target)
-    expected = json.loads((ROOT / 'expected' / 'analysis.json').read_text())
-    for relative, digest in expected['hashes'].items():
+    expected = json.loads((ROOT / 'expected' / 'archive_hashes.json').read_text())
+    for relative, digest in expected.items():
         actual = hashlib.sha256((dest / relative).read_bytes()).hexdigest()
         if actual != digest:
             raise RuntimeError(f'Archive hash mismatch: {relative}')
-    print(f"Verified {len(expected['hashes'])} original CSV hashes.")
+    print(f"Verified {len(expected)} archived CSV/metadata hashes (including FEM symmetry).")
     return dest
 
 

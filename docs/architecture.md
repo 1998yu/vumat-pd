@@ -6,7 +6,13 @@ VUMAT–PD is a correspondence-peridynamics framework with reusable material plu
 
 ```text
 vumat-pd/
-├── src/                   PD implementation and runtime entry points
+├── src/
+│   ├── apps/              Command-line entry points
+│   ├── config/            JSON parsing and material/case configuration
+│   ├── host/              Geometry, constraints, case orchestration and output
+│   ├── pd/                Correspondence operators, kinematics and integration
+│   ├── material/          Tensor mapping, plugin ABI and persistent state
+│   └── damage/            Optional outer point/bond degradation
 ├── include/               Public C++ interfaces
 ├── materials/
 │   ├── examples/          Elastic, Johnson–Cook and Neo-Hookean routines
@@ -20,13 +26,26 @@ vumat-pd/
 │   ├── neohookean-torsion/   540° PD demo and particle media
 │   └── *.py                 Shared launcher, reader and particle renderer
 ├── benchmarks/tensile3d/   Validation cases, data and independent FEM reference
-├── docs/                  Architecture, integration guides and manuscript figures
+├── docs/                  Governing equations, contracts and integration guides
 ├── tests/                 Automated numerical checks
 ├── CMakeLists.txt         Build targets
 └── .github/workflows/     Linux build and verification
 ```
 
 Generated runs, temporary plots and compiler outputs are excluded from Git.
+
+Public headers remain in include/ to preserve existing include paths. Source modules
+are grouped by responsibility; the shared library remains vumat_pd.
+
+Start with [the governing equation](governing-equations.md), then
+[parameters](parameters.md) and [time increments](time-step.md).
+The explicit node -> F -> material -> force -> integration sequence is implemented
+in src/host/BoundaryValueCaseRunner.cpp. The material plugin has no dependency on
+node neighborhoods; the host owns them.
+
+Examples are case inputs, demos are user launch/render workflows, and benchmarks
+are fixed quantitative comparison protocols. They are not three competing runtime
+implementations. See [the example index](../examples/README.md).
 
 ## Material update routes
 

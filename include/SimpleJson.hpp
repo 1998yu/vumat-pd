@@ -18,18 +18,17 @@ struct Value {
   std::map<std::string, Value> object;
 };
 
-Value parse(const std::string& text);
-Value loadFile(const std::string& path);
-const Value* find(const Value& object, const std::string& name);
-std::string getString(const Value& object, const std::string& name, bool required = true,
-                      const std::string& fallback = "");
-int getInt(const Value& object, const std::string& name, bool required = true,
-           int fallback = 0);
-double getDouble(const Value& object, const std::string& name, bool required = true,
+Value parse(const std::string &text);
+Value loadFile(const std::string &path);
+const Value *find(const Value &object, const std::string &name);
+std::string getString(const Value &object, const std::string &name, bool required = true,
+                      const std::string &fallback = "");
+int getInt(const Value &object, const std::string &name, bool required = true, int fallback = 0);
+double getDouble(const Value &object, const std::string &name, bool required = true,
                  double fallback = 0.0);
-bool getBool(const Value& object, const std::string& name, bool required = true,
+bool getBool(const Value &object, const std::string &name, bool required = true,
              bool fallback = false);
-std::vector<double> getDoubleArray(const Value& object, const std::string& name);
+std::vector<double> getDoubleArray(const Value &object, const std::string &name);
 
 } // namespace json
 } // namespace vumat

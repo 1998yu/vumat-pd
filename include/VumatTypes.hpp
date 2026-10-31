@@ -29,18 +29,10 @@ struct VumatPointInput {
   std::array<double, 9> relSpinIncFull{};
   std::array<double, 9> strainFullN{};
   std::array<double, 9> stressFullN{};
-  std::array<double, 9> stretchOld{1.0, 0.0, 0.0,
-                                  0.0, 1.0, 0.0,
-                                  0.0, 0.0, 1.0};
-  std::array<double, 9> stretchNew{1.0, 0.0, 0.0,
-                                  0.0, 1.0, 0.0,
-                                  0.0, 0.0, 1.0};
-  std::array<double, 9> defgradOld{1.0, 0.0, 0.0,
-                                   0.0, 1.0, 0.0,
-                                   0.0, 0.0, 1.0};
-  std::array<double, 9> defgradNew{1.0, 0.0, 0.0,
-                                   0.0, 1.0, 0.0,
-                                   0.0, 0.0, 1.0};
+  std::array<double, 9> stretchOld{1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0};
+  std::array<double, 9> stretchNew{1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0};
+  std::array<double, 9> defgradOld{1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0};
+  std::array<double, 9> defgradNew{1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0};
   std::vector<double> stateOld;
   double internalEnergyOld = 0.0;
   double inelasticEnergyOld = 0.0;

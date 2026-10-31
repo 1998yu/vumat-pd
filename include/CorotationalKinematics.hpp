@@ -14,17 +14,15 @@ struct CorotationalUpdate {
 };
 
 // Flanagan--Taylor kinematic update used by Peridigm correspondence models.
-CorotationalUpdate updateCorotationalKinematics(
-    const Tensor3& deformationGradientN,
-    const Tensor3& deformationGradientNP1,
-    const Tensor3& leftStretchN,
-    const Tensor3& rotationN,
-    double dt);
+CorotationalUpdate updateCorotationalKinematics(const Tensor3 &deformationGradientN,
+                                                const Tensor3 &deformationGradientNP1,
+                                                const Tensor3 &leftStretchN,
+                                                const Tensor3 &rotationN, double dt);
 
-Tensor3 rotateCorotationalStressToSpatial(const Tensor3& corotationalStress,
-                                          const Tensor3& rotation);
+Tensor3 rotateCorotationalStressToSpatial(const Tensor3 &corotationalStress,
+                                          const Tensor3 &rotation);
 
-Tensor3 greenLagrangeStrain(const Tensor3& deformationGradient);
+Tensor3 greenLagrangeStrain(const Tensor3 &deformationGradient);
 
 } // namespace pd
 } // namespace vumat

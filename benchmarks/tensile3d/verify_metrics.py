@@ -20,3 +20,8 @@ for case, metrics in pair_expected.items():
             raise SystemExit(f'Matched FEM-PD metric mismatch: {case}/{name}')
 print('PASS: all 11 cases match the frozen metrics within 0.5% relative tolerance.')
 print('PASS: matched FEM-PD comparisons also match their separate PD baseline.')
+for name, value in expected['fem_symmetry_check'].items():
+    if not math.isclose(value, actual['fem_symmetry_check'][name],
+                        rel_tol=0.005, abs_tol=1e-8):
+        raise SystemExit(f'FEM symmetry metric mismatch: {name}')
+print('PASS: FEM symmetry metrics match their frozen baseline.')

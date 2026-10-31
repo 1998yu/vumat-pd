@@ -1,0 +1,12 @@
+{
+  "date": "2026-10-31",
+  "base_revision": "0f76ef2",
+  "original_plastic_difference_pct": 0.2553804186561734,
+  "recomputed_plastic_difference_pct": 0.007579445552936301,
+  "original_coarse_csvs_byte_identical": true,
+  "changed_archive_case": "fem_symmetry_check",
+  "main_11_case_archives_changed": false,
+  "archived_files_now_hashed": 41,
+  "command": "python benchmarks/tensile3d/run_cases.py --cases fem_coarse fem_symmetry_check --threads 2 --workers 1",
+  "reason": "Stale optional symmetry archive excluded from the former 26-CSV integrity check."
+}

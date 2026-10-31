@@ -4,7 +4,7 @@
 
 namespace vumat {
 
-VumatMaterialConfig loadMaterialConfigFromJson(const std::string& configPath,
-                                               const std::string& pluginDirectory = "");
+VumatMaterialConfig loadMaterialConfigFromJson(const std::string &configPath,
+                                               const std::string &pluginDirectory = "");
 
 } // namespace vumat

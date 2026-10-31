@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.25)
 project(VumatPd LANGUAGES CXX Fortran)
 
 include(CTest)
+option(VUMAT_PD_EIGEN_CHECK "Cross-check rotations with Eigen (test-only dependency)" OFF)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -59,23 +60,23 @@ target_compile_options(neohookean_kv_vumat_plugin PRIVATE
 set_target_properties(neohookean_kv_vumat_plugin PROPERTIES PREFIX "")
 
 add_library(vumat_pd STATIC
-  src/MaterialConfigJson.cpp
-  src/SimpleJson.cpp
-  src/SimpleDamageModel.cpp
-  src/PdSimpleDamage.cpp
-  src/TensorVoigtMap.cpp
-  src/VumatMaterialAdapter.cpp
-  src/DemoConfig.cpp
-  src/BoundaryConditions.cpp
-  src/ParticleSets.cpp
-  src/Geometry.cpp
-  src/DemoCaseRunner.cpp
-  src/MaterialPointCaseRunner.cpp
-  src/BoundaryValueCaseRunner.cpp
-  src/ExplicitTimeIntegrator.cpp
-  src/CorotationalKinematics.cpp
-  src/PdCorrespondenceSkeleton.cpp
-  src/VumatPdCorrespondenceMaterial.cpp
+  src/config/MaterialConfigJson.cpp
+  src/config/SimpleJson.cpp
+  src/damage/SimpleDamageModel.cpp
+  src/damage/PdSimpleDamage.cpp
+  src/material/TensorVoigtMap.cpp
+  src/material/VumatMaterialAdapter.cpp
+  src/config/DemoConfig.cpp
+  src/host/BoundaryConditions.cpp
+  src/host/ParticleSets.cpp
+  src/host/Geometry.cpp
+  src/host/DemoCaseRunner.cpp
+  src/host/MaterialPointCaseRunner.cpp
+  src/host/BoundaryValueCaseRunner.cpp
+  src/pd/ExplicitTimeIntegrator.cpp
+  src/pd/CorotationalKinematics.cpp
+  src/pd/PdCorrespondenceSkeleton.cpp
+  src/material/VumatPdCorrespondenceMaterial.cpp
 )
 target_include_directories(vumat_pd PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -85,7 +86,7 @@ if(NOT WIN32)
   target_link_libraries(vumat_pd PUBLIC dl)
 endif()
 
-add_executable(vumat_pd_run src/main_pd_case_runner.cpp)
+add_executable(vumat_pd_run src/apps/main_pd_case_runner.cpp)
 target_link_libraries(vumat_pd_run PRIVATE vumat_pd)
 
 # Parallel material blocks require reentrant user material routines.
@@ -94,10 +95,26 @@ target_link_libraries(vumat_pd PUBLIC OpenMP::OpenMP_CXX)
 target_compile_options(jc_vumat_plugin PRIVATE
   $<$<COMPILE_LANGUAGE:Fortran>:-frecursive>)
 
-add_executable(vumat_pd_large_motion_3d src/main_large_motion_3d.cpp)
+add_executable(vumat_pd_large_motion_3d src/apps/main_large_motion_3d.cpp)
 target_link_libraries(vumat_pd_large_motion_3d PRIVATE vumat_pd)
 
 if(BUILD_TESTING)
+  if(VUMAT_PD_EIGEN_CHECK)
+    find_path(EIGEN3_INCLUDE_DIR Eigen/Core PATH_SUFFIXES eigen3 REQUIRED)
+    add_executable(eigen_rotation_test tests/eigen_rotation_test.cpp)
+    target_include_directories(eigen_rotation_test PRIVATE "${EIGEN3_INCLUDE_DIR}")
+    target_link_libraries(eigen_rotation_test PRIVATE vumat_pd)
+    add_test(NAME eigen_rotation COMMAND eigen_rotation_test)
+    get_filename_component(_runtime_dir "${CMAKE_Fortran_COMPILER}" DIRECTORY)
+    set_tests_properties(eigen_rotation PROPERTIES
+      ENVIRONMENT_MODIFICATION "PATH=path_list_prepend:${_runtime_dir}")
+  endif()
+  add_executable(observation_window_test tests/observation_window_test.cpp)
+  target_link_libraries(observation_window_test PRIVATE vumat_pd)
+  add_executable(correspondence_sampling_test tests/correspondence_sampling_test.cpp)
+  target_link_libraries(correspondence_sampling_test PRIVATE vumat_pd)
+  add_test(NAME observation_window COMMAND observation_window_test)
+  add_test(NAME correspondence_sampling COMMAND correspondence_sampling_test)
   # Verification executables do not belong to a PD-only runtime build.
   add_executable(corotational_kinematics_test tests/corotational_kinematics_test.cpp)
   target_link_libraries(corotational_kinematics_test PRIVATE vumat_pd)
@@ -130,7 +147,7 @@ if(BUILD_TESTING)
   add_test(NAME jc_pd_tension COMMAND vumat_pd_run examples/jc_tension_pd.json)
 
   get_filename_component(VUMAT_FORTRAN_RUNTIME_DIR "${CMAKE_Fortran_COMPILER}" DIRECTORY)
-  set_tests_properties(corotational_kinematics neighbor_search affine_bar_elastic
+  set_tests_properties(observation_window correspondence_sampling corotational_kinematics neighbor_search affine_bar_elastic
     affine_shear_elastic jc_vumat_material_point fem_h8_patch neighbor_lattice_regression outer_damage
     neohookean_material hyperelastic_bending hyperelastic_torsion elastic_pd_tension jc_pd_tension
     PROPERTIES WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"

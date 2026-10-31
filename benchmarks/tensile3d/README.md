@@ -1,5 +1,14 @@
 # Three-dimensional tensile validation
 
+H8 means an eight-node linear hexahedral finite element (trilinear interpolation
+in natural coordinates), with full 2x2x2 Gauss integration in the included FEM
+reference. FEM is a separate executable in this repository; no Abaqus solver is
+called. It shares the material adapter/plugin, not the PD spatial discretisation.
+
+The [parameter guide](../../docs/parameters.md), [time-increment policy](../../docs/time-step.md)
+and [governing-equation/code map](../../docs/governing-equations.md) define the
+quantities needed to reproduce the runs. No zero-energy stabilization is present.
+
 This benchmark checks the same JC material plugin through independent correspondence-PD and fully integrated H8 FEM solvers. Both use a 100 × 20 × 4 mm domain, 2 mm end bands and half-cosine displacement reaching 2 mm in 0.12 ms. Lateral and thickness faces are free except for rigid-body pins.
 
 FEM is an independent validation reference, not the project's runtime or gallery solver. Its source is `src/main_jc_3d_fem.cpp` within this benchmark folder and it is built only with `BUILD_TESTING=ON`. Every public demo runs PD; see [the PD demo guide](../../demos/README.md).
@@ -25,6 +34,14 @@ Damage, deletion, damping and mass scaling are disabled. The configuration check
 The finest numerical reference uses 150 × 30 × 6 H8 elements. Two reflection planes reduce its computation, then full-domain outputs are reconstructed. `fem_symmetry_check` is retained to check this against the full coarse model. The reference is a numerical approximation.
 
 ## Inspect the archive
+
+The 2026-10-31 code review detected stale optional FEM symmetry files that were
+not covered by the former 26-CSV manifest. The full coarse model and reduced model
+were rerun. All three full-model CSVs were byte-identical to the existing archive;
+the refreshed symmetry run reproduced the frozen metric (0.00757945% peak-normalized
+plastic-history difference, below the unchanged 0.05% threshold). Only the symmetry
+archive was replaced. All 41 CSV/metadata files are now covered by
+`expected/archive_hashes.json`; see `expected/archive_repair_20261031.json`.
 
 ```bash
 python -m pip install -r benchmarks/tensile3d/requirements.txt

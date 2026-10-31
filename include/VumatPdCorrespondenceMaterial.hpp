@@ -8,10 +8,7 @@
 namespace vumat {
 namespace pd {
 
-enum class KinematicsMode {
-  Corotational,
-  LegacySmallStrain
-};
+enum class KinematicsMode { Corotational, LegacySmallStrain };
 
 struct VumatPdCorrespondenceConfig {
   VumatMaterialConfig material;
@@ -25,14 +22,11 @@ class VumatPdCorrespondenceMaterial {
 public:
   explicit VumatPdCorrespondenceMaterial(VumatPdCorrespondenceConfig config);
 
-  void initialize(const std::vector<Tensor3>& initialDeformationGradient,
-                  MaterialState& state) const;
+  void initialize(const std::vector<Tensor3> &initialDeformationGradient,
+                  MaterialState &state) const;
 
-  MaterialUpdateResult update(const std::vector<Tensor3>& deformationGradient,
-                              MaterialState& state,
-                              double dt,
-                              double stepTime,
-                              double totalTime) const;
+  MaterialUpdateResult update(const std::vector<Tensor3> &deformationGradient, MaterialState &state,
+                              double dt, double stepTime, double totalTime) const;
 
 private:
   VumatPdCorrespondenceConfig config_;
