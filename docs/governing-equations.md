@@ -45,9 +45,7 @@ Small net internal force checks global balance, not local equilibrium or accurac
 ## Zero-energy modes: current limitation
 
 No hourglass force, bond-associated stabilization or other zero-energy compensation
-is implemented. Neither rigid-body constraints, affine consistency, optional damage
-nor the demonstrator's relaxation substitutes for such a term. Remove any manuscript
-statement claiming it is present.
+is implemented. The optional damage layer attenuates bond forces and does not stabilize the correspondence discretisation.
 
 `correspondence_sampling` checks exact body volume and affine gradients, then
 demonstrates that an alternating displacement can be invisible to the reconstructed

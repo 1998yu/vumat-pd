@@ -1,10 +1,10 @@
 # Optional outer damage layer
 
-`SimpleDamageModel` and `PdSimpleDamage` provide optional host-level damage operations separately from a material plugin. They are part of the PD library and are called by the corotational spatial/affine hosts. The dedicated Neo-Hookean bending/torsion host uses intact bonds and does not enable this layer.
+`SimpleDamageModel` and `PdSimpleDamage` provide optional host-level damage operations separately from a material plugin. They are part of the PD library and are called by the corotational spatial/affine hosts.
 
 ## Default behavior
 
-Every supplied PD demo and paper benchmark explicitly disables outer damage:
+The paper benchmark explicitly disables outer damage:
 
 ```json
 "damage": {
@@ -34,7 +34,7 @@ For point modes, `failure` must exceed `initiation`. For critical stretch, `init
 
 ## Verification scope
 
-The outer-damage test checks disabled behavior, material-state separation, point-threshold degradation, principal-strain evaluation, irreversibility, invalid thresholds and tensile/compressive bond failure. The paper's JC comparisons and the four particle-demo regressions use `none`; their agreement does not validate damage or fracture prediction.
+The outer-damage test checks disabled behavior, material-state separation, point-threshold degradation, principal-strain evaluation, irreversibility, invalid thresholds and tensile/compressive bond failure. The paper's JC comparisons use `none`; their agreement does not validate damage or fracture prediction.
 
 Run the algorithmic check after building:
 

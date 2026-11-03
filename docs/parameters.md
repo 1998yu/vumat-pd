@@ -69,7 +69,7 @@ material-specific; do not infer it from an array length.
 
 tensorConvention defaults to legacy_vumat_pd (the only implemented packing).
 stressFrame defaults to corotational; spatial is valid only for a compatible direct
-adapter caller such as the dedicated Neo-Hookean host. Generic JSON case hosts
+adapter caller that supplies matching spatial kinematics. Generic JSON case hosts
 reject spatial. These labels are user declarations, not automatic compatibility checks.
 
 | JC property (Fortran 1-based) | Meaning / supplied value |

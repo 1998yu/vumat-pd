@@ -18,7 +18,7 @@ int main(int argc, char **argv) {
               << "Run from the checkout root; default: examples/affine_bar_elastic.json\n"
               << "Regional PD units: mm, ms, N, MPa. dt is user supplied.\n"
               << "No zero-energy stabilization or automatic stable-step estimator.\n"
-              << "See docs/parameters.md and docs/time-step.md.\n";
+              << "See docs/parameters.md and benchmarks/tensile3d/README.md.\n";
     return 0;
   }
   const std::string casePath = argc > 1 ? argv[1] : "examples/affine_bar_elastic.json";

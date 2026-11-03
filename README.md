@@ -18,7 +18,7 @@ The shared Johnson–Cook plugin runs in both hosts. This lets you inspect how e
 | [tests/](tests/) | **Check a code change.** Run CTest to check specific behavior such as tensor ordering, material history transfer, and rotation updates. Each check has a pass or fail criterion. |
 | [benchmarks/](benchmarks/tensile3d/) | **Reproduce the paper's numerical results.** Run the tensile cases or use the archived outputs to compare PD with H8 FEM and regenerate the reported metrics. |
 
-Case inputs are stored once. CTest runs the same `examples/jc_material_point.json` file used in the quick start. The benchmark keeps separate inputs for runs that vary the grid, horizon, or time step because each run measures a different numerical effect.
+Case inputs are stored once. The two affine elastic inputs exercise the extension and shear regression tests. CTest runs the same `examples/jc_material_point.json` file used in the quick start. The benchmark keeps separate inputs for runs that vary the grid, horizon, or time step because each run measures a different numerical effect.
 
 ## See what the software reproduces
 
