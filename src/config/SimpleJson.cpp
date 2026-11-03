@@ -2,8 +2,10 @@
 #include "SimpleJson.hpp"
 
 #include <cctype>
+#include <cmath>
 #include <cstdlib>
 #include <fstream>
+#include <limits>
 #include <sstream>
 #include <stdexcept>
 #include <utility>
@@ -38,7 +40,7 @@ private:
       return parseArray();
     if (ch == '{')
       return parseObject();
-    if (std::isdigit(static_cast<unsigned char>(ch)) || ch == '-' || ch == '+')
+    if (std::isdigit(static_cast<unsigned char>(ch)) || ch == '-')
       return parseNumber();
     if (consumeLiteral("true"))
       return makeBool(true);
@@ -107,16 +109,37 @@ private:
 
   Value parseNumber() {
     const size_t begin = pos_;
-    while (pos_ < text_.size()) {
-      const char ch = text_[pos_];
-      if (!(std::isdigit(static_cast<unsigned char>(ch)) || ch == '-' || ch == '+' || ch == '.' ||
-            ch == 'e' || ch == 'E'))
-        break;
+    if (peek('-'))
       ++pos_;
+    auto digits = [&]() {
+      const size_t start = pos_;
+      while (pos_ < text_.size() && std::isdigit(static_cast<unsigned char>(text_[pos_])))
+        ++pos_;
+      if (pos_ == start)
+        throw std::runtime_error("Invalid JSON number: expected digits.");
+    };
+    if (peek('0'))
+      ++pos_;
+    else
+      digits();
+    if (peek('.')) {
+      ++pos_;
+      digits();
     }
+    if (peek('e') || peek('E')) {
+      ++pos_;
+      if (peek('+') || peek('-'))
+        ++pos_;
+      digits();
+    }
+    // Reject overflow before a nonfinite value reaches geometry or material arrays.
+    const std::string token = text_.substr(begin, pos_ - begin);
+    char *end = nullptr;
     Value value;
     value.type = Value::Type::Number;
-    value.number = std::strtod(text_.substr(begin, pos_ - begin).c_str(), nullptr);
+    value.number = std::strtod(token.c_str(), &end);
+    if (end != token.c_str() + token.size() || !std::isfinite(value.number))
+      throw std::runtime_error("JSON number must be finite and representable as a double.");
     return value;
   }
 
@@ -247,6 +270,10 @@ int getInt(const Value &object, const std::string &name, bool required, int fall
   }
   if (value->type != Value::Type::Number)
     throw std::runtime_error("Expected numeric field: " + name);
+  if (!std::isfinite(value->number) || std::trunc(value->number) != value->number ||
+      value->number < std::numeric_limits<int>::min() ||
+      value->number > std::numeric_limits<int>::max())
+    throw std::runtime_error("Expected representable integer field: " + name);
   return static_cast<int>(value->number);
 }
 

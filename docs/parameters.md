@@ -5,6 +5,14 @@ relative to the working directory; plugin basenames are resolved beside the runn
 Examples are runnable inputs; demos provide launch/render instructions; benchmarks
 contain the reference matrix, archived data and comparison definitions.
 
+Numeric input must use valid JSON number syntax and fit a finite double. Integer
+fields (including grid counts, steps and state indices) must be exact integers in
+the C++ int range; fractions are rejected rather than truncated. Numeric state
+arrays cannot contain strings or silently ignored entries. State-override keys
+must consist entirely of decimal digits, and equivalentPlasticStrainIndex accepts
+only -1 (disabled) or an existing state index. Overflow of steps*dt is rejected
+before simulation. These checks do not choose an automatically stable time step.
+
 ## Regional PD case JSON
 
 | Object / fields | Meaning and units |
@@ -86,12 +94,3 @@ described as validated physical adiabatic heating; changing it requires new runs
 
 See [outer damage](outer-damage.md) for model/mode, initiation, failure,
 eqpsStateIndex and deletionEnabled. All publication inputs disable this path.
-
-## Neo-Hookean spatial demo
-
-Its four properties are shear modulus mu=769.230769 MPa, bulk modulus
-K=1666.666667 MPa, shear viscosity etaShear=0 and bulk viscosity etaBulk=0
-(viscosities in MPa ms). The zero viscosities select the purely elastic material.
-These are separate from numerical relaxation used by the large-motion demo host.
-Use the dedicated vumat_pd_large_motion_3d route described in the demo guide;
-selecting this plugin in a corotational tensile input is not an equivalent setup.

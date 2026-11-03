@@ -1,0 +1,86 @@
+[
+  {
+    "file": "examples/output/affine_bar_elastic/field_final.csv",
+    "expected_sha256": "cd4ae3ebf5170aa7199fa8882d84c31c4a62fbf1a051cd8d33720b8abf235049",
+    "actual_sha256": "cd4ae3ebf5170aa7199fa8882d84c31c4a62fbf1a051cd8d33720b8abf235049",
+    "match": true
+  },
+  {
+    "file": "examples/output/affine_bar_elastic/timeseries.csv",
+    "expected_sha256": "b2b4567c6731e03e7bc1e3e2704904a5f24d8b9adba682221bc71d5e0d944366",
+    "actual_sha256": "b2b4567c6731e03e7bc1e3e2704904a5f24d8b9adba682221bc71d5e0d944366",
+    "match": true
+  },
+  {
+    "file": "examples/output/affine_shear_elastic/field_final.csv",
+    "expected_sha256": "0556b0e49248379b6917cac7dbd96d33cfdf68c3ca6be6b713a4f15bad3e6713",
+    "actual_sha256": "0556b0e49248379b6917cac7dbd96d33cfdf68c3ca6be6b713a4f15bad3e6713",
+    "match": true
+  },
+  {
+    "file": "examples/output/affine_shear_elastic/timeseries.csv",
+    "expected_sha256": "0b5e1261cd6c5e092515ab92292989e67ec4edb47ef7b421d762d5d57f6e2063",
+    "actual_sha256": "0b5e1261cd6c5e092515ab92292989e67ec4edb47ef7b421d762d5d57f6e2063",
+    "match": true
+  },
+  {
+    "file": "examples/output/jc_material_point/timeseries.csv",
+    "expected_sha256": "d6de3adc37d9116a9bdfd4f1a033a754f07a650763355aa5accb4d292dae55d6",
+    "actual_sha256": "d6de3adc37d9116a9bdfd4f1a033a754f07a650763355aa5accb4d292dae55d6",
+    "match": true
+  },
+  {
+    "file": "demos/output/elastic_pd/field_snapshots.csv",
+    "expected_sha256": "fd38b36cc534012ddcf1ebd25e7605ab98405b6ddcea59921a166f3a30e61eb3",
+    "actual_sha256": "fd38b36cc534012ddcf1ebd25e7605ab98405b6ddcea59921a166f3a30e61eb3",
+    "match": true
+  },
+  {
+    "file": "demos/output/elastic_pd/timeseries.csv",
+    "expected_sha256": "36ae962e47183ecf58eb7a6633be5a508998d6ce998535ee5ef05b3da078f8db",
+    "actual_sha256": "36ae962e47183ecf58eb7a6633be5a508998d6ce998535ee5ef05b3da078f8db",
+    "match": true
+  },
+  {
+    "file": "demos/output/hyperelastic/bending/field_snapshots.csv",
+    "expected_sha256": "189203962d7648adcb5d0afab98c017a860bdca50cc0c1a5e1e4a0a920271731",
+    "actual_sha256": "189203962d7648adcb5d0afab98c017a860bdca50cc0c1a5e1e4a0a920271731",
+    "match": true
+  },
+  {
+    "file": "demos/output/hyperelastic/bending/timeseries.csv",
+    "expected_sha256": "877133bad5a6302187089cbd4b99e2d65279297ed5a06b28dd1aae20b11e96ee",
+    "actual_sha256": "877133bad5a6302187089cbd4b99e2d65279297ed5a06b28dd1aae20b11e96ee",
+    "match": true
+  },
+  {
+    "file": "demos/output/hyperelastic/material-point-check/material_point_validation.csv",
+    "expected_sha256": "f9c49cc5b516b5fa25735aef205ed644cc7fcea4bd15bd9b204d0ee85bc34f7c",
+    "actual_sha256": "f9c49cc5b516b5fa25735aef205ed644cc7fcea4bd15bd9b204d0ee85bc34f7c",
+    "match": true
+  },
+  {
+    "file": "demos/output/hyperelastic/torsion/field_snapshots.csv",
+    "expected_sha256": "da7cbd8c090c249ac0b174380177503a7d0e0c1f4f3f4f9d695fbdde4be5334a",
+    "actual_sha256": "da7cbd8c090c249ac0b174380177503a7d0e0c1f4f3f4f9d695fbdde4be5334a",
+    "match": true
+  },
+  {
+    "file": "demos/output/hyperelastic/torsion/timeseries.csv",
+    "expected_sha256": "d5e06e66b64840f9e57b16cfea8ba11d28e12ba0c33d466f13ccfd4ec748bcb0",
+    "actual_sha256": "d5e06e66b64840f9e57b16cfea8ba11d28e12ba0c33d466f13ccfd4ec748bcb0",
+    "match": true
+  },
+  {
+    "file": "demos/output/jc_pd/field_snapshots.csv",
+    "expected_sha256": "da97658c16bbed906d5b0640a6c821e7cd5caae0024727403c22fbef8f0ceb1c",
+    "actual_sha256": "da97658c16bbed906d5b0640a6c821e7cd5caae0024727403c22fbef8f0ceb1c",
+    "match": true
+  },
+  {
+    "file": "demos/output/jc_pd/timeseries.csv",
+    "expected_sha256": "60106d68ac3c42f7580d4ec47f788ed6847d1a823f854c9b17f24b83cbe3f4ac",
+    "actual_sha256": "60106d68ac3c42f7580d4ec47f788ed6847d1a823f854c9b17f24b83cbe3f4ac",
+    "match": true
+  }
+]

@@ -5,6 +5,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <limits>
 #include <stdexcept>
 #include <string>
 #include <utility>
@@ -171,24 +172,33 @@ ValidationToleranceConfig loadTolerances(const json::Value &root) {
 
 std::vector<double> loadOptionalDoubleArray(const json::Value &object, const std::string &name) {
   const json::Value *value = json::find(object, name);
-  if (!value || value->type != json::Value::Type::Array)
+  if (!value)
     return {};
+  if (value->type != json::Value::Type::Array)
+    throw std::runtime_error("Expected numeric array: " + name);
   std::vector<double> result;
   result.reserve(value->array.size());
   for (const auto &entry : value->array) {
-    if (entry.type == json::Value::Type::Number)
-      result.push_back(entry.number);
+    if (entry.type != json::Value::Type::Number)
+      throw std::runtime_error("Expected numeric entries in " + name);
+    result.push_back(entry.number);
   }
   return result;
 }
 
 std::vector<int> loadOptionalIntArray(const json::Value &object, const std::string &name) {
   const json::Value *value = json::find(object, name);
-  if (!value || value->type != json::Value::Type::Array)
+  if (!value)
     return {};
+  if (value->type != json::Value::Type::Array)
+    throw std::runtime_error("Expected integer array: " + name);
   std::vector<int> result;
   for (const auto &entry : value->array)
-    if (entry.type == json::Value::Type::Number)
+    if (entry.type != json::Value::Type::Number || !std::isfinite(entry.number) ||
+        std::trunc(entry.number) != entry.number || entry.number < 0 ||
+        entry.number > std::numeric_limits<int>::max())
+      throw std::runtime_error("Expected nonnegative integer entries in " + name);
+    else
       result.push_back(static_cast<int>(entry.number));
   return result;
 }
@@ -223,7 +233,8 @@ DemoMaterialConfig loadMaterial(const json::Value &entry, const std::string &plu
     throw std::runtime_error("initialState length does not match nstatev.");
   material.equivalentPlasticStrainIndex =
       json::getInt(entry, "equivalentPlasticStrainIndex", false, -1);
-  if (material.equivalentPlasticStrainIndex >= material.material.nstatev)
+  if (material.equivalentPlasticStrainIndex < -1 ||
+      material.equivalentPlasticStrainIndex >= material.material.nstatev)
     throw std::runtime_error("equivalentPlasticStrainIndex is outside nstatev for material: " +
                              material.label);
   const json::Value *overrides = json::find(entry, "initialStateOverrides");
@@ -231,7 +242,13 @@ DemoMaterialConfig loadMaterial(const json::Value &entry, const std::string &plu
     if (material.initialState.empty())
       material.initialState.assign(static_cast<size_t>(material.material.nstatev), 0.0);
     for (const auto &item : overrides->object) {
-      const int index = std::stoi(item.first);
+      size_t used = 0;
+      const int index = std::stoi(item.first, &used);
+      if (used != item.first.size() || item.first.empty() ||
+          !std::all_of(item.first.begin(), item.first.end(),
+                       [](char c) { return c >= '0' && c <= '9'; }))
+        throw std::runtime_error("Invalid initialStateOverrides index for material: " +
+                                 material.label);
       if (index < 0 || index >= material.material.nstatev ||
           item.second.type != json::Value::Type::Number)
         throw std::runtime_error("Invalid initialStateOverrides entry for material: " +
@@ -320,9 +337,12 @@ DemoCaseConfig loadDemoCaseConfigFromJson(const std::string &casePath,
   } else {
     throw std::runtime_error("Unsupported geometry type: " + config.geometry.type);
   }
-  if (config.timeIntegration.steps < 1 || config.timeIntegration.dt <= 0.0)
+  if (config.timeIntegration.steps < 1 || !std::isfinite(config.timeIntegration.dt) ||
+      config.timeIntegration.dt <= 0.0)
     throw std::runtime_error("time_integration requires steps >= 1 and dt > 0.");
   const double expectedTotal = config.timeIntegration.dt * config.timeIntegration.steps;
+  if (!std::isfinite(expectedTotal) || !std::isfinite(config.timeIntegration.totalTime))
+    throw std::runtime_error("time_integration duration must be finite.");
   if (std::abs(config.timeIntegration.totalTime - expectedTotal) >
       1.0e-12 * std::max(1.0, expectedTotal))
     throw std::runtime_error("time_integration.totalTime must equal steps * dt.");

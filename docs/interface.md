@@ -68,9 +68,9 @@ It is an audit configuration, not a replacement of the frozen benchmark. See
 
 ## Verified scope
 
-Comparisons verify the included JC routine in documented 3D nonfracturing tensile models. Core tests cover affine response, neighbor search, an H8 patch, corotational updates and the supplied PD demos. Local maximum plastic strain remains resolution-sensitive.
+Comparisons verify the included JC routine in documented 3D nonfracturing tensile models. Core tests cover affine response, neighbor search, an H8 patch, corotational updates. Local maximum plastic strain remains resolution-sensitive.
 
-The dedicated Neo-Hookean examples demonstrate 150° bending and 540° torsion with dynamic relaxation, but have no independent spatial reference or convergence study. General finite-rotation accuracy, arbitrary VUMAT compatibility, damage–neighborhood coupling, deletion and production impact/fracture need separate evaluation. The optional outer damage layer is retained separately from the VUMAT update; see [damage configuration](outer-damage.md). The supplied benchmark and demos disable it. The removed rigid-wall contact extension is not part of the current runtime.
+General finite-rotation accuracy, arbitrary VUMAT compatibility, damage–neighborhood coupling, deletion and production impact/fracture need separate evaluation. The optional outer damage layer is retained separately from the VUMAT update; see [damage configuration](outer-damage.md). The supplied benchmark disables it. The removed rigid-wall contact extension is not part of the current runtime.
 
 ## Threading
 

@@ -1,0 +1,219 @@
+{
+  "status": "completed",
+  "scope": "Run a fixed-space PD time-step study in a NEW directory; never reuse archives.\n\nThis measures temporal sensitivity, not a spectral stability limit or validation\nof physical heating. The material configuration is kept byte-identical.",
+  "base_case_sha256": "b5cacd97b3fd5ffdd5406e62c27b654a492ff2910d22f15747545d3956af2dc7",
+  "material_sha256": "7f9922fb83db1ca145068d26439f9f0e3ead08314db3973db654e85d4da81e09",
+  "source_sha256": {
+    "src/apps/main_large_motion_3d.cpp": "cf1eec410cf34d0b9883dec81793da8d0cafa8a545c063da739471df669f91af",
+    "src/apps/main_pd_case_runner.cpp": "d71da85184641405713c4e439fc70c8051d6d2d53cc0501ee7b3a91bdb1b23c8",
+    "src/config/DemoConfig.cpp": "d8fc5da269f2270f44853b625377929e936f5006340b0da182536b3b519e84fb",
+    "src/config/MaterialConfigJson.cpp": "473f9c528dfcea33c2c379ddd4d4cf79f3b5ca91420359ce2c93f1bc4a28089d",
+    "src/config/SimpleJson.cpp": "5834583ba0e5f5e1d1b0e097de90de3c2deadc4d59fa45ccd739ec1e7299aee7",
+    "src/damage/PdSimpleDamage.cpp": "2a2790a6df319f73ff566a4c3fdecc1f1a59ea7d6d230bf9e68af7cc6108b0a8",
+    "src/damage/SimpleDamageModel.cpp": "939d2dd00145ea0e566dd7753a9bfbf368927ca9c08e143b96e5b4878dc336aa",
+    "src/host/BoundaryConditions.cpp": "9f476bb0c47e04fd80872a71208e336df7b9c0589f3ddfbb455ced6a6513a944",
+    "src/host/BoundaryValueCaseRunner.cpp": "9d6dcfbbe8df9202b9b783bad0fead7496407291298b590262eeb2b8253fb076",
+    "src/host/DemoCaseRunner.cpp": "3a8a3dc3a0d7aa6be211b964728ceac962378a0d768ea6835352f9361cbd22c9",
+    "src/host/Geometry.cpp": "0c5c986c4cdd2f80b999dc29936594e368e8ae038b259d822bdf7b3427dd44ae",
+    "src/host/MaterialPointCaseRunner.cpp": "5218f250717438896439854e70fd92e1370d9564d2ccbd78ef7428f362b1c639",
+    "src/host/ParticleSets.cpp": "7de0f4e765312fc3d58ce6ccad23e59c43be69ff6e67d3c77937c39235476484",
+    "src/material/TensorVoigtMap.cpp": "b2c31a59640a28ddcdc60a5cecb8495e5fe1a73311dc304e101611520f3631b9",
+    "src/material/VumatMaterialAdapter.cpp": "56d756d064108367b2c7bb6da2d74c77fd74115b4dd528897f016412b510a9ae",
+    "src/material/VumatPdCorrespondenceMaterial.cpp": "789bb2805213b2bed964672fee324b4ca2b545eebe65e77ed45a07eca0a144f2",
+    "src/pd/CorotationalKinematics.cpp": "3161c47a880d8557349856e52fb9bb1f730e18263b65f4896c3bd43b3978f335",
+    "src/pd/ExplicitTimeIntegrator.cpp": "cfac483dcec990c7e547a938ff7fffb5f3a09e00636c50627727ee0558bebd37",
+    "src/pd/PdCorrespondenceSkeleton.cpp": "82651828ac8d11e7eee3e89982e8aa7f84c0b06ee645f8ce424098b9854a4026",
+    "include/BoundaryConditions.hpp": "5f0c76ddd4a221722c00f6de497cdc18bc0be58ee638aed4667eb7a953340e89",
+    "include/BoundaryValueCaseRunner.hpp": "fda982004f333cb01da51cb47937397fa8393e9f741fddb0d17880ce2ba4bf9e",
+    "include/CorotationalKinematics.hpp": "de2e5ce076f9dbfe14c7126133e98fef8e32db1bedb5021e1005998f64f874da",
+    "include/DemoCaseRunner.hpp": "dad2093a77811d788fe87b2e62e28e31c00fa68935d846628864fe6a12bdbce1",
+    "include/DemoConfig.hpp": "7147a9548653561776f4d64060cdb5bf84afa3890b2e88cfaf4242926a9a6ef6",
+    "include/ExplicitTimeIntegrator.hpp": "a4e723a776218a1c1f9a43c1afe70cec0f23cad2e5497e749e571371ae9f9eb4",
+    "include/Geometry.hpp": "10a1d75ed5336cfc2f948356fe42b91b618579e0a2894372827b791af744c329",
+    "include/MaterialConfig.hpp": "aebe387f3781efdb905e7056ed244d8cceaaf49f8f0f40a341ed962ea7c5c595",
+    "include/MaterialPointCaseRunner.hpp": "209030c1e1cf8ccf9712fb5c41ca5419a35e101c7474910eb7db547df4f1a8e6",
+    "include/ObservationWindow.hpp": "eab471eb1b871e5286579f80ff656698dd6efd22f46e3ddc9c7305ecb1007678",
+    "include/ParticleSets.hpp": "1016b1daa667ea37deafe41a23a0e4194359e87a382ca39bb58a6a96f1fe32aa",
+    "include/PdCorrespondenceSkeleton.hpp": "dc69d37d809fc77ce7034c42037ebc778f1f19002b09a58da4fb2e983f6b4877",
+    "include/PdSimpleDamage.hpp": "8c8a0322cc89af95ebeb730d5f9efd587cb3b10a5edd5f81e1b5a614aa97de39",
+    "include/PdTypes.hpp": "dda1b84a7544be259e50e81dce768e115a4bcface38507284cd2ebac637d2f6d",
+    "include/SimpleDamageModel.hpp": "08fb46c690ea6ed57e743d8b1698c96245113d0cc8ba9ba6d4279a792e9a35ce",
+    "include/SimpleJson.hpp": "0460d5422e109e535d5eb56707491714d544bfa107f3b1df25cceff69530dc82",
+    "include/TensorVoigtMap.hpp": "83d353b88fba3d4c56ce270640535cad865ec5f093081bc1f1b3af4cb4726250",
+    "include/VumatMaterialAdapter.hpp": "192113c9aa00626966b046736ee0c8d49fcfa74ccbca7e682cf1eee9c787157c",
+    "include/VumatPdCorrespondenceMaterial.hpp": "f34b52195539f2ce7b282c9b452ba7cb0b182e01f404998e458943cc68073a02",
+    "include/VumatTypes.hpp": "90d188c882ed4f7042e1da36a7c861226d4edae2259a2fc0271e75c3b8e9396c",
+    "materials/bridge/abaqus_stubs.f90": "4b4215e6a1dec6813107bfed8f892ae3fe2193489abdf269a00f651c78c2576d",
+    "materials/bridge/vaba_param.inc": "92a5d1eb80b2c32666bab0eb1e0fdd92bae1e8a22f349b8f5b788ab0178a81ba",
+    "materials/bridge/vumat_c_wrapper_jinfo.f90": "e791e2190b0cefb8869ba30087e51f38621fc280ce58bfe70233d465e1a2881a",
+    "materials/examples/Elastic.f": "3895cde5c9d81bfb1a91bd94a776447eb5ac8dd270206ead4f171ba446f9d222",
+    "materials/examples/JohnsonCook.f90": "3c5c49c1068ddae880b8aff36946532d105c19cc836878a8e91e46b62f3784f1",
+    "materials/examples/NeoHookeanKV.f90": "1e739f6d2faf71134070f701ef0e3431567e8ac63c2b13e8871f5ea326883ea1"
+  },
+  "binary_sha256": {
+    "vumat_pd_run.exe": "a0b2d6e74d81588ed381f06d5c137da0cc06e45ee07e216b7e83639eef27afc0",
+    "elastic_vumat_plugin.dll": "c6159996cdb16d0c4c3451a37fe676cc87783b01f498df935d5c82c3880b636c",
+    "jc_vumat_plugin.dll": "4913459ca5e01d1fff32ade9335060d1e44d1577a91bae86acfb12de5d8f608f",
+    "neohookean_kv_vumat_plugin.dll": "5a02c86fbb0d4ed7c9804381b1620f074f25d660e2842d734e527ab533a7fd59"
+  },
+  "runs": [
+    {
+      "label": "dt_x2",
+      "dt_ms": 4.9999999999999996e-05,
+      "steps": 2400,
+      "returncode": 0,
+      "threads": 2,
+      "elapsed_seconds": 19.67199999999957,
+      "diagnostics": {
+        "name": "JC",
+        "status": "pass",
+        "plugin_file": "jc_vumat_plugin.dll",
+        "sourceDensity_kg_per_m3": 7800,
+        "solverDensity": 0.0078,
+        "runtimeSeconds": 19.5627855,
+        "observationAxis": "x",
+        "observationMin_mm": 2,
+        "observationMax_mm": 98,
+        "maxNetInternalForce_N": 2.98769049587156e-10,
+        "finalEnergyError": 0.0224739174692087,
+        "maxEnergyError": 0.0224739174692087,
+        "maxKineticToInternal": 606.134881871799,
+        "finalKineticToInternal": 0.00229662237223126,
+        "maxEqps": 0.0279515303929222,
+        "maxInternalIndicator": 0,
+        "earlyElasticSlope_MPa": 201186.919719741,
+        "analyticalPlaneStrainSlope_MPa": 230769.230769231,
+        "earlyElasticRelativeError": 0.12819001454779,
+        "finalReaction_N": 10300.8742880243,
+        "finalNominalStress_MPa": 128.760928600304,
+        "finalEngineeringStrain": 0.0204081632653061,
+        "finite": true
+      },
+      "result_sha256": {
+        "field_snapshots.csv": "585bb7fcc122a4c480a856aebae8c38f9f82dd184a5feedf1280af6a1958e2e9",
+        "metadata.json": "6a454b207346dde70e45741386ac1c7d966900010cb214faa643433ff695d8b2",
+        "timeseries.csv": "eb4577a5a2f04f35cab1ea3bd9ea94c1811df9b47c0ebcdaabdfd40efcb67611"
+      }
+    },
+    {
+      "label": "dt_x1",
+      "dt_ms": 2.4999999999999998e-05,
+      "steps": 4800,
+      "returncode": 0,
+      "threads": 2,
+      "elapsed_seconds": 44.57800000000043,
+      "diagnostics": {
+        "name": "JC",
+        "status": "pass",
+        "plugin_file": "jc_vumat_plugin.dll",
+        "sourceDensity_kg_per_m3": 7800,
+        "solverDensity": 0.0078,
+        "runtimeSeconds": 44.4892031,
+        "observationAxis": "x",
+        "observationMin_mm": 2,
+        "observationMax_mm": 98,
+        "maxNetInternalForce_N": 3.35774477874176e-10,
+        "finalEnergyError": 0.0224015614675876,
+        "maxEnergyError": 0.0224015614675876,
+        "maxKineticToInternal": 2424.53097161769,
+        "finalKineticToInternal": 0.00233810751741491,
+        "maxEqps": 0.0278018224371612,
+        "maxInternalIndicator": 0,
+        "earlyElasticSlope_MPa": 201234.895921675,
+        "analyticalPlaneStrainSlope_MPa": 230769.230769231,
+        "earlyElasticRelativeError": 0.127982117672743,
+        "finalReaction_N": 9875.54163611348,
+        "finalNominalStress_MPa": 123.444270451419,
+        "finalEngineeringStrain": 0.0204081632653061,
+        "finite": true
+      },
+      "result_sha256": {
+        "field_snapshots.csv": "196320234ed402039b925f4e967a5e63bdc07673870c390745fca4552c6b74c3",
+        "metadata.json": "e93abd288a020d80fc90b7a9d102483fc5b619e0cc3deceda67abd1f89478ab5",
+        "timeseries.csv": "60106d68ac3c42f7580d4ec47f788ed6847d1a823f854c9b17f24b83cbe3f4ac"
+      }
+    },
+    {
+      "label": "dt_x0p5",
+      "dt_ms": 1.2499999999999999e-05,
+      "steps": 9600,
+      "returncode": 0,
+      "threads": 2,
+      "elapsed_seconds": 90.61000000000058,
+      "diagnostics": {
+        "name": "JC",
+        "status": "pass",
+        "plugin_file": "jc_vumat_plugin.dll",
+        "sourceDensity_kg_per_m3": 7800,
+        "solverDensity": 0.0078,
+        "runtimeSeconds": 90.4841531,
+        "observationAxis": "x",
+        "observationMin_mm": 2,
+        "observationMax_mm": 98,
+        "maxNetInternalForce_N": 3.04012914472894e-10,
+        "finalEnergyError": 0.0223729261562504,
+        "maxEnergyError": 0.0223729261562504,
+        "maxKineticToInternal": 9698.12121881572,
+        "finalKineticToInternal": 0.00236886354513852,
+        "maxEqps": 0.027738484863816,
+        "maxInternalIndicator": 0,
+        "earlyElasticSlope_MPa": 201258.018500102,
+        "analyticalPlaneStrainSlope_MPa": 230769.230769231,
+        "earlyElasticRelativeError": 0.127881919832893,
+        "finalReaction_N": 9705.83455017495,
+        "finalNominalStress_MPa": 121.322931877187,
+        "finalEngineeringStrain": 0.0204081632653061,
+        "finite": true
+      },
+      "result_sha256": {
+        "field_snapshots.csv": "7262c80d5768ee6cbe4ac628c7402c4aa4301171295f87daa79347f314429c69",
+        "metadata.json": "fbaa1978fd9ee842da552360a6c00013278fe63fad970ceb0bba5255cd2f53d0",
+        "timeseries.csv": "67a01c97aaec8ff640d739c8e8119abf76f3cfa67fb70c3e3761c25c0e227e0f"
+      }
+    }
+  ],
+  "comparisons": [
+    {
+      "coarser_dt_ms": 4.9999999999999996e-05,
+      "finer_dt_ms": 2.4999999999999998e-05,
+      "common_history_times": 240,
+      "stress_history_nrmse_percent": 0.20996671088699284,
+      "displacement_rmse_percent_of_amplitude": 0.16881933301596191,
+      "max_eqps_relative_difference_percent": 0.5384825260985645,
+      "coarser_peak_eqps_reference_xyz_mm": [
+        86.0,
+        0.0,
+        -2.0
+      ],
+      "finer_peak_eqps_reference_xyz_mm": [
+        86.0,
+        0.0,
+        -2.0
+      ]
+    },
+    {
+      "coarser_dt_ms": 2.4999999999999998e-05,
+      "finer_dt_ms": 1.2499999999999999e-05,
+      "common_history_times": 240,
+      "stress_history_nrmse_percent": 0.09155634142450814,
+      "displacement_rmse_percent_of_amplitude": 0.0663514075342531,
+      "max_eqps_relative_difference_percent": 0.22833825876246852,
+      "coarser_peak_eqps_reference_xyz_mm": [
+        86.0,
+        0.0,
+        -2.0
+      ],
+      "finer_peak_eqps_reference_xyz_mm": [
+        86.0,
+        0.0,
+        -2.0
+      ]
+    }
+  ],
+  "continuum_screen": {
+    "wave_speed_mm_per_ms": 6020.183016345588,
+    "h_over_cp_ms": 0.00033221581379996873,
+    "base_dt_over_h_over_cp": 0.07525228770431984,
+    "scope": "Continuum screening estimate using configured E and nu; NOT a PD stability bound"
+  }
+}

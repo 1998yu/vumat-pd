@@ -1,7 +1,10 @@
 # Reviewer follow-up candidate (base 7538485)
 
-This revision is developed on the local reviewer-interface-audit-20261031 branch
-and has not been pushed. The previous GitHub run passed compilation/tests but failed metadata hash
+The committed interface revision 198c800 was pushed on reviewer-interface-audit-20261031.
+Its [Ubuntu CI run](https://github.com/1998yu/vumat-pd/actions/runs/41162730760)
+completed successfully, including archive metrics; main remains at 7538485.
+The additional 2026-11-03 work is local and uncommitted; see
+[Reviewer 8 follow-up](reviewer8-20261103.md). The previous main run passed compilation/tests but failed metadata hash
 verification because its manifest used Windows CRLF bytes. The candidate preserves
 exact CSV verification and normalizes only JSON CRLF to LF; metadata values remain checked.
 
@@ -46,6 +49,7 @@ not a general restart/polar-decomposition facility. Predefined fields and coordi
 are zero-filled, effective-modulus dtArray extensions and global Abaqus queries are
 unsupported. New material routines require their own tests.
 
-The current timestep studies are archived evidence, not new space/time convergence
-calculations performed for this candidate. Full publication-matrix reruns are not
-claimed. New solves and archive reanalysis are listed separately in the validation report.
+The 2026-10-31 timestep evidence was archived, not new space/time calculations.
+The 2026-11-03 follow-up separately records new fixed-space coarse-grid temporal
+runs. Neither is a full publication-matrix rerun or a proven stability bound.
+New solves and archive reanalysis are listed separately in the validation reports.

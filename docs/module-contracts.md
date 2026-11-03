@@ -12,7 +12,7 @@
 | damage: PdSimpleDamage | Raw stress/strain/history, geometry | Effective stress and bond attenuation | Does not rewrite VUMAT history; no validated fracture-neighborhood update |
 | pd: ExplicitTimeIntegrator | Force density, solver density, dt | Displacement, velocity and acceleration | Velocity-Verlet; user-chosen dt; no automatic stability bound |
 | host: BoundaryValueCaseRunner | Validated configuration and modules | Time histories, nodal fields and metadata | Owns order of operations and boundary constraints |
-| apps | CLI arguments | Calls host / dedicated spatial demo | No alternate material law hidden in CLI |
+| apps | CLI arguments | Dispatches the configured host | No alternate material law hidden in CLI |
 
 Host solver units are mm-ms-N-MPa. VUMAT material density/properties retain their
 declared contract; no implicit general-purpose unit conversion is performed.

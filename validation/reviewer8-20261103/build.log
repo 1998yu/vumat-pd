@@ -1,0 +1,17 @@
+[1/17] Building CXX object CMakeFiles/json_numeric_test.dir/tests/json_numeric_test.cpp.obj
+[2/17] Building CXX object CMakeFiles/vumat_pd.dir/src/config/DemoConfig.cpp.obj
+[3/17] Linking CXX static library lib\libvumat_pd.a
+[4/17] Linking CXX executable bin\vumat_pd_run.exe
+[5/17] Linking CXX executable bin\vumat_pd_large_motion_3d.exe
+[6/17] Linking CXX executable bin\json_numeric_test.exe
+[7/17] Linking CXX executable bin\interface_contract_test.exe
+[8/17] Linking CXX executable bin\jc_thermal_units_test.exe
+[9/17] Linking CXX executable bin\eigen_rotation_test.exe
+[10/17] Linking CXX executable bin\observation_window_test.exe
+[11/17] Linking CXX executable bin\correspondence_sampling_test.exe
+[12/17] Linking CXX executable bin\corotational_kinematics_test.exe
+[13/17] Linking CXX executable bin\neighbor_search_test.exe
+[14/17] Linking CXX executable bin\neighbor_lattice_regression.exe
+[15/17] Linking CXX executable bin\neohookean_material_test.exe
+[16/17] Linking CXX executable bin\outer_damage_test.exe
+[17/17] Linking CXX executable bin\jc_3d_fem.exe

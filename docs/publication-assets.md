@@ -2,7 +2,7 @@
 
 The runtime needs source, headers, material configurations and input cases. The
 benchmark additionally needs scripts, reference CSV archives and their hashes.
-Manuscript illustrations in docs/paper-figures are presentation assets, not inputs
+Manuscript illustrations in the adjacent local asset archive under docs/paper-figures are presentation assets, not inputs
 or validation evidence by themselves.
 
 This local revision removes manuscript figures from the main getting-started

@@ -11,9 +11,13 @@ quantities needed to reproduce the runs. No zero-energy stabilization is present
 
 This benchmark checks the same JC material plugin through independent correspondence-PD and fully integrated H8 FEM solvers. Both use a 100 × 20 × 4 mm domain, 2 mm end bands and half-cosine displacement reaching 2 mm in 0.12 ms. Lateral and thickness faces are free except for rigid-body pins.
 
-FEM is an independent validation reference, not the project's runtime or gallery solver. Its source is `src/main_jc_3d_fem.cpp` within this benchmark folder and it is built only with `BUILD_TESTING=ON`. Every public demo runs PD; see [the PD demo guide](../../demos/README.md).
+FEM is an independent validation reference, not the project's runtime or gallery solver. Its source is `src/main_jc_3d_fem.cpp` within this benchmark folder and it is built only with `BUILD_TESTING=ON`.
 
 Damage, deletion, damping and mass scaling are disabled. The configuration checks material transfer, not fracture prediction or general VUMAT compatibility.
+
+For three newly computed PD runs at fixed spatial resolution and matched physical
+output times, use [the isolated time-step study](../../docs/time-step.md#new-fixed-space-time-step-runs).
+Its outputs are separate from the archived publication matrix.
 
 ## Final configurations
 
@@ -49,7 +53,7 @@ python benchmarks/tensile3d/analyse_and_plot.py
 python benchmarks/tensile3d/verify_metrics.py
 ```
 
-Data expand to ignored `generated/archive_results`. SHA-256 checks use the original uncompressed CSVs. Recomputed metrics and editable plots are saved under `generated`. For the separate coarse-grid PD particle demo, see [Johnson–Cook tension](../../demos/johnson-cook-tension/README.md). Its display is distinct from this benchmark's fine-resolution comparison.
+Data expand to ignored `generated/archive_results`. SHA-256 checks use the original uncompressed CSVs. Recomputed metrics and editable plots are saved under `generated`. Its display is distinct from this benchmark's fine-resolution comparison.
 
 ## Run selected cases
 
@@ -66,7 +70,7 @@ Omit `--cases` to run the final matrix. Fine PD and the finest FEM cost more tha
 python benchmarks/tensile3d/run_cases.py --cases fem_coarse --snapshots 20 --threads 2
 ```
 
-These optional FEM fields are verification outputs. The particle-gallery rendering workflow uses only PD results; see [the demo guide](../../demos/README.md).
+These optional FEM fields are verification outputs.
 
 ## Definitions and expected response
 

@@ -9,14 +9,13 @@ runtimes on PATH on Windows. Run commands from the repository root.
 ```bash
 cmake --preset release
 cmake --build --preset release --parallel 4
-build/release/bin/vumat_pd_run examples/affine_bar_elastic.json
+build/release/bin/vumat_pd_run examples/jc_material_point.json
 ctest --preset release --output-on-failure
 ```
 
-Use .exe on Windows when required by the shell. This is a small affine interface
+Use .exe on Windows when required by the shell. This is a small material-point interface
 check, not a spatial-convergence result. The reference tensile configuration is
-benchmarks/tensile3d/cases/pd_coarse.json. Demonstration launchers reuse their
-example inputs; do not maintain independent copies of the same published case.
+benchmarks/tensile3d/cases/pd_coarse.json.
 
 ## Complete release checks with retained logs
 

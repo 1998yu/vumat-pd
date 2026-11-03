@@ -1,0 +1,47 @@
+Test project <CHECKOUT>/build/release
+      Start  1: json_numeric
+ 1/21 Test  #1: json_numeric .....................   Passed    0.07 sec
+      Start  2: archive_integrity_contract
+ 2/21 Test  #2: archive_integrity_contract .......   Passed    0.68 sec
+      Start  3: interface_contract
+ 3/21 Test  #3: interface_contract ...............   Passed    0.25 sec
+      Start  4: config_rejection
+ 4/21 Test  #4: config_rejection .................   Passed    2.17 sec
+      Start  5: jc_thermal_units
+ 5/21 Test  #5: jc_thermal_units .................   Passed    0.28 sec
+      Start  6: eigen_rotation
+ 6/21 Test  #6: eigen_rotation ...................   Passed    0.23 sec
+      Start  7: observation_window
+ 7/21 Test  #7: observation_window ...............   Passed    0.22 sec
+      Start  8: correspondence_sampling
+ 8/21 Test  #8: correspondence_sampling ..........   Passed    0.25 sec
+      Start  9: corotational_kinematics
+ 9/21 Test  #9: corotational_kinematics ..........   Passed    0.25 sec
+      Start 10: neighbor_search
+10/21 Test #10: neighbor_search ..................   Passed    0.24 sec
+      Start 11: affine_bar_elastic
+11/21 Test #11: affine_bar_elastic ...............   Passed    0.13 sec
+      Start 12: affine_shear_elastic
+12/21 Test #12: affine_shear_elastic .............   Passed    0.12 sec
+      Start 13: jc_vumat_material_point
+13/21 Test #13: jc_vumat_material_point ..........   Passed    0.23 sec
+      Start 14: fem_h8_patch
+14/21 Test #14: fem_h8_patch .....................   Passed    0.25 sec
+      Start 15: neighbor_lattice_regression
+15/21 Test #15: neighbor_lattice_regression ......   Passed    0.41 sec
+      Start 16: outer_damage
+16/21 Test #16: outer_damage .....................   Passed    0.23 sec
+      Start 17: neohookean_material
+17/21 Test #17: neohookean_material ..............   Passed    0.28 sec
+      Start 18: hyperelastic_bending
+18/21 Test #18: hyperelastic_bending .............   Passed   15.63 sec
+      Start 19: hyperelastic_torsion
+19/21 Test #19: hyperelastic_torsion .............   Passed   13.62 sec
+      Start 20: elastic_pd_tension
+20/21 Test #20: elastic_pd_tension ...............   Passed   62.08 sec
+      Start 21: jc_pd_tension
+21/21 Test #21: jc_pd_tension ....................   Passed   71.29 sec
+
+100% tests passed, 0 tests failed out of 21
+
+Total Test time (real) = 169.08 sec

@@ -2,7 +2,7 @@
 
 Base remote/main: 75384859fec2f6163ff7c1956c73635520218bc7.
 Revision branch: reviewer-interface-audit-20261031. Validation was performed before
-the local commit; this branch has not been pushed.
+the local commit. Commit 198c800 was subsequently pushed on this branch.
 See [reviewer mapping](reviewer-followup.md) for scope and unresolved issues.
 
 ## Fresh-clone verification
@@ -29,8 +29,11 @@ The detailed CTest log is retained; no summary is substituted for missing eviden
 
 The remote base's Linux compile/test steps succeeded, but its metadata hash stage
 failed. That exact byte-normalization defect is fixed and negatively tested here.
-The new Linux workflow has not run because the candidate is not pushed. No Linux
-success is claimed. The unmodified remote commit still has its recorded CI failure.
+The branch's subsequent Ubuntu workflow completed successfully for commit 198c800:
+[run 41162730760](https://github.com/1998yu/vumat-pd/actions/runs/41162730760).
+This includes compilation, tests, archive checks and metric reproduction. The
+unmodified main commit still has its recorded CI failure. This CI result applies
+to 198c800, not the local 2026-11-03 follow-up.
 
 ## New solves versus archive analysis
 

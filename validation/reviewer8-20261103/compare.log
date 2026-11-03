@@ -1,0 +1,3 @@
+PASS: all 11 cases match the frozen metrics within 0.5% relative tolerance.
+PASS: matched FEM-PD comparisons also match their separate PD baseline.
+PASS: FEM symmetry metrics match their frozen baseline.

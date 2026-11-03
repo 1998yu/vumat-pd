@@ -27,8 +27,7 @@ def main():
         ("archive",[sys.executable,"benchmarks/tensile3d/unpack_archive.py"]),
         ("metrics",[sys.executable,"benchmarks/tensile3d/analyse_and_plot.py"]),
         ("compare",[sys.executable,"benchmarks/tensile3d/verify_metrics.py"]),
-        ("python",[sys.executable,"-m","compileall","-q","demos","benchmarks/tensile3d","tests","tools"]),
-        ("entry",[sys.executable,"demos/run.py","--help"]),
+        ("python",[sys.executable,"-m","compileall","-q","benchmarks/tensile3d","tests","tools"]),
     ]
     report=[]
     for name,command in commands:

@@ -24,7 +24,3 @@ jobs:
           python -m pip install -r benchmarks/tensile3d/requirements.txt
           python benchmarks/tensile3d/analyse_and_plot.py
           python benchmarks/tensile3d/verify_metrics.py
-      - name: Check demo entry points
-        run: |
-          python -m compileall -q demos benchmarks/tensile3d
-          python demos/run.py --help

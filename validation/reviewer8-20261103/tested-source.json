@@ -1,0 +1,14 @@
+{
+  "base_commit": "198c80095e04234132925f822245a98ed1f83b57",
+  "files_sha256": {
+    "CMakeLists.txt": "e308de86ae04899edb245ce1fa23524201b749c562e69cf3afc57b30c4ae62f1",
+    "src/config/SimpleJson.cpp": "5834583ba0e5f5e1d1b0e097de90de3c2deadc4d59fa45ccd739ec1e7299aee7",
+    "src/config/DemoConfig.cpp": "d8fc5da269f2270f44853b625377929e936f5006340b0da182536b3b519e84fb",
+    "tests/json_numeric_test.cpp": "93fc4b3377d13a20a8f897f6eb139c3556b1c4b364cda71e9d55d6338ae4ab45",
+    "tests/config_rejection_test.py": "35fe1a108f1dac12ad5be2f4903f5d56f1587c217fcc70a2185a9300a0c99fdc",
+    "benchmarks/tensile3d/time_step_study.py": "b65df9858146f1a160205f16373c2adddc7a20681a26dc06dcbfc070c3f80fd6"
+  },
+  "source_hashes_match_study": true,
+  "coarse_25ns_history_and_fields_match_archive": true,
+  "validation_kind": "existing local checkout; new build and solves; not a clean clone or remote CI"
+}

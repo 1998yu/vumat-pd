@@ -48,7 +48,7 @@ build/release/bin/vumat_pd_run examples/jc_material_point.json
 ```
 
 On Windows the executable has an `.exe` suffix. For an actual spatial PD run,
-use `python demos/run.py tensile` after building.
+run the material-point example from the repository root after building.
 Keep new material cases separate from the validated benchmark inputs.
 
 ## 5. Verify objective behavior

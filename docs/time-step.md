@@ -31,3 +31,32 @@ results without recording the binary revision and configuration. For a new mater
 geometry or loading duration, repeat temporal refinement and check finite response,
 energy/work histories and the outputs of interest. Passing a CTest case means its
 specified acceptance criteria passed, not that convergence has been established.
+
+## New fixed-space time-step runs
+
+For an isolated temporal study without mixing archived and newly computed cases:
+
+```bash
+python benchmarks/tensile3d/time_step_study.py --output benchmarks/tensile3d/generated/time-study-01 --threads 2
+```
+
+The default is the existing coarse 51 x 11 x 3 node case, h=2 mm and delta=6 mm.
+It runs 50, 25 and 12.5 ns to the same 0.12 ms final time. A different single-material
+regional PD input can be supplied with `--case`; the same factors of its base dt
+are used. The script holds geometry, material, constraints, loading duration and
+all physical parameters fixed. It changes increment counts and output intervals
+to compare the same physical times; field snapshots are final-state only.
+
+The output directory must be new. Each run keeps its input, execution log and
+solver outputs. `study.json` records material, source, executable and result
+hashes, exit codes, physical-time history comparisons, final displacement error
+and plastic-strain peak values/locations. Relative differences use the finer PD
+run in each adjacent pair, not the FEM reference. The script checks completed,
+finite output and the solver's declared acceptance tests. It does not turn those
+checks into a claim of asymptotic convergence or absence of unstable modes.
+
+The reported h/c_p estimate uses the configured small-strain elastic E, nu and
+solver density; it is a screening ratio, not an automatically selected stable dt.
+Different constitutive tangents, neighborhood settings and damage can change the
+actual limit. This study retains the selected material's thermal convention;
+it does not repair or validate the archived Johnson-Cook heat conversion.
