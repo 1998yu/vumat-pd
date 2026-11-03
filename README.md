@@ -59,13 +59,4 @@ On Windows use vumat_pd_run.exe. The example writes stress and material history 
 
 ## Reproduce the paper results
 
-```sh
-python -m pip install -r benchmarks/tensile3d/requirements.txt
-python benchmarks/tensile3d/unpack_archive.py
-python benchmarks/tensile3d/analyse_and_plot.py
-python benchmarks/tensile3d/verify_metrics.py
-```
-
-To run a new coarse PD/H8 pair, use `python benchmarks/tensile3d/run_cases.py --cases fem_coarse pd_coarse`.
-
-See the [benchmark guide](benchmarks/tensile3d/README.md) for the full matrix, tolerance definitions and Supplementary Movie S1.
+The [tensile benchmark guide](benchmarks/tensile3d/README.md) gives the commands to recalculate the paper's metrics from archived data, run a coarse PD/H8 FEM pair, or recompute the full case matrix.

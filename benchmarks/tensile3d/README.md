@@ -5,7 +5,7 @@ in natural coordinates), with full 2x2x2 Gauss integration in the included FEM
 reference. FEM is a separate executable in this repository; no Abaqus solver is
 called. It shares the material adapter/plugin, not the PD spatial discretisation.
 
-The [parameter guide](../../docs/parameters.md) and [governing-equation/code map](../../docs/governing-equations.md) define the
+The [parameter guide](../../docs/parameters.md) and [governing equations](../../docs/kinematics.md#governing-equations-and-spatial-discretisation) define the
 quantities needed to reproduce the runs. No zero-energy stabilization is present.
 
 This benchmark checks the same JC material plugin through independent correspondence-PD and fully integrated H8 FEM solvers. Both use a 100 × 20 × 4 mm domain, 2 mm end bands and half-cosine displacement reaching 2 mm in 0.12 ms. Lateral and thickness faces are free except for rigid-body pins.
@@ -71,8 +71,6 @@ python benchmarks/tensile3d/analyse_and_plot.py --results benchmarks/tensile3d/g
 python benchmarks/tensile3d/verify_metrics.py
 ```
 
-For a build, test and archive check in one command, use `python tools/verify_release.py` after installing the benchmark requirements. Add `--eigen-dir /path/to/eigen` to include the optional independent rotation check. Logs are written to `build/verification`.
-
 ## Definitions and expected response
 
 - Means are volume-weighted over x = 2–98 mm and the full cross-section.
@@ -92,9 +90,7 @@ Raw metadata retains an earlier elastic-slope diagnostic for hash integrity; the
 
 [Supplementary Movie S1](media/fem-tension.mp4) shows the coarse H8 FEM response. It shows axial stress and plastic strain over 0–0.12 ms. Its [provenance](media/fem-tension.json) records its updated MP4 checksum, quadrature-plane sampling and corrected-archive comparison.
 
-## Publication rotation update
-
-The Rodrigues coefficient multiplying the squared material-spin matrix is positive and uses a stable half-angle form. Finite-spin and 1000-increment checks cover rotation orthogonality, determinant and isotropic-stress invariance. All 11 publication cases and the FEM symmetry check were recomputed; the archived CSVs and both metric baselines now describe this corrected implementation. The earlier publication remains recoverable in Git history at `a47fb8af211f61f3aa5c5f7977234d30a4a28f5f`. These checks verify rotation assembly rather than general finite-rotation accuracy of the complete time-discrete host.
+The archive uses the corrected Rodrigues update described in the [kinematics guide](../../docs/kinematics.md). The earlier publication snapshot is available at commit `a47fb8af211f61f3aa5c5f7977234d30a4a28f5f`.
 
 ## Time increments and sensitivity
 
