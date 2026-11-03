@@ -206,12 +206,15 @@ RunSummary runMaterial(const DemoCaseConfig &config, const DemoMaterialConfig &m
   // -> force density -> correct velocity -> constraints. No stabilization term.
   for (int step = 1; step <= config.timeIntegration.steps; ++step) {
     const double time = static_cast<double>(step) * config.timeIntegration.dt;
+    // Predict nodal positions before reconstructing the end-of-increment deformation.
     integrator.predictDisplacement(block, dynamicState, config.timeIntegration.dt);
     constraints.apply(block, dynamicState, time);
     const auto previousStress = materialState.rawStressN;
     const auto previousStrain = materialState.strainN;
     const auto deformationGradient =
         skeleton.computeDeformationGradients(block, correspondenceState);
+    // The deformation is evaluated at the new positions. VUMAT receives the
+    // beginning-of-increment time and updates the history owned by materialState.
     auto result = bridge.update(deformationGradient, materialState, config.timeIntegration.dt,
                                 (step - 1) * config.timeIntegration.dt,
                                 (step - 1) * config.timeIntegration.dt);
@@ -220,6 +223,8 @@ RunSummary runMaterial(const DemoCaseConfig &config, const DemoMaterialConfig &m
     auto force =
         skeleton.computeForceDensity(block, correspondenceState, result.deformationGradient,
                                      damage.effectiveStress, damage.bondDamage);
+    // The PD kernel returns force per reference volume. The integrator uses
+    // reference density to convert that force density to acceleration.
     integrator.correctVelocity(dynamicState, force, config.timeIntegration.dt);
     constraints.apply(block, dynamicState, time);
 

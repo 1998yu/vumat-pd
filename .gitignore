@@ -14,10 +14,3 @@
 .DS_Store
 Thumbs.db
 desktop.ini
-
-
-
-# Retain the small, reviewed validation logs with this source revision.
-!/validation/20261031/*.log
-!/validation/interface-audit-20261031/*.log
-!/validation/reviewer8-20261103/*.log

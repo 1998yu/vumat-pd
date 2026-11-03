@@ -1,0 +1,49 @@
+{
+  "source": "Corrected 2026-10-13 publication: supplied manuscript diagrams (Figs. 1\u20133) and fresh benchmark results (Figs. 4\u20136).",
+  "title": "VUMAT-PD: A plugin-based interface for VUMAT-driven peridynamic correspondence simulations",
+  "figures": [
+    {
+      "manuscript_figure": 1,
+      "file": "coupling-workflow.png",
+      "caption": "Constitutive coupling between correspondence-PD kinematics and VUMAT.",
+      "sha256": "d007289e56c5ca21f4b4239e1de551634153f40c80c9095d01f5f811fb3a4fb8",
+      "processing": "Original embedded EMF rendered with Windows GDI+ to PNG at 2400 pixels wide; no content redrawing.",
+      "original_vector_sha256": "7033fd38150e125f1e1b7c1b838b262ca79acfc92b196c991747a1663852982a"
+    },
+    {
+      "manuscript_figure": 2,
+      "file": "benchmark-setup.png",
+      "caption": "Common three-dimensional geometry, end bands and loading history.",
+      "sha256": "a85273a4fa18ac911a79b930ecf74641b6602c7f140bb655ffdae3cbac965ead",
+      "processing": "Original embedded PNG, copied without modifying pixels."
+    },
+    {
+      "manuscript_figure": 3,
+      "file": "verification-path.png",
+      "caption": "Shared material transfer through independent three-dimensional FEM and PD paths.",
+      "sha256": "266b004bedf79a0bc426e207d076383154eae151c5c32df0d2ee73a1ab137891",
+      "processing": "Original embedded PNG, copied without modifying pixels."
+    },
+    {
+      "manuscript_figure": 4,
+      "file": "coarse-fields.png",
+      "caption": "Coarse-grid axial-stress and equivalent-plastic-strain fields at 0.12 ms.",
+      "sha256": "51183b4903f2f57964746dfee03ea7e0fa4e3127ebf8207cced2ddcc3c6c8014",
+      "processing": "Regenerated from the full corrected FEM\u2013PD case matrix using the public analysis script, with unchanged field-sampling and normalization definitions."
+    },
+    {
+      "manuscript_figure": 5,
+      "file": "fine-fields.png",
+      "caption": "Fine-grid axial-stress and equivalent-plastic-strain fields at 0.12 ms.",
+      "sha256": "ba4f98d4366fea5973df73a784b46b66410e226251aeb6b4165076403fd9fffa",
+      "processing": "Regenerated from the full corrected FEM\u2013PD case matrix using the public analysis script, with unchanged field-sampling and normalization definitions."
+    },
+    {
+      "manuscript_figure": 6,
+      "file": "sensitivity.png",
+      "caption": "Spatial and temporal sensitivity relative to the finest H8 FEM numerical reference.",
+      "sha256": "66fe9369ccf486eb1ee9dde18cdfc51bcba4c5fbb0767d386bbfc32a3e70f3f1",
+      "processing": "Regenerated from the full corrected FEM\u2013PD case matrix using the public analysis script, with unchanged field-sampling and normalization definitions."
+    }
+  ]
+}

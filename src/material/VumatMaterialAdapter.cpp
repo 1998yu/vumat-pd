@@ -75,6 +75,7 @@ VumatMaterialAdapter::VumatMaterialAdapter(VumatMaterialConfig config)
 }
 
 int VumatMaterialAdapter::fortranIndex(int block, int component, int nblock) {
+  // Fortran stores all material points for a component contiguously.
   return block + nblock * component;
 }
 
@@ -328,6 +329,8 @@ VumatMaterialAdapter::updateFixedBlockCached(const VumatBlockInput &input) const
           input.stateOld[static_cast<size_t>(blockIndex)][static_cast<size_t>(c)];
   }
 
+  // The routine reads old stress and history and writes the updated arrays.
+  // The host persists those values for the next increment.
   call_(&nblock, &ndir, &nshr, &nstatev, &nfieldv, &nprops, &lanneal, &stepTime, &totalTime, &dt,
         cmname.data(), work.coordMp.data(), work.charLength.data(), work.props.data(),
         work.density.data(), work.strainInc.data(), work.relSpinInc.data(), work.tempOld.data(),

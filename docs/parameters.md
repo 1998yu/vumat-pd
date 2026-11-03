@@ -2,7 +2,7 @@
 
 Run from the checkout root. Case material paths and output directories are resolved
 relative to the working directory; plugin basenames are resolved beside the runner.
-Examples are runnable inputs; demos provide launch/render instructions; benchmarks
+Examples contain runnable inputs. Benchmarks
 contain the reference matrix, archived data and comparison definitions.
 
 Numeric input must use valid JSON number syntax and fit a finite double. Integer
@@ -84,8 +84,7 @@ reject spatial. These labels are user declarations, not automatic compatibility 
 
 JC states (Fortran 1-based): initialized, equivalentPlasticStrain, temperature,
 yieldStress, lastPlasticIncrement, cumulativeIterations. Thus its equivalent plastic
-strain index in JSON is 1. The supplied elastic material uses E,nu; the dedicated
-Neo-Hookean demo has its own documented spatial-stress contract.
+strain index in JSON is 1. The supplied elastic material uses E and nu.
 
 **Unresolved thermal convention:** MPa plastic-work density needs a factor of 1e6
 to become J/m^3 with SI rho/Cp. The archived workToHeat=1 does not supply it.

@@ -176,8 +176,8 @@ PdCorrespondenceSkeleton::computeDeformationGradients(const ParticleBlock &block
   if (state.shapeTensorInverse.size() != block.referencePosition.size())
     throw std::runtime_error("PD correspondence state is not initialized.");
   std::vector<Tensor3> f(block.referencePosition.size(), zeroTensor());
-// F_i = [sum_j (y_j-y_i) tensor (X_j-X_i) V_j] K_i^-1.
-// Affine completeness does not imply zero-energy-mode suppression.
+  // Use current bonds y_j-y_i and reference bonds X_j-X_i to reconstruct F.
+  // The reference shape tensor supplies the normalization for each neighborhood.
 #pragma omp parallel for schedule(static)
   for (size_t i = 0; i < block.referencePosition.size(); ++i) {
     Tensor3 numerator = zeroTensor();
@@ -203,9 +203,9 @@ std::vector<Vec3> PdCorrespondenceSkeleton::computeForceDensity(
   if (f.size() != n || stress.size() != n || bondDamage.size() != n)
     throw std::runtime_error("PD force-state inputs do not match particle count.");
   std::vector<Tensor3> forceMap(n);
-// P=det(F)*sigma*F^-T; T_i(xi)=P_i*K_i^-1*xi.
-// Return force per reference volume: dynamics divides by mass density.
-// Global force diagnostics must multiply by V_i. No stabilization is added.
+  // Convert spatial Cauchy stress to first Piola stress on the reference configuration.
+  // The returned force density is N/mm^3 in the paper case. Multiply by the
+  // reference nodal volume to obtain a nodal force in N.
 #pragma omp parallel for schedule(static)
   for (size_t i = 0; i < n; ++i)
     forceMap[i] = multiply(cauchyToFirstPiola(stress[i], f[i]), state.shapeTensorInverse[i]);

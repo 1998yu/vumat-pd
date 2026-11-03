@@ -47,12 +47,10 @@ Use the standalone material-point check as a verification step:
 build/release/bin/vumat_pd_run examples/jc_material_point.json
 ```
 
-On Windows the executable has an `.exe` suffix. For an actual spatial PD run,
-run the material-point example from the repository root after building.
+On Windows the executable has an `.exe` suffix. For a spatial PD run, copy the [coarse tensile case](../benchmarks/tensile3d/cases/pd_coarse.json) and select your material configuration. Set a separate output directory and use the case runner from the repository root.
 Keep new material cases separate from the validated benchmark inputs.
 
 ## 5. Verify objective behavior
 
 For finite-rotation applications, run rigid-rotation, extension, and shear
 checks before impact or fracture simulations.
-
