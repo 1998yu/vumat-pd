@@ -39,13 +39,7 @@ The finest numerical reference uses 150 × 30 × 6 H8 elements. Two reflection p
 
 ## Inspect the archive
 
-The 2026-10-31 code review detected stale optional FEM symmetry files that were
-not covered by the former 26-CSV manifest. The full coarse model and reduced model
-were rerun. All three full-model CSVs were byte-identical to the existing archive;
-the refreshed symmetry run reproduced the frozen metric (0.00757945% peak-normalized
-plastic-history difference, below the unchanged 0.05% threshold). Only the symmetry
-archive was replaced. All 41 CSV/metadata files are now covered by
-`expected/archive_hashes.json`; see `expected/archive_repair_20261031.json`.
+The archive contains 41 checked CSV and metadata files, including the FEM symmetry case. Run the commands below from the repository root.
 
 ```bash
 python -m pip install -r benchmarks/tensile3d/requirements.txt
@@ -53,7 +47,7 @@ python benchmarks/tensile3d/analyse_and_plot.py
 python benchmarks/tensile3d/verify_metrics.py
 ```
 
-Data expand to ignored `generated/archive_results`. SHA-256 checks use the original uncompressed CSVs. Recomputed metrics and editable plots are saved under `generated`. Its display is distinct from this benchmark's fine-resolution comparison.
+Data expand to ignored `generated/archive_results`. SHA-256 checks use the original uncompressed CSVs. Recomputed metrics and editable plots are saved under `generated`.
 
 ## Run selected cases
 
@@ -64,13 +58,25 @@ python benchmarks/tensile3d/run_cases.py \
 
 The runner resolves paths from the checkout, supports Windows `.exe` names, and defaults to one thread and worker. It reuses completed cases; `--overwrite` recomputes selected generated outputs. `--bin-dir` chooses a nondefault build. Windows paths should be ASCII-only and compiler runtimes must be on `PATH`.
 
-Omit `--cases` to run the final matrix. Fine PD and the finest FEM cost more than the quick demos. Optional full-domain FEM midplane snapshots change output only:
+Omit `--cases` to run the final matrix. Fine PD and the finest FEM require more computation than the coarse pair. Optional full-domain FEM midplane snapshots change output only:
 
 ```bash
 python benchmarks/tensile3d/run_cases.py --cases fem_coarse --snapshots 20 --threads 2
 ```
 
 These optional FEM fields are verification outputs.
+
+## Recompute all paper cases
+
+Build with the release preset described on the [project homepage](../../README.md). Then run:
+
+```bash
+python benchmarks/tensile3d/run_cases.py --threads 2 --workers 1 --overwrite
+python benchmarks/tensile3d/analyse_and_plot.py --results benchmarks/tensile3d/generated/results
+python benchmarks/tensile3d/verify_metrics.py
+```
+
+For a build, test and archive check in one command, use `python tools/verify_release.py` after installing the benchmark requirements. Add `--eigen-dir /path/to/eigen` to include the optional independent rotation check. Logs are written to `build/verification`.
 
 ## Definitions and expected response
 
@@ -89,7 +95,7 @@ Raw metadata retains an earlier elastic-slope diagnostic for hash integrity; the
 
 ## FEM verification movie
 
-The homepage includes the corrected [3D FEM tensile movie](media/fem-tension.mp4), also shown as a [GIF preview](media/fem-tension.gif). It is Supplementary Movie S1 for the coarse H8 case, showing actual axial-stress and plastic-strain evolution over 0–0.12 ms. Its [provenance](media/fem-tension.json) records its updated MP4 checksum, quadrature-plane sampling and corrected-archive comparison. This movie is an independent verification reference; every runnable demo command still launches PD.
+[Supplementary Movie S1](media/fem-tension.mp4) shows the coarse H8 FEM response. It shows axial stress and plastic strain over 0–0.12 ms. Its [provenance](media/fem-tension.json) records its updated MP4 checksum, quadrature-plane sampling and corrected-archive comparison.
 
 ## Publication rotation update
 
