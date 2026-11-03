@@ -10,6 +10,16 @@ Use VUMAT-PD to run a compatible Fortran material routine in a standalone C++ co
 
 The shared Johnson–Cook plugin runs in both hosts. This lets you inspect how each host supplies kinematics and uses the returned stress while keeping the constitutive routine fixed. Compatibility depends on the component order, stress frame and state layout documented in the interface guide.
 
+## Which directory should I open?
+
+| Directory | Start here when you want to… |
+|---|---|
+| [examples/](examples/) | **Learn how to use VUMAT-PD.** Run the small Johnson–Cook material-point example and inspect its stress and history output before trying your own material. |
+| [tests/](tests/) | **Check a code change.** Run CTest to check specific behavior such as tensor ordering, material history transfer, and rotation updates. Each check has a pass or fail criterion. |
+| [benchmarks/](benchmarks/tensile3d/) | **Reproduce the paper's numerical results.** Run the tensile cases or use the archived outputs to compare PD with H8 FEM and regenerate the reported metrics. |
+
+Case inputs are stored once. CTest runs the same `examples/jc_material_point.json` file used in the quick start. The benchmark keeps separate inputs for runs that vary the grid, horizon, or time step because each run measures a different numerical effect.
+
 ## See what the software reproduces
 
 ![VUMAT–PD coupling workflow](docs/paper-figures/coupling-workflow.png)
