@@ -1,0 +1,102 @@
+{
+  "pd_coarse": {
+    "legacy": {
+      "average_axial_stress_MPa": 334.2865437115309,
+      "max_eqps": 0.02780182243716117
+    },
+    "corrected": {
+      "average_axial_stress_MPa": 334.1927603099694,
+      "max_eqps": 0.02785620537508725
+    },
+    "legacy_max_temperature_K": null,
+    "corrected_max_temperature_K": null,
+    "differences_pct": {
+      "average_axial_stress_MPa": -0.028054794105749212,
+      "max_eqps": 0.19560925564862247,
+      "stress_history_nrmse_pct": 0.0305290160580455,
+      "displacement_rmse_pct_of_2mm": 0.02544258277473062
+    }
+  },
+  "fem_coarse": {
+    "legacy": {
+      "average_axial_stress_MPa": 332.4898112958709,
+      "max_eqps": 0.02546562393606112
+    },
+    "corrected": {
+      "average_axial_stress_MPa": 332.5804010231097,
+      "max_eqps": 0.0254822691173136
+    },
+    "legacy_max_temperature_K": null,
+    "corrected_max_temperature_K": null,
+    "differences_pct": {
+      "average_axial_stress_MPa": 0.027245865635923155,
+      "max_eqps": 0.06536333566486931,
+      "stress_history_nrmse_pct": 0.036367427939313274,
+      "displacement_rmse_pct_of_2mm": 0.03827260023979881
+    }
+  },
+  "pd_shared": {
+    "legacy": {
+      "average_axial_stress_MPa": 335.9454676381402,
+      "max_eqps": 0.02948136076837947
+    },
+    "corrected": {
+      "average_axial_stress_MPa": 335.8269569286615,
+      "max_eqps": 0.02959858410744042
+    },
+    "legacy_max_temperature_K": null,
+    "corrected_max_temperature_K": null,
+    "differences_pct": {
+      "average_axial_stress_MPa": -0.03527676986145591,
+      "max_eqps": 0.3976184816634318,
+      "stress_history_nrmse_pct": 0.0293350973217678,
+      "displacement_rmse_pct_of_2mm": 0.029670164267558124
+    }
+  },
+  "fem_fine": {
+    "legacy": {
+      "average_axial_stress_MPa": 336.593032375268,
+      "max_eqps": 0.02609134417389872
+    },
+    "corrected": {
+      "average_axial_stress_MPa": 336.2382225895437,
+      "max_eqps": 0.02614681423945323
+    },
+    "legacy_max_temperature_K": null,
+    "corrected_max_temperature_K": null,
+    "differences_pct": {
+      "average_axial_stress_MPa": -0.10541210054781053,
+      "max_eqps": 0.21259949347492554,
+      "stress_history_nrmse_pct": 0.028984432427627924,
+      "displacement_rmse_pct_of_2mm": 0.023471375646804002
+    }
+  },
+  "coarse_fem_vs_pd": {
+    "legacy": {
+      "average_axial_stress_MPa": -0.537482722370808,
+      "max_eqps": -8.403040866764835,
+      "stress_history_nrmse_pct": 1.982929008748062,
+      "displacement_rmse_pct_of_2mm": 2.1582387963359895
+    },
+    "corrected": {
+      "average_axial_stress_MPa": -0.4824638586916796,
+      "max_eqps": -8.522109260067207,
+      "stress_history_nrmse_pct": 1.9796157654877187,
+      "displacement_rmse_pct_of_2mm": 2.161995580941384
+    }
+  },
+  "fine_fem_vs_pd": {
+    "legacy": {
+      "average_axial_stress_MPa": 0.1927588848513175,
+      "max_eqps": -11.49884708889267,
+      "stress_history_nrmse_pct": 0.5515898897778329,
+      "displacement_rmse_pct_of_2mm": 0.9636136249255035
+    },
+    "corrected": {
+      "average_axial_stress_MPa": 0.12246356416514327,
+      "max_eqps": -11.661942528931618,
+      "stress_history_nrmse_pct": 0.5511310702168546,
+      "displacement_rmse_pct_of_2mm": 0.965522067172172
+    }
+  }
+}

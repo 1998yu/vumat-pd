@@ -1,0 +1,8 @@
+{
+  "command": [
+    "E:\\Codex\\Workspace\\projects\\vumat-pd-3d-revision\\softwarex-minimal-20261104\\build\\release\\bin\\vumat_pd_run.exe",
+    "E:\\Codex\\Workspace\\projects\\vumat-pd-3d-revision\\thermal-rerun-20261104\\pd_shared.json"
+  ],
+  "seconds": 225.39099999999962,
+  "returncode": 0
+}

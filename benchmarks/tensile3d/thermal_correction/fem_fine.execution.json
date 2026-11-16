@@ -1,0 +1,13 @@
+{
+  "command": [
+    "E:\\Codex\\Workspace\\projects\\vumat-pd-3d-revision\\softwarex-minimal-20261104\\build\\release\\bin\\jc_3d_fem.exe",
+    "E:\\Codex\\Workspace\\projects\\vumat-pd-3d-revision\\softwarex-minimal-20261104\\configs\\johnson_cook_heat_units.json",
+    "E:\\Codex\\Workspace\\projects\\vumat-pd-3d-revision\\softwarex-minimal-20261104\\build\\release\\bin",
+    "1",
+    "0.000025",
+    "4800",
+    "E:\\Codex\\Workspace\\projects\\vumat-pd-3d-revision\\thermal-rerun-20261104\\fem_fine"
+  ],
+  "seconds": 455.4840000000004,
+  "returncode": 0
+}

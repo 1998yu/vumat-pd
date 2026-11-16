@@ -154,3 +154,7 @@ solver density; it is a screening ratio, not an automatically selected stable dt
 Different constitutive tangents, neighborhood settings and damage can change the
 actual limit. This study retains the selected material's thermal convention;
 it does not repair or validate the archived Johnson-Cook heat conversion.
+
+## Heat-conversion correction supplement
+
+[Four corrected coarse/fine PD-FEM runs](thermal_correction/README.md) include compressed outputs, execution records and the comparison script for the plastic-work-to-heat unit correction.
